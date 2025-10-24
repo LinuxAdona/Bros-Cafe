@@ -61,9 +61,9 @@ export default function Login() {
       </div>
 
       {/* Right side - Login form */}
-      <div className="flex items-center justify-center w-full bg-gray-100 shadow-2xl md:w-1/3">
+      <div className="flex items-center justify-center h-screen w-full bg-gray-100 shadow-2xl md:w-1/3">
         <div className="w-full px-8 py-12">
-          <div className="flex flex-col items-center mb-8">
+          <div className="flex flex-col items-center mb-4">
             <a
               className="flex flex-col items-center"
               href="https://www.facebook.com/broscafebalayan"
@@ -168,8 +168,31 @@ export default function Login() {
             </div>
 
             {error && (
-              <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md">
+              <div
+                role="alert"
+                className="p-3 text-sm relative text-red-600 bg-red-100 rounded-md"
+              >
                 {error}
+                <button
+                  className="flex items-center justify-center transition-all w-8 h-8 rounded-md text-red-600 hover:bg-red-600/10 active:bg-red-600/10 absolute top-1.5 right-1.5"
+                  type="button"
+                  onClick={() => setError("")}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    className="h-5 w-5"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                </button>
               </div>
             )}
 
