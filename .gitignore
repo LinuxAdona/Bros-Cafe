@@ -1,0 +1,12 @@
+# Tailwind CSS output
+src/output.css
+
+# Node modules
+node_modules/
+
+# IDE files
+.vscode/
+
+# Environment files
+.env
+.env.local
