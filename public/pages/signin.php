@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign in to Bro's Cafe</title>
-    <link rel="stylesheet" href="../output.css">
-    <link rel="icon" type="image/png" href="../../public/assets/images/logo.png">
+    <link rel="stylesheet" href="../../src/output.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
 </head>
 
 <body>
@@ -15,7 +15,7 @@
             <div class="flex flex-col items-center justify-center w-5/12 h-screen p-16 bg-gray-100">
                 <div class="flex flex-col items-start w-full">
                     <a href="home.php" class="flex flex-col items-start w-max">
-                        <img src="../../public/assets/images/logo.png" alt="Bro's Cafe Logo"
+                        <img src="../assets/images/logo.png" alt="Bro's Cafe Logo"
                             class="w-24 h-24 rounded-full">
                     </a>
                     <h1 class="mt-10 text-3xl font-bold text-gray-800">Sign in to your account</h1>
@@ -50,7 +50,7 @@
             </div>
             <!-- Side Image Section -->
             <div class="flex w-7/12">
-                <img src="../../public/assets/images/bg-login.jpg" alt="Sign In Image"
+                <img src="../assets/images/bg-login.jpg" alt="Sign In Image"
                     class="object-cover w-full h-screen">
             </div>
         </div>
