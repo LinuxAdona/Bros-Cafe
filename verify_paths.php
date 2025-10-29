@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Path Verification Script
  * Checks that all include paths are correct
@@ -61,14 +62,14 @@ echo "<tr><th>File</th><th>Type</th><th>Expected Path</th><th>Status</th></tr>";
 
 foreach ($files_to_check as $file => $paths) {
     $filepath = __DIR__ . '/' . $file;
-    
+
     if (!file_exists($filepath)) {
         echo "<tr><td colspan='4' class='fail'>File not found: $file</td></tr>";
         continue;
     }
-    
+
     $content = file_get_contents($filepath);
-    
+
     foreach ($paths as $type => $expected_path) {
         $pattern = '';
         if ($type === 'config') {
@@ -78,16 +79,16 @@ foreach ($files_to_check as $file => $paths) {
         } elseif ($type === 'css') {
             $pattern = '/href=[\'"]([^"\']+output\.css)[\'"]/';
         }
-        
+
         if (preg_match($pattern, $content, $matches)) {
             $actual_path = $matches[1];
-            $status = ($actual_path === $expected_path) 
-                ? "<span class='pass'>✓ Correct</span>" 
+            $status = ($actual_path === $expected_path)
+                ? "<span class='pass'>✓ Correct</span>"
                 : "<span class='fail'>✗ Wrong: $actual_path</span>";
         } else {
             $status = "<span class='fail'>✗ Not found</span>";
         }
-        
+
         echo "<tr><td>$file</td><td>$type</td><td>$expected_path</td><td>$status</td></tr>";
     }
 }
@@ -110,4 +111,3 @@ echo "<li>Functions: <code>../../includes/functions.php</code></li>";
 echo "<li>CSS: <code>../../src/output.css</code></li>";
 echo "<li>Assets: <code>../assets/...</code></li>";
 echo "</ul>";
-?>

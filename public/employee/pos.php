@@ -54,32 +54,39 @@ $current_user = getCurrentUser();
                     <li>
                         <a href="pos.php" class="flex items-center px-4 py-3 bg-amber-600 rounded-lg">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
                             New Order
                         </a>
                     </li>
                     <li>
-                        <a href="orders.php" class="flex items-center px-4 py-3 hover:bg-gray-800 rounded-lg transition-colors">
+                        <a href="orders.php"
+                            class="flex items-center px-4 py-3 hover:bg-gray-800 rounded-lg transition-colors">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
                             Orders
                         </a>
                     </li>
                     <?php if (isAdmin()): ?>
                         <li>
-                            <a href="../admin/dashboard.php" class="flex items-center px-4 py-3 hover:bg-gray-800 rounded-lg transition-colors">
+                            <a href="../admin/dashboard.php"
+                                class="flex items-center px-4 py-3 hover:bg-gray-800 rounded-lg transition-colors">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                                 </svg>
                                 Dashboard
                             </a>
                         </li>
                         <li>
-                            <a href="../admin/inventory.php" class="flex items-center px-4 py-3 hover:bg-gray-800 rounded-lg transition-colors">
+                            <a href="../admin/inventory.php"
+                                class="flex items-center px-4 py-3 hover:bg-gray-800 rounded-lg transition-colors">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                 </svg>
                                 Inventory
                             </a>
@@ -94,9 +101,10 @@ $current_user = getCurrentUser();
                         <p class="text-sm font-semibold"><?php echo $current_user['full_name']; ?></p>
                         <p class="text-xs text-gray-400"><?php echo ucfirst($current_user['role']); ?></p>
                     </div>
-                    <a href="../../pages/logout.php" class="text-red-400 hover:text-red-300">
+                    <a href="../pages/logout.php" class="text-red-400 hover:text-red-300">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                         </svg>
                     </a>
                 </div>
@@ -114,9 +122,11 @@ $current_user = getCurrentUser();
 
                 <!-- Category Filter -->
                 <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
-                    <button onclick="filterCategory('all')" class="category-btn px-4 py-2 bg-amber-600 text-white rounded-lg whitespace-nowrap">All</button>
+                    <button onclick="filterCategory('all')"
+                        class="category-btn px-4 py-2 bg-amber-600 text-white rounded-lg whitespace-nowrap">All</button>
                     <?php foreach ($categories as $category): ?>
-                        <button onclick="filterCategory('<?php echo $category['id']; ?>')" class="category-btn px-4 py-2 bg-white text-gray-700 rounded-lg whitespace-nowrap hover:bg-gray-50"><?php echo $category['name']; ?></button>
+                        <button onclick="filterCategory('<?php echo $category['id']; ?>')"
+                            class="category-btn px-4 py-2 bg-white text-gray-700 rounded-lg whitespace-nowrap hover:bg-gray-50"><?php echo $category['name']; ?></button>
                     <?php endforeach; ?>
                 </div>
 
@@ -127,17 +137,20 @@ $current_user = getCurrentUser();
                             data-category="<?php echo $product['category_id']; ?>"
                             onclick='addToCart(<?php echo json_encode($product); ?>)'>
                             <div class="p-4">
-                                <div class="w-full h-32 bg-gradient-to-br from-amber-100 to-amber-200 rounded-lg flex items-center justify-center mb-3">
+                                <div
+                                    class="w-full h-32 bg-gradient-to-br from-amber-100 to-amber-200 rounded-lg flex items-center justify-center mb-3">
                                     <span class="text-4xl">☕</span>
                                 </div>
                                 <h3 class="font-semibold text-gray-800 mb-1"><?php echo $product['name']; ?></h3>
                                 <p class="text-sm text-gray-600 mb-2">Stock: <?php echo $product['stock']; ?></p>
                                 <div class="text-sm">
                                     <?php if ($product['price_dodici']): ?>
-                                        <p class="text-amber-600 font-semibold">Dodici: <?php echo formatCurrency($product['price_dodici']); ?></p>
+                                        <p class="text-amber-600 font-semibold">Dodici:
+                                            <?php echo formatCurrency($product['price_dodici']); ?></p>
                                     <?php endif; ?>
                                     <?php if ($product['price_sedici']): ?>
-                                        <p class="text-amber-600 font-semibold">Sedici: <?php echo formatCurrency($product['price_sedici']); ?></p>
+                                        <p class="text-amber-600 font-semibold">Sedici:
+                                            <?php echo formatCurrency($product['price_sedici']); ?></p>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -150,7 +163,8 @@ $current_user = getCurrentUser();
             <div class="w-96 bg-white border-l border-gray-200 flex flex-col">
                 <div class="p-6 border-b border-gray-200">
                     <h2 class="text-xl font-bold text-gray-800">Current Order</h2>
-                    <p class="text-sm text-gray-600">Order #<span id="order-number"><?php echo generateOrderNumber(); ?></span></p>
+                    <p class="text-sm text-gray-600">Order #<span
+                            id="order-number"><?php echo generateOrderNumber(); ?></span></p>
                 </div>
 
                 <div class="flex-1 overflow-y-auto p-6" id="cart-items">
@@ -181,10 +195,12 @@ $current_user = getCurrentUser();
                         <option value="delivery">Delivery</option>
                     </select>
 
-                    <button onclick="processOrder()" class="w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors">
+                    <button onclick="processOrder()"
+                        class="w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors">
                         Process Order
                     </button>
-                    <button onclick="clearCart()" class="w-full bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
+                    <button onclick="clearCart()"
+                        class="w-full bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
                         Clear Cart
                     </button>
                 </div>
@@ -217,7 +233,8 @@ $current_user = getCurrentUser();
         }
 
         function addToCart(product) {
-            const size = product.price_sedici ? prompt('Select size:\n1. Dodici - ' + formatPHP(product.price_dodici) + '\n2. Sedici - ' + formatPHP(product.price_sedici), '1') : '1';
+            const size = product.price_sedici ? prompt('Select size:\n1. Dodici - ' + formatPHP(product.price_dodici) +
+                '\n2. Sedici - ' + formatPHP(product.price_sedici), '1') : '1';
 
             const selectedSize = size === '2' ? 'sedici' : 'dodici';
             const price = selectedSize === 'sedici' ? parseFloat(product.price_sedici) : parseFloat(product.price_dodici);
