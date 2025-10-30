@@ -53,21 +53,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
-    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8">
+    <div class="flex items-center justify-center min-h-screen px-4 py-12 sm:px-6 lg:px-8">
+        <div class="w-full max-w-md space-y-8">
             <!-- Logo and Title -->
             <div class="text-center">
                 <a href="home.php" class="inline-block">
-                    <img src="../assets/images/logo.png" alt="Bro's Cafe Logo" class="w-20 h-20 rounded-full mx-auto">
+                    <img src="../assets/images/logo.png" alt="Bro's Cafe Logo" class="w-20 h-20 mx-auto rounded-full">
                 </a>
                 <h2 class="mt-6 text-3xl font-bold text-gray-900">Welcome Back</h2>
                 <p class="mt-2 text-sm text-gray-600">Sign in to your account</p>
             </div>
 
             <!-- Login Form -->
-            <form class="mt-8 space-y-6 bg-white p-8 rounded-xl shadow-lg" method="POST">
+            <form class="p-8 mt-8 space-y-6 bg-white shadow-lg rounded-xl" method="POST">
                 <?php if ($error): ?>
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <div class="relative px-4 py-3 text-red-700 bg-red-100 border border-red-400 rounded" role="alert">
                         <span class="block sm:inline"><?php echo $error; ?></span>
                     </div>
                 <?php endif; ?>
@@ -76,21 +76,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div>
                         <label for="username" class="block text-sm font-medium text-gray-700">Username or Email</label>
                         <input type="text" id="username" name="username" required
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500">
+                            class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500">
                     </div>
 
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                         <input type="password" id="password" name="password" required
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500">
+                            class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500">
                     </div>
                 </div>
 
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <input id="remember" name="remember" type="checkbox"
-                            class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded">
-                        <label for="remember" class="ml-2 block text-sm text-gray-900">Remember me</label>
+                            class="w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500">
+                        <label for="remember" class="block ml-2 text-sm text-gray-900">Remember me</label>
                     </div>
 
                     <div class="text-sm">
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <button type="submit"
-                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors">
+                    class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white transition-colors border border-transparent rounded-lg shadow-sm cursor-pointer bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
                     Sign In
                 </button>
 
@@ -112,8 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
 
             <!-- Demo Credentials -->
-            <div class="bg-blue-50 p-4 rounded-lg text-sm">
-                <p class="font-semibold text-blue-800 mb-2">Demo Credentials:</p>
+            <div class="p-4 text-sm rounded-lg bg-blue-50">
+                <p class="mb-2 font-semibold text-blue-800">Demo Credentials:</p>
                 <p class="text-blue-700">Admin: admin / admin123</p>
                 <p class="text-blue-700">Employee: employee / employee123</p>
             </div>

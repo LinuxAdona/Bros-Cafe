@@ -35,7 +35,7 @@ $current_user = getCurrentUser();
 <body class="bg-gray-100 font-['Montserrat']">
     <!-- Navigation -->
     <nav class="bg-white shadow-md">
-        <div class="container mx-auto px-4 py-4">
+        <div class="container px-4 py-4 mx-auto">
             <div class="flex items-center justify-between">
                 <a href="../../pages/home.php" class="flex items-center">
                     <img src="../../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
@@ -50,29 +50,29 @@ $current_user = getCurrentUser();
     </nav>
 
     <!-- Main Content -->
-    <div class="container mx-auto px-4 py-8">
+    <div class="container px-4 py-8 mx-auto">
         <div class="mb-6">
             <h1 class="text-3xl font-bold text-gray-800">My Orders</h1>
             <p class="text-gray-600">View your order history and track current orders</p>
         </div>
 
         <?php if (empty($orders)): ?>
-            <div class="bg-white rounded-lg shadow-lg p-12 text-center">
-                <svg class="mx-auto h-24 w-24 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="p-12 text-center bg-white rounded-lg shadow-lg">
+                <svg class="w-24 h-24 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">No Orders Yet</h3>
-                <p class="text-gray-600 mb-6">You haven't placed any orders yet.</p>
+                <h3 class="mb-2 text-xl font-semibold text-gray-800">No Orders Yet</h3>
+                <p class="mb-6 text-gray-600">You haven't placed any orders yet.</p>
                 <a href="../../pages/home.php"
-                    class="inline-block bg-amber-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-700">
+                    class="inline-block px-6 py-3 font-semibold text-white rounded-lg bg-amber-600 hover:bg-amber-700">
                     Browse Menu
                 </a>
             </div>
         <?php else: ?>
             <div class="space-y-4">
                 <?php foreach ($orders as $order): ?>
-                    <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="p-6 bg-white rounded-lg shadow-lg">
                         <div class="flex items-center justify-between mb-4">
                             <div>
                                 <h3 class="text-lg font-bold text-gray-800"><?php echo $order['order_number']; ?></h3>
@@ -91,7 +91,7 @@ $current_user = getCurrentUser();
                                 </span>
                             </div>
                         </div>
-                        <div class="border-t border-gray-200 pt-4">
+                        <div class="pt-4 border-t border-gray-200">
                             <div class="flex items-center justify-between text-sm">
                                 <div class="flex items-center space-x-4">
                                     <span class="text-gray-600">
