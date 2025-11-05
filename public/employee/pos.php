@@ -52,47 +52,47 @@ $current_user = getCurrentUser();
             <nav class="flex-1 p-4">
                 <ul class="space-y-2">
                     <?php if (isAdmin()): ?>
-                        <li>
-                            <a href="../admin/dashboard.php"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                                </svg>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li>
-                            <a href="orders.php"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                                Orders
-                            </a>
-                        </li>
+                    <li>
+                        <a href="../admin/dashboard.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="orders.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            Orders
+                        </a>
+                    </li>
                     <?php endif; ?>
                     <?php if (isEmployee()): ?>
-                        <li>
-                            <a href="pos.php" class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                POS
-                            </a>
-                        </li>
-                        <li>
-                            <a href="../admin/inventory.php"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                </svg>
-                                Inventory
-                            </a>
-                        </li>
+                    <li>
+                        <a href="pos.php" class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            POS
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../admin/inventory.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                            Inventory
+                        </a>
+                    </li>
                     <?php endif; ?>
                 </ul>
             </nav>
@@ -117,9 +117,23 @@ $current_user = getCurrentUser();
         <div class="flex flex-1 overflow-hidden">
             <!-- Products Section -->
             <div class="flex-1 p-6 overflow-y-auto">
-                <div class="mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">Products</h2>
-                    <p class="text-gray-600">Select items to add to order</p>
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800">Products</h2>
+                        <p class="text-gray-600">Select items to add to order</p>
+                    </div>
+                    <!-- Cart Toggle Button -->
+                    <button onclick="toggleCart()"
+                        class="relative p-3 text-white transition-all rounded-full bg-amber-600 hover:bg-amber-700 shadow-lg hover:shadow-xl">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <!-- Badge -->
+                        <span id="cart-badge"
+                            class="absolute -top-1 -right-1 items-center justify-center min-w-[24px] h-6 px-2 text-xs font-bold text-white bg-red-500 rounded-full"
+                            style="display: none;">0</span>
+                    </button>
                 </div>
 
                 <!-- Category Filter -->
@@ -127,46 +141,58 @@ $current_user = getCurrentUser();
                     <button onclick="filterCategory('all')"
                         class="px-4 py-2 text-white rounded-lg category-btn bg-amber-600 whitespace-nowrap">All</button>
                     <?php foreach ($categories as $category): ?>
-                        <button onclick="filterCategory('<?php echo $category['id']; ?>')"
-                            class="px-4 py-2 text-gray-700 bg-white rounded-lg category-btn whitespace-nowrap hover:bg-gray-50"><?php echo $category['name']; ?></button>
+                    <button onclick="filterCategory('<?php echo $category['id']; ?>')"
+                        class="px-4 py-2 text-gray-700 bg-white rounded-lg category-btn whitespace-nowrap hover:bg-gray-50"><?php echo $category['name']; ?></button>
                     <?php endforeach; ?>
                 </div>
 
                 <!-- Products Grid -->
                 <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4" id="products-grid">
                     <?php foreach ($products as $product): ?>
-                        <div class="transition-shadow bg-white rounded-lg shadow cursor-pointer product-card hover:shadow-lg"
-                            data-category="<?php echo $product['category_id']; ?>"
-                            onclick='addToCart(<?php echo json_encode($product); ?>)'>
-                            <div class="p-4">
-                                <div
-                                    class="flex items-center justify-center w-full h-32 mb-3 rounded-lg bg-gradient-to-br from-amber-100 to-amber-200">
-                                    <span class="text-4xl">☕</span>
+                    <div class="transition-shadow bg-white rounded-lg shadow cursor-pointer product-card hover:shadow-lg"
+                        data-category="<?php echo $product['category_id']; ?>"
+                        onclick='addToCart(<?php echo json_encode($product); ?>)'>
+                        <div class="p-4">
+                            <div
+                                class="flex items-center justify-center w-full h-32 mb-3 rounded-lg bg-linear-to-br from-amber-100 to-amber-200">
+                                <span class="text-4xl">☕</span>
+                            </div>
+                            <h3 class="mb-1 font-semibold text-gray-800"><?php echo $product['name']; ?></h3>
+                            <p class="mb-2 text-sm text-gray-600">Stock: <?php echo $product['stock']; ?></p>
+                            <div class="text-sm">
+                                <?php if ($product['price_dodici']): ?>
+                                <div class="flex items-center justify-between font-semibold text-amber-600">
+                                    <p>Dodici</p>
+                                    <span><?php echo formatCurrency($product['price_dodici']); ?></span>
                                 </div>
-                                <h3 class="mb-1 font-semibold text-gray-800"><?php echo $product['name']; ?></h3>
-                                <p class="mb-2 text-sm text-gray-600">Stock: <?php echo $product['stock']; ?></p>
-                                <div class="text-sm">
-                                    <?php if ($product['price_dodici']): ?>
-                                        <p class="font-semibold text-amber-600">Dodici:
-                                            <?php echo formatCurrency($product['price_dodici']); ?></p>
-                                    <?php endif; ?>
-                                    <?php if ($product['price_sedici']): ?>
-                                        <p class="font-semibold text-amber-600">Sedici:
-                                            <?php echo formatCurrency($product['price_sedici']); ?></p>
-                                    <?php endif; ?>
+                                <?php endif; ?>
+                                <?php if ($product['price_sedici']): ?>
+                                <div class="flex items-center justify-between font-semibold text-amber-600">
+                                    <p>Sedici</p>
+                                    <span><?php echo formatCurrency($product['price_sedici']); ?></span>
                                 </div>
+                                <?php endif; ?>
                             </div>
                         </div>
+                    </div>
                     <?php endforeach; ?>
                 </div>
             </div>
 
             <!-- Cart Section -->
-            <div class="flex flex-col bg-white border-l border-gray-200 w-96">
-                <div class="p-6 border-b border-gray-200">
-                    <h2 class="text-xl font-bold text-gray-800">Current Order</h2>
-                    <p class="text-sm text-gray-600">Order #<span
-                            id="order-number"><?php echo generateOrderNumber(); ?></span></p>
+            <div id="cart-section" class="flex flex-col bg-white border-l border-gray-200 w-96">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Current Order</h2>
+                        <p class="text-sm text-gray-600">Order #<span
+                                id="order-number"><?php echo generateOrderNumber(); ?></span></p>
+                    </div>
+                    <button onclick="toggleCart()" class="text-gray-400 transition-colors hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
 
                 <div class="flex-1 p-6 overflow-y-auto" id="cart-items">
@@ -210,72 +236,193 @@ $current_user = getCurrentUser();
         </div>
     </div>
 
+    <!-- Size Selection Modal -->
+    <div id="size-modal" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+        <div class="w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl animate-modal">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-2xl font-bold text-gray-800" id="modal-product-name">Select Size</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6 space-y-3" id="modal-size-options">
+                <!-- Size options will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <style>
+    @keyframes modal-appear {
+        from {
+            opacity: 0;
+            transform: scale(0.9) translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .animate-modal {
+        animation: modal-appear 0.3s ease-out;
+    }
+
+    .modal-backdrop {
+        background-color: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+    </style>
+
     <script>
-        let cart = [];
-        const orderNumber = document.getElementById('order-number').textContent;
+    let cart = [];
+    const orderNumber = document.getElementById('order-number').textContent;
+    let currentProduct = null;
 
-        function filterCategory(categoryId) {
-            const products = document.querySelectorAll('.product-card');
-            const buttons = document.querySelectorAll('.category-btn');
+    function filterCategory(categoryId) {
+        const products = document.querySelectorAll('.product-card');
+        const buttons = document.querySelectorAll('.category-btn');
 
-            buttons.forEach(btn => {
-                btn.classList.remove('bg-amber-600', 'text-white');
-                btn.classList.add('bg-white', 'text-gray-700');
-            });
-            event.target.classList.add('bg-amber-600', 'text-white');
-            event.target.classList.remove('bg-white', 'text-gray-700');
+        buttons.forEach(btn => {
+            btn.classList.remove('bg-amber-600', 'text-white');
+            btn.classList.add('bg-white', 'text-gray-700');
+        });
+        event.target.classList.add('bg-amber-600', 'text-white');
+        event.target.classList.remove('bg-white', 'text-gray-700');
 
-            products.forEach(product => {
-                if (categoryId === 'all' || product.dataset.category === categoryId) {
-                    product.style.display = 'block';
-                } else {
-                    product.style.display = 'none';
-                }
-            });
-        }
-
-        function addToCart(product) {
-            const size = product.price_sedici ? prompt('Select size:\n1. Dodici - ' + formatPHP(product.price_dodici) +
-                '\n2. Sedici - ' + formatPHP(product.price_sedici), '1') : '1';
-
-            const selectedSize = size === '2' ? 'sedici' : 'dodici';
-            const price = selectedSize === 'sedici' ? parseFloat(product.price_sedici) : parseFloat(product.price_dodici);
-
-            const existingItem = cart.find(item => item.id === product.id && item.size === selectedSize);
-
-            if (existingItem) {
-                existingItem.quantity++;
+        products.forEach(product => {
+            if (categoryId === 'all' || product.dataset.category === categoryId) {
+                product.style.display = 'block';
             } else {
-                cart.push({
-                    id: product.id,
-                    name: product.name,
-                    size: selectedSize,
-                    price: price,
-                    quantity: 1
-                });
+                product.style.display = 'none';
             }
+        });
+    }
 
-            updateCart();
+    function addToCart(product) {
+        currentProduct = product;
+
+        // Check if product has multiple sizes
+        if (product.price_sedici && product.price_dodici) {
+            showSizeModal(product);
+        } else {
+            // Single size, add directly
+            const selectedSize = product.price_dodici ? 'dodici' : 'sedici';
+            const price = product.price_dodici ? parseFloat(product.price_dodici) : parseFloat(product.price_sedici);
+            addItemToCart(product.id, product.name, selectedSize, price);
+        }
+    }
+
+    function showSizeModal(product) {
+        const modal = document.getElementById('size-modal');
+        const modalName = document.getElementById('modal-product-name');
+        const modalOptions = document.getElementById('modal-size-options');
+
+        modalName.textContent = product.name;
+
+        let optionsHtml = '';
+
+        if (product.price_dodici) {
+            optionsHtml += `
+                    <button onclick="selectSize('dodici', ${product.price_dodici})" 
+                        class="w-full p-4 text-left transition-all bg-white border-2 border-gray-200 rounded-xl hover:border-amber-500 hover:shadow-md group">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-lg font-semibold text-gray-800 group-hover:text-amber-600">Dodici (12oz)</p>
+                                <p class="text-sm text-gray-500">Regular Size</p>
+                            </div>
+                            <p class="text-2xl font-bold text-amber-600">${formatPHP(product.price_dodici)}</p>
+                        </div>
+                    </button>
+                `;
         }
 
-        function updateCart() {
-            const cartItems = document.getElementById('cart-items');
+        if (product.price_sedici) {
+            optionsHtml += `
+                    <button onclick="selectSize('sedici', ${product.price_sedici})" 
+                        class="w-full p-4 text-left transition-all bg-white border-2 border-gray-200 rounded-xl hover:border-amber-500 hover:shadow-md group">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-lg font-semibold text-gray-800 group-hover:text-amber-600">Sedici (16oz)</p>
+                                <p class="text-sm text-gray-500">Large Size</p>
+                            </div>
+                            <p class="text-2xl font-bold text-amber-600">${formatPHP(product.price_sedici)}</p>
+                        </div>
+                    </button>
+                `;
+        }
 
-            if (cart.length === 0) {
-                cartItems.innerHTML = '<p class="py-8 text-center text-gray-400">No items in cart</p>';
-                document.getElementById('subtotal').textContent = '₱0.00';
-                document.getElementById('total').textContent = '₱0.00';
-                return;
-            }
+        modalOptions.innerHTML = optionsHtml;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
 
-            let html = '';
-            let total = 0;
+    function selectSize(size, price) {
+        if (currentProduct) {
+            addItemToCart(currentProduct.id, currentProduct.name, size, price);
+            closeModal();
+        }
+    }
 
-            cart.forEach((item, index) => {
-                const subtotal = item.price * item.quantity;
-                total += subtotal;
+    function addItemToCart(id, name, size, price) {
+        const existingItem = cart.find(item => item.id === id && item.size === size);
 
-                html += `
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            cart.push({
+                id: id,
+                name: name,
+                size: size,
+                price: price,
+                quantity: 1
+            });
+        }
+
+        updateCart();
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('size-modal');
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+        currentProduct = null;
+    }
+
+    // Close modal on ESC key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
+
+    function updateCart() {
+        const cartItems = document.getElementById('cart-items');
+
+        // Update cart badge
+        updateCartBadge();
+
+        if (cart.length === 0) {
+            cartItems.innerHTML = '<p class="py-8 text-center text-gray-400">No items in cart</p>';
+            document.getElementById('subtotal').textContent = '₱0.00';
+            document.getElementById('total').textContent = '₱0.00';
+            return;
+        }
+
+        let html = '';
+        let total = 0;
+
+        cart.forEach((item, index) => {
+            const subtotal = item.price * item.quantity;
+            total += subtotal;
+
+            html += `
                     <div class="flex items-start justify-between pb-4 mb-4 border-b border-gray-200">
                         <div class="flex-1">
                             <h4 class="font-semibold text-gray-800">${item.name}</h4>
@@ -292,81 +439,111 @@ $current_user = getCurrentUser();
                         </div>
                     </div>
                 `;
+        });
+
+        cartItems.innerHTML = html;
+        document.getElementById('subtotal').textContent = formatPHP(total);
+        document.getElementById('total').textContent = formatPHP(total);
+    }
+
+    function updateCartBadge() {
+        const badge = document.getElementById('cart-badge');
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+        // Only show badge when cart is hidden
+        if (totalItems > 0 && !isCartVisible) {
+            badge.textContent = totalItems;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    let isCartVisible = true;
+
+    function toggleCart() {
+        const cartSection = document.getElementById('cart-section');
+
+        if (isCartVisible) {
+            cartSection.style.display = 'none';
+            isCartVisible = false;
+        } else {
+            cartSection.style.display = 'flex';
+            isCartVisible = true;
+        }
+
+        // Update badge visibility
+        updateCartBadge();
+    }
+
+    function increaseQuantity(index) {
+        cart[index].quantity++;
+        updateCart();
+    }
+
+    function decreaseQuantity(index) {
+        if (cart[index].quantity > 1) {
+            cart[index].quantity--;
+            updateCart();
+        }
+    }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCart();
+    }
+
+    function clearCart() {
+        if (confirm('Clear all items from cart?')) {
+            cart = [];
+            updateCart();
+        }
+    }
+
+    function formatPHP(amount) {
+        return '₱' + parseFloat(amount).toFixed(2);
+    }
+
+    function processOrder() {
+        if (cart.length === 0) {
+            alert('Cart is empty!');
+            return;
+        }
+
+        const paymentMethod = document.getElementById('payment-method').value;
+        const orderType = document.getElementById('order-type').value;
+
+        const orderData = {
+            order_number: orderNumber,
+            items: cart,
+            payment_method: paymentMethod,
+            order_type: orderType,
+            total: parseFloat(document.getElementById('total').textContent.replace('₱', ''))
+        };
+
+        fetch('process_order.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Order placed successfully!\nOrder #: ' + orderNumber);
+                    cart = [];
+                    updateCart();
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('Error processing order');
+                console.error(error);
             });
-
-            cartItems.innerHTML = html;
-            document.getElementById('subtotal').textContent = formatPHP(total);
-            document.getElementById('total').textContent = formatPHP(total);
-        }
-
-        function increaseQuantity(index) {
-            cart[index].quantity++;
-            updateCart();
-        }
-
-        function decreaseQuantity(index) {
-            if (cart[index].quantity > 1) {
-                cart[index].quantity--;
-                updateCart();
-            }
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCart();
-        }
-
-        function clearCart() {
-            if (confirm('Clear all items from cart?')) {
-                cart = [];
-                updateCart();
-            }
-        }
-
-        function formatPHP(amount) {
-            return '₱' + parseFloat(amount).toFixed(2);
-        }
-
-        function processOrder() {
-            if (cart.length === 0) {
-                alert('Cart is empty!');
-                return;
-            }
-
-            const paymentMethod = document.getElementById('payment-method').value;
-            const orderType = document.getElementById('order-type').value;
-
-            const orderData = {
-                order_number: orderNumber,
-                items: cart,
-                payment_method: paymentMethod,
-                order_type: orderType,
-                total: parseFloat(document.getElementById('total').textContent.replace('₱', ''))
-            };
-
-            fetch('process_order.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(orderData)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Order placed successfully!\nOrder #: ' + orderNumber);
-                        cart = [];
-                        updateCart();
-                        location.reload();
-                    } else {
-                        alert('Error: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    alert('Error processing order');
-                    console.error(error);
-                });
-        }
+    }
     </script>
 </body>
 
