@@ -73,14 +73,21 @@ $current_user = getCurrentUser();
 <body class="bg-gray-100 font-['Montserrat']">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside class="flex flex-col w-64 text-white bg-gray-900">
+        <aside id="sidebar" class="flex flex-col w-64 text-white bg-gray-900">
             <div class="p-4 border-b border-gray-800">
-                <div class="flex items-center">
-                    <img src="../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
-                    <div class="ml-3">
-                        <h1 class="text-lg font-bold">Bro's Cafe</h1>
-                        <p class="text-xs text-gray-400">Admin Panel</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <img src="../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
+                        <div class="ml-3">
+                            <h1 class="text-lg font-bold">Bro's Cafe</h1>
+                            <p class="text-xs text-gray-400">Admin Panel</p>
+                        </div>
                     </div>
+                    <button onclick="toggleSidebar()" class="text-gray-400 transition-colors hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
             </div>
 
@@ -157,9 +164,18 @@ $current_user = getCurrentUser();
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto">
             <div class="p-6">
-                <div class="mb-6">
-                    <h2 class="text-3xl font-bold text-gray-800">Dashboard</h2>
-                    <p class="text-gray-600">Welcome back, <?php echo $current_user['full_name']; ?>!</p>
+                <div class="flex items-center mb-6">
+                    <!-- Hamburger Menu Button -->
+                    <button onclick="toggleSidebar()" id="hamburger-btn"
+                        class="p-3 mr-4 text-white transition-all rounded-full shadow-lg bg-amber-600 hover:bg-amber-700 hover:shadow-xl">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-800">Dashboard</h2>
+                        <p class="text-gray-600">Welcome back, <?php echo $current_user['full_name']; ?>!</p>
+                    </div>
                 </div>
 
                 <!-- Stats Cards -->
@@ -318,6 +334,22 @@ $current_user = getCurrentUser();
             </div>
         </div>
     </div>
+
+    <script>
+        let isSidebarVisible = true;
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+
+            if (isSidebarVisible) {
+                sidebar.style.display = 'none';
+                isSidebarVisible = false;
+            } else {
+                sidebar.style.display = 'flex';
+                isSidebarVisible = true;
+            }
+        }
+    </script>
 </body>
 
 </html>

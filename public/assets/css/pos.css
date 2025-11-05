@@ -1,0 +1,144 @@
+/* Modal Animations */
+@keyframes modal-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.animate-modal {
+    animation: modal-appear 0.3s ease-out;
+}
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+/* Sidebar Animations */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+#sidebar {
+    flex-shrink: 0;
+    transform: translateX(0);
+    margin-left: 0;
+    opacity: 1;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.4s ease-out,
+                margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#sidebar.sidebar-hidden {
+    transform: translateX(-100%);
+    margin-left: -256px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Hamburger button - always visible */
+#hamburger-btn {
+    position: relative;
+    z-index: 100;
+}
+
+/* Cart Animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+#cart-section {
+    flex-shrink: 0;
+    transform: translateX(0);
+    margin-right: 0;
+    opacity: 1;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.4s ease-out,
+                margin-right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#cart-section.cart-hidden {
+    transform: translateX(100%);
+    margin-right: -384px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Cart button in header - always visible */
+.header-cart-btn {
+    position: relative;
+    z-index: 100;
+}
+
+/* Fade animations for smooth transitions */
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Badge pulse animation */
+#cart-badge {
+    animation: badgePulse 0.5s ease-out;
+}
+
+@keyframes badgePulse {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
