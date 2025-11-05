@@ -56,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'phone' => $phone
             ])) {
                 $success = 'Registration successful! You can now login.';
+                header("Location: login.php");
             } else {
                 $error = 'Registration failed. Please try again.';
             }
@@ -95,7 +96,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
 
                 <?php if ($success): ?>
-                    <div class="relative px-4 py-3 text-green-700 bg-green-100 border border-green-400 rounded" role="alert">
+                    <div class="relative px-4 py-3 text-green-700 bg-green-100 border border-green-400 rounded"
+                        role="alert">
                         <span class="block sm:inline"><?php echo $success; ?></span>
                     </div>
                 <?php endif; ?>
@@ -133,7 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div>
-                        <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirm Password *</label>
+                        <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirm Password
+                            *</label>
                         <input type="password" id="confirm_password" name="confirm_password" required
                             class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500">
                     </div>
