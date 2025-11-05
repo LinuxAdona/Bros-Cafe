@@ -1,10 +1,19 @@
 <?php
 session_start();
 
+// Prevent caching of protected pages
+function preventCache()
+{
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+    header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+}
+
 // Check if user is logged in
 function isLoggedIn()
 {
-    return isset($_SESSION['user_id']);
+    return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 }
 
 // Check if user has specific role
@@ -31,6 +40,7 @@ function isEmployee()
 // Require login
 function requireLogin()
 {
+    preventCache();
     if (!isLoggedIn()) {
         header('Location: /Bros-Cafe/public/pages/login.php');
         exit();
@@ -40,6 +50,7 @@ function requireLogin()
 // Require specific role
 function requireRole($role)
 {
+    preventCache();
     requireLogin();
     if (!hasRole($role)) {
         header('Location: /Bros-Cafe/public/pages/unauthorized.php');
@@ -50,6 +61,7 @@ function requireRole($role)
 // Require employee or admin access
 function requireEmployee()
 {
+    preventCache();
     requireLogin();
     if (!isEmployee()) {
         header('Location: /Bros-Cafe/public/pages/unauthorized.php');
@@ -76,8 +88,22 @@ function getCurrentUser()
 // Logout user
 function logout()
 {
+    // Clear all session variables
+    $_SESSION = array();
+
+    // Delete the session cookie
+    if (isset($_COOKIE[session_name()])) {
+        setcookie(session_name(), '', time() - 3600, '/');
+    }
+
+    // Destroy the session
     session_unset();
     session_destroy();
+
+    // Prevent caching
+    preventCache();
+
+    // Redirect to login
     header('Location: /Bros-Cafe/public/pages/login.php');
     exit();
 }

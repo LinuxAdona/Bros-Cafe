@@ -45,7 +45,7 @@ $current_user = getCurrentUser();
         <aside class="w-64 bg-gray-900 text-white flex flex-col">
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center">
-                    <img src="../../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
+                    <img src="../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
                     <div class="ml-3">
                         <h1 class="font-bold text-lg">Bro's Cafe</h1>
                         <p class="text-xs text-gray-400">Inventory</p>

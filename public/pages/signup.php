@@ -2,6 +2,19 @@
 require_once '../../config/database.php';
 require_once '../../includes/functions.php';
 
+// Redirect if already logged in
+if (isLoggedIn()) {
+    $role = $_SESSION['user_role'];
+    if ($role === 'admin') {
+        header('Location: ../admin/dashboard.php');
+    } elseif ($role === 'employee') {
+        header('Location: ../employee/pos.php');
+    } else {
+        header('Location: ../customer/orders.php');
+    }
+    exit();
+}
+
 $error = '';
 $success = '';
 

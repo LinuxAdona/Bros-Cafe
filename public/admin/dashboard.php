@@ -76,7 +76,7 @@ $current_user = getCurrentUser();
         <aside class="flex flex-col w-64 text-white bg-gray-900">
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center">
-                    <img src="../../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
+                    <img src="../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
                     <div class="ml-3">
                         <h1 class="text-lg font-bold">Bro's Cafe</h1>
                         <p class="text-xs text-gray-400">Admin Panel</p>
