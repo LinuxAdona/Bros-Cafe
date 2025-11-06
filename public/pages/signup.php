@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             // Insert new user
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $conn->prepare("INSERT INTO users (username, email, password, full_name, phone, role) VALUES (:username, :email, :password, :full_name, :phone, 'customer')");
+            $stmt = $conn->prepare("INSERT INTO users (username, email, password, full_name, phone, role) VALUES (:username, :email, :password, :full_name, :phone, 'employee')");
 
             if ($stmt->execute([
                 'username' => $username,
@@ -56,7 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'phone' => $phone
             ])) {
                 $success = 'Registration successful! You can now login.';
-                header("Location: login.php");
+                // Don't redirect immediately - let the modal show first
+                // JavaScript will handle the redirect after 3 seconds
             } else {
                 $error = 'Registration failed. Please try again.';
             }
@@ -73,9 +74,95 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Sign Up - Bro's Cafe</title>
     <link rel="stylesheet" href="../../src/output.css">
     <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <style>
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-overlay {
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .modal-content {
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .success-icon {
+            animation: scaleIn 0.4s ease-out;
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
+    <!-- Modal for Success/Error Messages -->
+    <?php if ($error || $success): ?>
+        <div id="messageModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 modal-overlay" style="background-color: rgba(0, 0, 0, 0.5);">
+            <div class="w-full max-w-md p-6 bg-white shadow-2xl modal-content rounded-2xl">
+                <div class="text-center">
+                    <?php if ($success): ?>
+                        <!-- Success Icon -->
+                        <div class="flex items-center justify-center w-20 h-20 mx-auto mb-4 bg-green-100 rounded-full success-icon">
+                            <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="mb-2 text-2xl font-bold text-gray-900">Success!</h3>
+                        <p class="mb-6 text-gray-600"><?php echo $success; ?></p>
+                        <button onclick="window.location.href='login.php'" class="w-full px-6 py-3 text-white transition-colors bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                            Go to Login
+                        </button>
+                    <?php endif; ?>
+
+                    <?php if ($error): ?>
+                        <!-- Error Icon -->
+                        <div class="flex items-center justify-center w-20 h-20 mx-auto mb-4 bg-red-100 rounded-full success-icon">
+                            <svg class="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </div>
+                        <h3 class="mb-2 text-2xl font-bold text-gray-900">Oops!</h3>
+                        <p class="mb-6 text-gray-600"><?php echo $error; ?></p>
+                        <button onclick="closeModal()" class="w-full px-6 py-3 text-white transition-colors bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                            Try Again
+                        </button>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <div class="flex items-center justify-center min-h-screen px-4 py-12 sm:px-6 lg:px-8">
         <div class="w-full max-w-md space-y-8">
             <!-- Logo and Title -->
@@ -89,18 +176,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- Signup Form -->
             <form class="p-8 mt-8 space-y-6 bg-white shadow-lg rounded-xl" method="POST">
-                <?php if ($error): ?>
-                    <div class="relative px-4 py-3 text-red-700 bg-red-100 border border-red-400 rounded" role="alert">
-                        <span class="block sm:inline"><?php echo $error; ?></span>
-                    </div>
-                <?php endif; ?>
-
-                <?php if ($success): ?>
-                    <div class="relative px-4 py-3 text-green-700 bg-green-100 border border-green-400 rounded"
-                        role="alert">
-                        <span class="block sm:inline"><?php echo $success; ?></span>
-                    </div>
-                <?php endif; ?>
 
                 <div class="space-y-4">
                     <div>
@@ -156,6 +231,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         </div>
     </div>
+
+    <script>
+        function closeModal() {
+            const modal = document.getElementById('messageModal');
+            if (modal) {
+                modal.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        // Auto redirect for success messages
+        <?php if ($success): ?>
+            setTimeout(() => {
+                window.location.href = 'login.php';
+            }, 3000);
+        <?php endif; ?>
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('messageModal')?.addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        });
+    </script>
 </body>
 
 </html>

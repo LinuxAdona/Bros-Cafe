@@ -71,16 +71,6 @@ $current_user = getCurrentUser();
                                 Dashboard
                             </a>
                         </li>
-                        <li>
-                            <a href="orders.php"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                                Orders
-                            </a>
-                        </li>
                     <?php endif; ?>
                     <?php if (isEmployee()): ?>
                         <li>
@@ -93,6 +83,16 @@ $current_user = getCurrentUser();
                             </a>
                         </li>
                         <li>
+                            <a href="orders.php"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                                Orders
+                            </a>
+                        </li>
+                        <li>
                             <a href="../admin/inventory.php"
                                 class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,6 +100,28 @@ $current_user = getCurrentUser();
                                         d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                 </svg>
                                 Inventory
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                    <?php if (isAdmin()): ?>
+                        <li>
+                            <a href="products.php"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                                Products
+                            </a>
+                        </li>
+                        <li>
+                            <a href="users.php"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                Users
                             </a>
                         </li>
                     <?php endif; ?>
@@ -142,14 +164,14 @@ $current_user = getCurrentUser();
                     <!-- Cart Toggle Button -->
                     <div class="header-cart-btn">
                         <button onclick="toggleCart()"
-                            class="relative p-3 text-white transition-all rounded-full bg-amber-600 hover:bg-amber-700 shadow-lg hover:shadow-xl">
+                            class="relative p-3 text-white transition-all rounded-full shadow-lg bg-amber-600 hover:bg-amber-700 hover:shadow-xl">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
                             <!-- Badge -->
                             <span id="cart-badge"
-                                class="absolute -top-1 -right-1 items-center justify-center min-w-6 h-6 px-2 text-xs font-bold text-white bg-red-500 rounded-full"
+                                class="absolute items-center justify-center h-6 px-2 text-xs font-bold text-white bg-red-500 rounded-full -top-1 -right-1 min-w-6"
                                 style="display: none;">0</span>
                         </button>
                     </div>
@@ -162,7 +184,7 @@ $current_user = getCurrentUser();
                             class="px-4 py-2 text-white rounded-lg category-btn bg-amber-600 whitespace-nowrap">All</button>
                         <?php foreach ($categories as $category): ?>
                             <button onclick="filterCategory('<?php echo $category['id']; ?>')"
-                                class="px-4 py-2 text-gray-700 bg-white rounded-lg category-btn whitespace-nowrap transition-all"><?php echo $category['name']; ?></button>
+                                class="px-4 py-2 text-gray-700 transition-all bg-white rounded-lg category-btn whitespace-nowrap"><?php echo $category['name']; ?></button>
                         <?php endforeach; ?>
                     </div>
 
@@ -258,7 +280,7 @@ $current_user = getCurrentUser();
 
     <!-- Size Selection Modal -->
     <div id="size-modal" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
-        <div class="w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl animate-modal">
+        <div class="w-full max-w-md mx-4 bg-white shadow-2xl rounded-2xl animate-modal">
             <div class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
                     <h3 class="text-2xl font-bold text-gray-800" id="modal-product-name">Select Size</h3>
