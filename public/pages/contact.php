@@ -19,6 +19,8 @@
                 <span class="ml-3 text-xl font-bold">BROS CAFE</span>
             </a>
 
+            <div class="flex"></div>
+
             <!-- Mobile Menu Button -->
             <button id="mobile-menu-btn" class="text-gray-700 lg:hidden focus:outline-none">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,21 +31,27 @@
             <!-- Desktop Menu -->
             <ul class="hidden space-x-2 font-medium lg:flex">
                 <li class="transition ease-out hover:-translate-y-0.5">
-                    <a href="home.php" class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Home</a>
+                    <a href="home.php"
+                        class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Home</a>
                 </li>
                 <li class="transition ease-out hover:-translate-y-0.5">
-                    <a href="menu.php" class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Menu</a>
+                    <a href="menu.php"
+                        class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Menu</a>
                 </li>
                 <li class="transition ease-out hover:-translate-y-0.5">
-                    <a href="about.php" class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">About</a>
+                    <a href="about.php"
+                        class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">About</a>
                 </li>
                 <li class="transition ease-out hover:-translate-y-0.5">
-                    <a href="contact.php" class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Contact</a>
+                    <a href="contact.php"
+                        class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Contact</a>
                 </li>
             </ul>
             <div class="hidden space-x-4 font-medium lg:flex lg:items-center">
                 <a href="login.php" class="transition ease-out hover:-translate-x-0.5">Log in</a>
-                <a href="signup.php" class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Sign up</a>
+                <a href="signup.php"
+                    class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Sign
+                    up</a>
             </div>
         </div>
 
@@ -54,8 +62,11 @@
                 <li><a href="menu.php" class="block px-6 py-2 transition hover:bg-amber-50">Menu</a></li>
                 <li><a href="about.php" class="block px-6 py-2 transition hover:bg-amber-50">About</a></li>
                 <li><a href="contact.php" class="block px-6 py-2 transition bg-amber-50 text-amber-600">Contact</a></li>
-                <li class="px-6 pt-4 border-t"><a href="login.php" class="block py-2 transition hover:text-amber-600">Log in</a></li>
-                <li class="px-6"><a href="signup.php" class="block px-4 py-2 text-center text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600">Sign up</a></li>
+                <li class="px-6 pt-4 border-t"><a href="login.php"
+                        class="block py-2 transition hover:text-amber-600">Log in</a></li>
+                <li class="px-6"><a href="signup.php"
+                        class="block px-4 py-2 text-center text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600">Sign
+                        up</a></li>
             </ul>
         </div>
     </nav>
@@ -76,8 +87,10 @@
                 <div class="p-6 text-center transition-all transform bg-white shadow-lg rounded-2xl hover:scale-105">
                     <div class="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-amber-100">
                         <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                     </div>
                     <h3 class="mb-2 text-xl font-bold text-gray-800">Our Location</h3>
@@ -88,7 +101,8 @@
                 <div class="p-6 text-center transition-all transform bg-white shadow-lg rounded-2xl hover:scale-105">
                     <div class="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-blue-100">
                         <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                         </svg>
                     </div>
                     <h3 class="mb-2 text-xl font-bold text-gray-800">Call Us</h3>
@@ -99,7 +113,8 @@
                 <div class="p-6 text-center transition-all transform bg-white shadow-lg rounded-2xl hover:scale-105">
                     <div class="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-green-100">
                         <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
                     </div>
                     <h3 class="mb-2 text-xl font-bold text-gray-800">Email Us</h3>
@@ -110,7 +125,8 @@
                 <div class="p-6 text-center transition-all transform bg-white shadow-lg rounded-2xl hover:scale-105">
                     <div class="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-purple-100">
                         <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
                         </svg>
                     </div>
                     <h3 class="mb-2 text-xl font-bold text-gray-800">Follow Us</h3>
@@ -140,7 +156,8 @@
                     <form id="contact-form" class="space-y-6">
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <div>
-                                <label for="first-name" class="block mb-2 font-semibold text-gray-700">First Name</label>
+                                <label for="first-name" class="block mb-2 font-semibold text-gray-700">First
+                                    Name</label>
                                 <input type="text" id="first-name" name="first-name" required
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                                     placeholder="John">
@@ -195,7 +212,8 @@
                     </form>
 
                     <!-- Success Message -->
-                    <div id="success-message" class="hidden p-4 mt-6 text-green-800 bg-green-100 border border-green-300 rounded-lg">
+                    <div id="success-message"
+                        class="hidden p-4 mt-6 text-green-800 bg-green-100 border border-green-300 rounded-lg">
                         <p class="font-semibold">✓ Message sent successfully!</p>
                         <p class="text-sm">We'll get back to you within 24 hours.</p>
                     </div>
@@ -209,8 +227,10 @@
                             <!-- Placeholder for map - replace with actual map API -->
                             <div class="flex items-center justify-center h-full">
                                 <div class="text-center">
-                                    <svg class="w-16 h-16 mx-auto mb-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                                    <svg class="w-16 h-16 mx-auto mb-4 text-amber-600" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                                     </svg>
                                     <p class="text-gray-600">Interactive Map</p>
                                     <p class="text-sm text-gray-500">123 Coffee Street, Cafe District</p>
@@ -221,7 +241,8 @@
                             <a href="https://maps.google.com" target="_blank"
                                 class="flex items-center justify-center w-full px-6 py-3 font-semibold transition-all border-2 rounded-lg border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                 </svg>
                                 Open in Google Maps
                             </a>
@@ -251,8 +272,10 @@
                         </div>
                         <div class="p-4 mt-6 border-2 rounded-lg bg-amber-50 border-amber-200">
                             <p class="flex items-center text-sm text-gray-700">
-                                <svg class="w-5 h-5 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <svg class="w-5 h-5 mr-2 text-amber-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 We're currently <span class="ml-1 font-semibold text-green-600">OPEN</span>
                             </p>
@@ -260,10 +283,12 @@
                     </div>
 
                     <!-- FAQ Link -->
-                    <div class="p-6 text-center text-white shadow-xl bg-linear-to-br from-amber-600 to-orange-600 rounded-2xl">
+                    <div
+                        class="p-6 text-center text-white shadow-xl bg-linear-to-br from-amber-600 to-orange-600 rounded-2xl">
                         <h3 class="mb-2 text-xl font-bold">Have Questions?</h3>
                         <p class="mb-4">Check out our FAQ section for quick answers</p>
-                        <a href="#faq" class="inline-block px-6 py-3 font-semibold transition-all bg-white rounded-lg text-amber-600 hover:bg-amber-50">
+                        <a href="#faq"
+                            class="inline-block px-6 py-3 font-semibold transition-all bg-white rounded-lg text-amber-600 hover:bg-amber-50">
                             View FAQs
                         </a>
                     </div>
@@ -285,25 +310,30 @@
                 <div class="overflow-hidden bg-gray-50 rounded-xl">
                     <button class="flex items-center justify-between w-full p-6 text-left faq-btn">
                         <span class="text-lg font-semibold text-gray-800">Do you offer WiFi for customers?</span>
-                        <svg class="w-6 h-6 transition-transform text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 transition-transform text-amber-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div class="hidden p-6 pt-0 faq-content">
-                        <p class="text-gray-600">Yes! We offer free high-speed WiFi to all our customers. The password is available on request or displayed at the counter.</p>
+                        <p class="text-gray-600">Yes! We offer free high-speed WiFi to all our customers. The password
+                            is available on request or displayed at the counter.</p>
                     </div>
                 </div>
 
                 <!-- FAQ Item 2 -->
                 <div class="overflow-hidden bg-gray-50 rounded-xl">
                     <button class="flex items-center justify-between w-full p-6 text-left faq-btn">
-                        <span class="text-lg font-semibold text-gray-800">Do you have vegan or dairy-free options?</span>
-                        <svg class="w-6 h-6 transition-transform text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <span class="text-lg font-semibold text-gray-800">Do you have vegan or dairy-free
+                            options?</span>
+                        <svg class="w-6 h-6 transition-transform text-amber-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div class="hidden p-6 pt-0 faq-content">
-                        <p class="text-gray-600">Absolutely! We offer oat milk, almond milk, and soy milk as alternatives. Many of our pastries and snacks are also vegan-friendly.</p>
+                        <p class="text-gray-600">Absolutely! We offer oat milk, almond milk, and soy milk as
+                            alternatives. Many of our pastries and snacks are also vegan-friendly.</p>
                     </div>
                 </div>
 
@@ -311,12 +341,14 @@
                 <div class="overflow-hidden bg-gray-50 rounded-xl">
                     <button class="flex items-center justify-between w-full p-6 text-left faq-btn">
                         <span class="text-lg font-semibold text-gray-800">Can I book the cafe for private events?</span>
-                        <svg class="w-6 h-6 transition-transform text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 transition-transform text-amber-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div class="hidden p-6 pt-0 faq-content">
-                        <p class="text-gray-600">Yes! We offer private event bookings for groups of 20 or more. Please contact us at least 2 weeks in advance to discuss your requirements.</p>
+                        <p class="text-gray-600">Yes! We offer private event bookings for groups of 20 or more. Please
+                            contact us at least 2 weeks in advance to discuss your requirements.</p>
                     </div>
                 </div>
 
@@ -324,12 +356,14 @@
                 <div class="overflow-hidden bg-gray-50 rounded-xl">
                     <button class="flex items-center justify-between w-full p-6 text-left faq-btn">
                         <span class="text-lg font-semibold text-gray-800">Do you offer delivery services?</span>
-                        <svg class="w-6 h-6 transition-transform text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 transition-transform text-amber-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div class="hidden p-6 pt-0 faq-content">
-                        <p class="text-gray-600">Yes! We partner with major delivery platforms including GrabFood, FoodPanda, and our own mobile app for delivery within a 5km radius.</p>
+                        <p class="text-gray-600">Yes! We partner with major delivery platforms including GrabFood,
+                            FoodPanda, and our own mobile app for delivery within a 5km radius.</p>
                     </div>
                 </div>
 
@@ -337,12 +371,14 @@
                 <div class="overflow-hidden bg-gray-50 rounded-xl">
                     <button class="flex items-center justify-between w-full p-6 text-left faq-btn">
                         <span class="text-lg font-semibold text-gray-800">What payment methods do you accept?</span>
-                        <svg class="w-6 h-6 transition-transform text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 transition-transform text-amber-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div class="hidden p-6 pt-0 faq-content">
-                        <p class="text-gray-600">We accept cash, all major credit/debit cards, GCash, PayMaya, and contactless payments. We're a cashless-friendly establishment!</p>
+                        <p class="text-gray-600">We accept cash, all major credit/debit cards, GCash, PayMaya, and
+                            contactless payments. We're a cashless-friendly establishment!</p>
                     </div>
                 </div>
             </div>
