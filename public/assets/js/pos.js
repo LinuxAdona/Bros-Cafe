@@ -43,11 +43,11 @@ function filterCategory(categoryId) {
     const buttons = document.querySelectorAll('.category-btn');
 
     buttons.forEach(btn => {
-        btn.classList.remove('bg-amber-600', 'text-white');
-        btn.classList.add('bg-white', 'text-gray-700');
+        btn.classList.remove('bg-amber-600', 'text-white', 'hover:bg-amber-700');
+        btn.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-50');
     });
-    event.target.classList.add('bg-amber-600', 'text-white');
-    event.target.classList.remove('bg-white', 'text-gray-700');
+    event.target.classList.add('bg-amber-600', 'text-white', 'hover:bg-amber-700');
+    event.target.classList.remove('bg-white', 'text-gray-700', 'hover:bg-gray-50');
 
     products.forEach(product => {
         if (categoryId === 'all' || product.dataset.category === categoryId) {
