@@ -19,8 +19,6 @@
                 <span class="ml-3 text-xl font-bold">BROS CAFE</span>
             </a>
 
-            <div class="flex"></div>
-
             <!-- Mobile Menu Button -->
             <button id="mobile-menu-btn" class="text-gray-700 lg:hidden focus:outline-none">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
