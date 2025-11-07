@@ -102,6 +102,7 @@ $current_user = getCurrentUser();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products Management - Bro's Cafe</title>
     <link rel="stylesheet" href="../../src/output.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
     <link rel="icon" type="image/png" href="../assets/images/logo.png">
     <script src="https://kit.fontawesome.com/2a99de0fa5.js" crossorigin="anonymous"></script>
 </head>
@@ -441,14 +442,8 @@ $current_user = getCurrentUser();
         <input type="hidden" name="product_id" id="deleteProductId">
     </form>
 
+    <script src="../assets/js/admin.js"></script>
     <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('-translate-x-full');
-            sidebar.classList.toggle('absolute');
-            sidebar.classList.toggle('z-50');
-        }
-
         function openAddModal() {
             document.getElementById('modal-title').textContent = 'Add Product';
             document.getElementById('formAction').value = 'add';
@@ -479,13 +474,6 @@ $current_user = getCurrentUser();
         function closeModal() {
             document.getElementById('productModal').classList.add('hidden');
         }
-
-        // Responsive sidebar
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768) {
-                document.getElementById('sidebar').classList.remove('-translate-x-full', 'absolute', 'z-50');
-            }
-        });
     </script>
 </body>
 

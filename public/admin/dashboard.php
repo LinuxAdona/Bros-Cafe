@@ -67,6 +67,7 @@ $current_user = getCurrentUser();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Bro's Cafe</title>
     <link rel="stylesheet" href="../../src/output.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
     <link rel="icon" type="image/png" href="../assets/images/logo.png">
     <script src="https://kit.fontawesome.com/2a99de0fa5.js" crossorigin="anonymous"></script>
 </head>
@@ -353,21 +354,7 @@ $current_user = getCurrentUser();
         </div>
     </div>
 
-    <script>
-        let isSidebarVisible = true;
-
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-
-            if (isSidebarVisible) {
-                sidebar.style.display = 'none';
-                isSidebarVisible = false;
-            } else {
-                sidebar.style.display = 'flex';
-                isSidebarVisible = true;
-            }
-        }
-    </script>
+    <script src="../assets/js/admin.js"></script>
 </body>
 
 </html>
