@@ -143,12 +143,13 @@ $current_user = getCurrentUser();
                         <img src="../../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
                         <div class="ml-3">
                             <h1 class="text-lg font-bold">Bro's Cafe</h1>
-                            <p class="text-xs text-gray-400">Admin Panel</p>
+                            <p class="text-xs text-gray-400"><?php echo ucfirst($current_user['role']); ?> Panel</p>
                         </div>
                     </div>
                     <button onclick="toggleSidebar()" class="text-gray-400 transition-colors hover:text-white">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
@@ -157,7 +158,8 @@ $current_user = getCurrentUser();
             <nav class="flex-1 p-4 overflow-y-auto">
                 <ul class="space-y-2">
                     <li>
-                        <a href="dashboard.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="dashboard.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -166,7 +168,8 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="pos.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="pos.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -175,7 +178,8 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="orders.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="orders.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -184,7 +188,8 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="inventory.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="inventory.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -193,13 +198,15 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="analytics.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="analytics.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <i class="w-5 h-5 mr-3 fa-solid fa-chart-simple"></i>
                             Analytics
                         </a>
                     </li>
                     <li>
-                        <a href="products.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="products.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -243,7 +250,8 @@ $current_user = getCurrentUser();
                         <button onclick="toggleSidebar()" id="hamburger-btn"
                             class="p-3 mr-4 text-white transition-all rounded-full shadow-lg bg-amber-600 hover:bg-amber-700 hover:shadow-xl">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
                         <div>
@@ -259,7 +267,8 @@ $current_user = getCurrentUser();
 
                 <!-- Alert Messages -->
                 <?php if ($message): ?>
-                    <div class="p-4 mb-6 rounded-lg <?php echo $message_type === 'success' ? 'bg-green-100 text-green-800 border-l-4 border-green-500' : 'bg-red-100 text-red-800 border-l-4 border-red-500'; ?>">
+                    <div
+                        class="p-4 mb-6 rounded-lg <?php echo $message_type === 'success' ? 'bg-green-100 text-green-800 border-l-4 border-green-500' : 'bg-red-100 text-red-800 border-l-4 border-red-500'; ?>">
                         <?php echo $message; ?>
                     </div>
                 <?php endif; ?>
@@ -309,31 +318,40 @@ $current_user = getCurrentUser();
                         <table class="w-full">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         User
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Username
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Email
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Phone
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Role
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Orders
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Total Sales
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Status
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Actions
                                     </th>
                                 </tr>
@@ -344,13 +362,16 @@ $current_user = getCurrentUser();
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <div class="shrink-0 w-10 h-10">
-                                                    <div class="flex items-center justify-center w-10 h-10 text-white rounded-full bg-amber-600">
+                                                    <div
+                                                        class="flex items-center justify-center w-10 h-10 text-white rounded-full bg-amber-600">
                                                         <?php echo strtoupper(substr($user['full_name'], 0, 2)); ?>
                                                     </div>
                                                 </div>
                                                 <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900"><?php echo $user['full_name']; ?></div>
-                                                    <div class="text-sm text-gray-500">Joined <?php echo date('M Y', strtotime($user['created_at'])); ?></div>
+                                                    <div class="text-sm font-medium text-gray-900">
+                                                        <?php echo $user['full_name']; ?></div>
+                                                    <div class="text-sm text-gray-500">Joined
+                                                        <?php echo date('M Y', strtotime($user['created_at'])); ?></div>
                                                 </div>
                                             </div>
                                         </td>
@@ -364,7 +385,8 @@ $current_user = getCurrentUser();
                                             <?php echo $user['phone'] ?: '-'; ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full 
+                                            <span
+                                                class="px-2 py-1 text-xs font-medium rounded-full 
                                                 <?php echo $user['role'] === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'; ?>">
                                                 <?php echo ucfirst($user['role']); ?>
                                             </span>
@@ -376,7 +398,8 @@ $current_user = getCurrentUser();
                                             ₱<?php echo number_format($user['total_sales'] ?? 0, 2); ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 py-1 text-xs font-medium rounded-full 
+                                            <span
+                                                class="px-2 py-1 text-xs font-medium rounded-full 
                                                 <?php echo $user['status'] === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'; ?>">
                                                 <?php echo ucfirst($user['status']); ?>
                                             </span>
@@ -386,12 +409,15 @@ $current_user = getCurrentUser();
                                                 class="mr-3 text-blue-600 hover:text-blue-800" title="Edit">
                                                 <i class="fa-solid fa-edit"></i>
                                             </button>
-                                            <button onclick="toggleUserStatus(<?php echo $user['id']; ?>, '<?php echo $user['status']; ?>')"
+                                            <button
+                                                onclick="toggleUserStatus(<?php echo $user['id']; ?>, '<?php echo $user['status']; ?>')"
                                                 class="mr-3 text-yellow-600 hover:text-yellow-800" title="Toggle Status">
-                                                <i class="fa-solid fa-toggle-<?php echo $user['status'] === 'active' ? 'on' : 'off'; ?>"></i>
+                                                <i
+                                                    class="fa-solid fa-toggle-<?php echo $user['status'] === 'active' ? 'on' : 'off'; ?>"></i>
                                             </button>
                                             <?php if ($user['id'] != $current_user['id']): ?>
-                                                <button onclick="deleteUser(<?php echo $user['id']; ?>, '<?php echo addslashes($user['full_name']); ?>')"
+                                                <button
+                                                    onclick="deleteUser(<?php echo $user['id']; ?>, '<?php echo addslashes($user['full_name']); ?>')"
                                                     class="text-red-600 hover:text-red-800" title="Delete">
                                                     <i class="fa-solid fa-trash"></i>
                                                 </button>
@@ -408,11 +434,13 @@ $current_user = getCurrentUser();
     </div>
 
     <!-- Add/Edit User Modal -->
-    <div id="userModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div id="userModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
         <div class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div
+                class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 <form method="POST" id="userForm">
                     <div class="px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4">
                         <div class="mb-4">
@@ -448,10 +476,12 @@ $current_user = getCurrentUser();
                             </div>
 
                             <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-700">Password <span id="passwordRequired">*</span></label>
+                                <label class="block mb-2 text-sm font-medium text-gray-700">Password <span
+                                        id="passwordRequired">*</span></label>
                                 <input type="password" name="password" id="password"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
-                                <p class="mt-1 text-xs text-gray-500" id="passwordHint">Leave blank to keep current password</p>
+                                <p class="mt-1 text-xs text-gray-500" id="passwordHint">Leave blank to keep current
+                                    password</p>
                             </div>
 
                             <div>

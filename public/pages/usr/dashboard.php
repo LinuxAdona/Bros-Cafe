@@ -82,7 +82,7 @@ $current_user = getCurrentUser();
                         <img src="../../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
                         <div class="ml-3">
                             <h1 class="text-lg font-bold">Bro's Cafe</h1>
-                            <p class="text-xs text-gray-400">Admin Panel</p>
+                            <p class="text-xs text-gray-400"><?php echo ucfirst($current_user['role']); ?> Panel</p>
                         </div>
                     </div>
                     <button onclick="toggleSidebar()" class="text-gray-400 transition-colors hover:text-white">
