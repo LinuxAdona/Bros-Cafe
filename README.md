@@ -125,13 +125,6 @@ VALUES ('employee', 'employee@broscafe.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoE
 - **Password**: employee123
 - **Access**: POS and Inventory only
 
-### Customer Account
-
-Register through the signup page or:
-
-- **Username**: (create your own)
-- **Password**: (minimum 6 characters)
-
 ## Project Structure
 
 ```
@@ -149,9 +142,7 @@ Bros-Cafe/
 │   │   └── update_inventory.php
 │   ├── employee/
 │   │   ├── pos.php          # POS system
-│   │   └── process_order.php
-│   ├── customer/
-│   │   └── orders.php       # Customer order history
+│   │   └── process_order.php   # Customer order history
 │   ├── pages/
 │   │   ├── home.php         # Landing page
 │   │   ├── login.php        # Login page
@@ -171,7 +162,7 @@ Bros-Cafe/
 
 ### Main Tables
 
-- **users**: User accounts (admin, employee, customer)
+- **users**: User accounts (admin, employee)
 - **products**: Coffee products and menu items
 - **categories**: Product categories
 - **inventory**: Stock levels and management
@@ -234,13 +225,6 @@ Bros-Cafe/
 - Restock items
 - Process orders
 
-### Customer
-
-- View products
-- Place orders (future)
-- Order history
-- Account management
-
 ## API Endpoints (AJAX)
 
 - `POST /public/employee/process_order.php` - Process new order
@@ -273,15 +257,11 @@ Bros-Cafe/
 ## Future Enhancements
 
 - [ ] Mobile app integration
-- [ ] Online ordering for customers
 - [ ] QR code menu
-- [ ] SMS notifications
 - [ ] Receipt printing
 - [ ] Multi-branch support
 - [ ] Advanced reporting (PDF/Excel export)
 - [ ] Employee scheduling
-- [ ] Customer loyalty program management
-- [ ] Email notifications
 - [ ] API for third-party integrations
 
 ## Contributing
