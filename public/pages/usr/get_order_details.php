@@ -1,8 +1,8 @@
 <?php
-require_once '../../config/database.php';
-require_once '../../includes/functions.php';
+require_once '../../../config/database.php';
+require_once '../../../src/services/functions.php';
 
-requireRole('admin');
+requireEmployee();
 
 if (!isset($_GET['id'])) {
     echo '<p class="text-red-500">Invalid order ID</p>';

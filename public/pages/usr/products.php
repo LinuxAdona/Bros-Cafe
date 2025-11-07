@@ -1,8 +1,8 @@
 <?php
-require_once '../../config/database.php';
-require_once '../../includes/functions.php';
+require_once '../../../config/database.php';
+require_once '../../../src/services/functions.php';
 
-requireRole('admin');
+requireEmployee();
 
 $db = new Database();
 $conn = $db->getConnection();
@@ -101,9 +101,9 @@ $current_user = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products Management - Bro's Cafe</title>
-    <link rel="stylesheet" href="../../src/output.css">
-    <link rel="stylesheet" href="../assets/css/admin.css">
-    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <link rel="stylesheet" href="../../../src/output.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
     <script src="https://kit.fontawesome.com/2a99de0fa5.js" crossorigin="anonymous"></script>
 </head>
 
@@ -114,7 +114,7 @@ $current_user = getCurrentUser();
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
-                        <img src="../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
+                        <img src="../../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
                         <div class="ml-3">
                             <h1 class="text-lg font-bold">Bro's Cafe</h1>
                             <p class="text-xs text-gray-400">Admin Panel</p>
@@ -130,17 +130,19 @@ $current_user = getCurrentUser();
 
             <nav class="flex-1 p-4 overflow-y-auto">
                 <ul class="space-y-2">
+                    <?php if (isAdmin()): ?>
+                        <li>
+                            <a href="dashboard.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                </svg>
+                                Dashboard
+                            </a>
+                        </li>
+                    <?php endif; ?>
                     <li>
-                        <a href="dashboard.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                            </svg>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="../employee/pos.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="pos.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -166,12 +168,14 @@ $current_user = getCurrentUser();
                             Inventory
                         </a>
                     </li>
-                    <li>
-                        <a href="analytics.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <i class="w-5 h-5 mr-3 fa-solid fa-chart-simple"></i>
-                            Analytics
-                        </a>
-                    </li>
+                    <?php if (isAdmin()): ?>
+                        <li>
+                            <a href="analytics.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <i class="w-5 h-5 mr-3 fa-solid fa-chart-simple"></i>
+                                Analytics
+                            </a>
+                        </li>
+                    <?php endif; ?>
                     <li>
                         <a href="products.php" class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,15 +185,17 @@ $current_user = getCurrentUser();
                             Products
                         </a>
                     </li>
-                    <li>
-                        <a href="users.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                            Employees
-                        </a>
-                    </li>
+                    <?php if (isAdmin()): ?>
+                        <li>
+                            <a href="users.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                Employees
+                            </a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </nav>
 
@@ -199,7 +205,7 @@ $current_user = getCurrentUser();
                         <p class="text-sm font-semibold"><?php echo $current_user['full_name']; ?></p>
                         <p class="text-xs text-gray-400">Administrator</p>
                     </div>
-                    <a href="../pages/logout.php" class="text-red-400 hover:text-red-300">
+                    <a href="../logout.php" class="text-red-400 hover:text-red-300">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -442,39 +448,8 @@ $current_user = getCurrentUser();
         <input type="hidden" name="product_id" id="deleteProductId">
     </form>
 
-    <script src="../assets/js/admin.js"></script>
-    <script>
-        function openAddModal() {
-            document.getElementById('modal-title').textContent = 'Add Product';
-            document.getElementById('formAction').value = 'add';
-            document.getElementById('productForm').reset();
-            document.getElementById('productModal').classList.remove('hidden');
-        }
-
-        function editProduct(product) {
-            document.getElementById('modal-title').textContent = 'Edit Product';
-            document.getElementById('formAction').value = 'edit';
-            document.getElementById('productId').value = product.id;
-            document.getElementById('productName').value = product.name;
-            document.getElementById('categoryId').value = product.category_id;
-            document.getElementById('productDescription').value = product.description || '';
-            document.getElementById('priceDodici').value = product.price_dodici || '';
-            document.getElementById('priceSedici').value = product.price_sedici || '';
-            document.getElementById('productStatus').value = product.status;
-            document.getElementById('productModal').classList.remove('hidden');
-        }
-
-        function deleteProduct(id, name) {
-            if (confirm(`Are you sure you want to delete "${name}"? This action cannot be undone.`)) {
-                document.getElementById('deleteProductId').value = id;
-                document.getElementById('deleteForm').submit();
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('productModal').classList.add('hidden');
-        }
-    </script>
+    <script src="../../assets/js/admin.js"></script>
+    <script src="../../assets/js/products.js"></script>
 </body>
 
 </html>

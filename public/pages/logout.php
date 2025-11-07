@@ -1,3 +1,3 @@
 <?php
-require_once '../../includes/functions.php';
+require_once '../../src/services/functions.php';
 logout();

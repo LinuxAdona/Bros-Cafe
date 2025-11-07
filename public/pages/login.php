@@ -1,16 +1,14 @@
 <?php
 require_once '../../config/database.php';
-require_once '../../includes/functions.php';
+require_once '../../src/services/functions.php';
 
 // Redirect if already logged in
 if (isLoggedIn()) {
     $role = $_SESSION['user_role'];
     if ($role === 'admin') {
-        header('Location: ../admin/dashboard.php');
-    } elseif ($role === 'employee') {
-        header('Location: ../employee/pos.php');
+        header('Location: ./usr/dashboard.php');
     } else {
-        header('Location: ../customer/orders.php');
+        header('Location: ./usr/pos.php');
     }
     exit();
 }
@@ -41,11 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Redirect based on role
             if ($user['role'] === 'admin') {
-                header('Location: ../admin/dashboard.php');
-            } elseif ($user['role'] === 'employee') {
-                header('Location: ../employee/pos.php');
+                header('Location: ./usr/dashboard.php');
             } else {
-                header('Location: ../customer/orders.php');
+                header('Location: ./usr/pos.php');
             }
             exit();
         } else {

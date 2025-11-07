@@ -1,6 +1,6 @@
 <?php
-require_once '../../config/database.php';
-require_once '../../includes/functions.php';
+require_once '../../../config/database.php';
+require_once '../../../src/services/functions.php';
 
 requireRole('admin');
 
@@ -127,8 +127,8 @@ $current_user = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management - Bro's Cafe</title>
-    <link rel="stylesheet" href="../../src/output.css">
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../../../src/output.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
     <link rel="icon" type="image/png" href="../assets/images/logo.png">
     <script src="https://kit.fontawesome.com/2a99de0fa5.js" crossorigin="anonymous"></script>
 </head>
@@ -140,7 +140,7 @@ $current_user = getCurrentUser();
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
-                        <img src="../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
+                        <img src="../../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
                         <div class="ml-3">
                             <h1 class="text-lg font-bold">Bro's Cafe</h1>
                             <p class="text-xs text-gray-400">Admin Panel</p>
@@ -166,7 +166,7 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="../employee/pos.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="pos.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -225,7 +225,7 @@ $current_user = getCurrentUser();
                         <p class="text-sm font-semibold"><?php echo $current_user['full_name']; ?></p>
                         <p class="text-xs text-gray-400">Administrator</p>
                     </div>
-                    <a href="../pages/logout.php" class="text-red-400 hover:text-red-300">
+                    <a href="../logout.php" class="text-red-400 hover:text-red-300">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -343,7 +343,7 @@ $current_user = getCurrentUser();
                                     <tr class="hover:bg-gray-50">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center">
-                                                <div class="flex-shrink-0 w-10 h-10">
+                                                <div class="shrink-0 w-10 h-10">
                                                     <div class="flex items-center justify-center w-10 h-10 text-white rounded-full bg-amber-600">
                                                         <?php echo strtoupper(substr($user['full_name'], 0, 2)); ?>
                                                     </div>
@@ -500,54 +500,8 @@ $current_user = getCurrentUser();
         <input type="hidden" name="user_id" id="toggleUserId">
     </form>
 
-    <script src="../assets/js/admin.js"></script>
-    <script>
-        function openAddModal() {
-            document.getElementById('modal-title').textContent = 'Add User';
-            document.getElementById('formAction').value = 'add';
-            document.getElementById('userForm').reset();
-            document.getElementById('password').required = true;
-            document.getElementById('passwordRequired').style.display = 'inline';
-            document.getElementById('passwordHint').style.display = 'none';
-            document.getElementById('userModal').classList.remove('hidden');
-        }
-
-        function editUser(user) {
-            document.getElementById('modal-title').textContent = 'Edit User';
-            document.getElementById('formAction').value = 'edit';
-            document.getElementById('userId').value = user.id;
-            document.getElementById('fullName').value = user.full_name;
-            document.getElementById('username').value = user.username;
-            document.getElementById('email').value = user.email;
-            document.getElementById('phone').value = user.phone || '';
-            document.getElementById('password').value = '';
-            document.getElementById('password').required = false;
-            document.getElementById('passwordRequired').style.display = 'none';
-            document.getElementById('passwordHint').style.display = 'block';
-            document.getElementById('role').value = user.role;
-            document.getElementById('status').value = user.status;
-            document.getElementById('userModal').classList.remove('hidden');
-        }
-
-        function deleteUser(id, name) {
-            if (confirm(`Are you sure you want to delete "${name}"? This action cannot be undone.`)) {
-                document.getElementById('deleteUserId').value = id;
-                document.getElementById('deleteForm').submit();
-            }
-        }
-
-        function toggleUserStatus(id, currentStatus) {
-            const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-            if (confirm(`Change user status to "${newStatus}"?`)) {
-                document.getElementById('toggleUserId').value = id;
-                document.getElementById('toggleStatusForm').submit();
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('userModal').classList.add('hidden');
-        }
-    </script>
+    <script src="../../assets/js/admin.js"></script>
+    <script src="../../assets/js/users.js"></script>
 </body>
 
 </html>

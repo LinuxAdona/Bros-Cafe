@@ -1,6 +1,6 @@
 <?php
-require_once '../../config/database.php';
-require_once '../../includes/functions.php';
+require_once '../../../config/database.php';
+require_once '../../../src/services/functions.php';
 
 requireEmployee();
 
@@ -31,9 +31,9 @@ $current_user = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POS System - Bro's Cafe</title>
-    <link rel="stylesheet" href="../../src/output.css">
-    <link rel="stylesheet" href="../assets/css/pos.css">
-    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <link rel="stylesheet" href="../../../src/output.css">
+    <link rel="stylesheet" href="../../assets/css/pos.css">
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
     <script src="https://kit.fontawesome.com/2a99de0fa5.js" crossorigin="anonymous"></script>
 </head>
 
@@ -44,7 +44,7 @@ $current_user = getCurrentUser();
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
-                        <img src="../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
+                        <img src="../../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
                         <div class="ml-3">
                             <h1 class="text-lg font-bold">Bro's Cafe</h1>
                             <p class="text-xs text-gray-400">POS System</p>
@@ -63,7 +63,7 @@ $current_user = getCurrentUser();
                 <ul class="space-y-2">
                     <?php if (isAdmin()): ?>
                         <li>
-                            <a href="../admin/dashboard.php"
+                            <a href="dashboard.php"
                                 class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -94,7 +94,7 @@ $current_user = getCurrentUser();
                             </a>
                         </li>
                         <li>
-                            <a href="../admin/inventory.php"
+                            <a href="inventory.php"
                                 class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -112,16 +112,18 @@ $current_user = getCurrentUser();
                                 Analytics
                             </a>
                         </li>
-                        <li>
-                            <a href="products.php"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                </svg>
-                                Products
-                            </a>
-                        </li>
+                    <?php endif; ?>
+                    <li>
+                        <a href="products.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                            Products
+                        </a>
+                    </li>
+                    <?php if (isAdmin()): ?>
                         <li>
                             <a href="users.php"
                                 class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
@@ -142,7 +144,7 @@ $current_user = getCurrentUser();
                         <p class="text-sm font-semibold"><?php echo $current_user['full_name']; ?></p>
                         <p class="text-xs text-gray-400"><?php echo ucfirst($current_user['role']); ?></p>
                     </div>
-                    <a href="../pages/logout.php" class="text-red-400 hover:text-red-300">
+                    <a href="../logout.php" class="text-red-400 hover:text-red-300">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -265,7 +267,6 @@ $current_user = getCurrentUser();
                     <select id="payment-method" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                         <option value="cash">Cash</option>
                         <option value="card">Card</option>
-                        <option value="gcash">GCash</option>
                     </select>
 
                     <select id="order-type" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
@@ -306,7 +307,7 @@ $current_user = getCurrentUser();
         </div>
     </div>
 
-    <script src="../assets/js/pos.js"></script>
+    <script src="../../assets/js/pos.js"></script>
 </body>
 
 </html>

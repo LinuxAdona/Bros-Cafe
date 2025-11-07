@@ -1,6 +1,6 @@
 <?php
-require_once '../../config/database.php';
-require_once '../../includes/functions.php';
+require_once '../../../config/database.php';
+require_once '../../../src/services/functions.php';
 
 requireEmployee();
 
@@ -35,9 +35,9 @@ $current_user = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Management - Bro's Cafe</title>
-    <link rel="stylesheet" href="../../src/output.css">
-    <link rel="stylesheet" href="../assets/css/admin.css">
-    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <link rel="stylesheet" href="../../../src/output.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
     <script src="https://kit.fontawesome.com/2a99de0fa5.js" crossorigin="anonymous"></script>
 </head>
 
@@ -48,7 +48,7 @@ $current_user = getCurrentUser();
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
-                        <img src="../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
+                        <img src="../../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
                         <div class="ml-3">
                             <h1 class="text-lg font-bold">Bro's Cafe</h1>
                             <p class="text-xs text-gray-400">Inventory</p>
@@ -67,7 +67,7 @@ $current_user = getCurrentUser();
                 <ul class="space-y-2">
                     <?php if (isAdmin()): ?>
                         <li>
-                            <a href="../admin/dashboard.php"
+                            <a href="dashboard.php"
                                 class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -78,7 +78,7 @@ $current_user = getCurrentUser();
                         </li>
                     <?php endif; ?>
                     <li>
-                        <a href="../employee/pos.php"
+                        <a href="pos.php"
                             class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -114,16 +114,18 @@ $current_user = getCurrentUser();
                                 Analytics
                             </a>
                         </li>
-                        <li>
-                            <a href="products.php"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                </svg>
-                                Products
-                            </a>
-                        </li>
+                    <?php endif; ?>
+                    <li>
+                        <a href="products.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                            Products
+                        </a>
+                    </li>
+                    <?php if (isAdmin()): ?>
                         <li>
                             <a href="users.php"
                                 class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
@@ -144,7 +146,7 @@ $current_user = getCurrentUser();
                         <p class="text-sm font-semibold"><?php echo $current_user['full_name']; ?></p>
                         <p class="text-xs text-gray-400"><?php echo ucfirst($current_user['role']); ?></p>
                     </div>
-                    <a href="../pages/logout.php" class="text-red-400 hover:text-red-300">
+                    <a href="../logout.php" class="text-red-400 hover:text-red-300">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -176,7 +178,7 @@ $current_user = getCurrentUser();
                 <?php if (count($low_stock) > 0): ?>
                     <div class="p-4 mb-6 border-l-4 border-red-500 bg-red-50">
                         <div class="flex">
-                            <div class="flex-shrink-0">
+                            <div class="shrink-0">
                                 <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
                                         d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
@@ -202,7 +204,7 @@ $current_user = getCurrentUser();
                 <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-3">
                     <div class="p-6 bg-white rounded-lg shadow">
                         <div class="flex items-center">
-                            <div class="flex-shrink-0 p-3 bg-blue-500 rounded-md">
+                            <div class="p-3 bg-blue-500 rounded-md shrink-0">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -217,7 +219,7 @@ $current_user = getCurrentUser();
 
                     <div class="p-6 bg-white rounded-lg shadow">
                         <div class="flex items-center">
-                            <div class="flex-shrink-0 p-3 bg-red-500 rounded-md">
+                            <div class="p-3 bg-red-500 rounded-md shrink-0">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -232,7 +234,7 @@ $current_user = getCurrentUser();
 
                     <div class="p-6 bg-white rounded-lg shadow">
                         <div class="flex items-center">
-                            <div class="flex-shrink-0 p-3 bg-green-500 rounded-md">
+                            <div class="p-3 bg-green-500 rounded-md shrink-0">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -367,81 +369,8 @@ $current_user = getCurrentUser();
         </div>
     </div>
 
-    <script>
-        function openRestockModal(productId, productName, currentStock) {
-            document.getElementById('restock_product_id').value = productId;
-            document.getElementById('restock_product_name').textContent = productName;
-            document.getElementById('restock_current_stock').textContent = currentStock + ' servings';
-            document.getElementById('restockModal').classList.remove('hidden');
-        }
-
-        function closeRestockModal() {
-            document.getElementById('restockModal').classList.add('hidden');
-            document.getElementById('restockForm').reset();
-        }
-
-        function openAdjustModal(productId, productName, currentStock) {
-            // Similar to restock but allows both increase and decrease
-            const adjustment = prompt(`Adjust stock for ${productName}\nCurrent: ${currentStock}\nEnter adjustment (+/-):`);
-            if (adjustment) {
-                adjustStock(productId, parseInt(adjustment));
-            }
-        }
-
-        function submitRestock(event) {
-            event.preventDefault();
-
-            const productId = document.getElementById('restock_product_id').value;
-            const quantity = document.getElementById('restock_quantity').value;
-            const notes = document.getElementById('restock_notes').value;
-
-            fetch('update_inventory.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        product_id: productId,
-                        quantity: quantity,
-                        type: 'restock',
-                        notes: notes
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Stock updated successfully!');
-                        location.reload();
-                    } else {
-                        alert('Error: ' + data.message);
-                    }
-                });
-        }
-
-        function adjustStock(productId, adjustment) {
-            fetch('update_inventory.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        product_id: productId,
-                        quantity: adjustment,
-                        type: 'adjustment'
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Stock adjusted successfully!');
-                        location.reload();
-                    } else {
-                        alert('Error: ' + data.message);
-                    }
-                });
-        }
-    </script>
-    <script src="../assets/js/admin.js"></script>
+    <script src="../../assets/js/inventory.js"></script>
+    <script src="../../assets/js/admin.js"></script>
 </body>
 
 </html>
