@@ -1,14 +1,14 @@
 <?php
 require_once '../../config/database.php';
-require_once '../../includes/functions.php';
+require_once '../../src/services/functions.php';
 
 // Redirect if already logged in
 if (isLoggedIn()) {
     $role = $_SESSION['user_role'];
     if ($role === 'admin') {
-        header('Location: ../admin/dashboard.php');
+        header('Location: ./usr/dashboard.php');
     } else {
-        header('Location: ../employee/pos.php');
+        header('Location: ./usr/pos.php');
     }
     exit();
 }
@@ -71,56 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - Bro's Cafe</title>
     <link rel="stylesheet" href="../../src/output.css">
+    <link rel="stylesheet" href="../assets/css/signup.css">
     <link rel="icon" type="image/png" href="../assets/images/logo.png">
-    <style>
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .modal-overlay {
-            animation: fadeIn 0.2s ease-out;
-        }
-
-        .modal-content {
-            animation: slideDown 0.3s ease-out;
-        }
-
-        .success-icon {
-            animation: scaleIn 0.4s ease-out;
-        }
-
-        @keyframes scaleIn {
-            0% {
-                transform: scale(0);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-    </style>
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
