@@ -12,6 +12,8 @@ $period = isset($_GET['period']) ? $_GET['period'] : '7days';
 $start_date = '';
 $end_date = date('Y-m-d');
 
+// Hello
+
 switch ($period) {
     case 'today':
         $start_date = date('Y-m-d');
