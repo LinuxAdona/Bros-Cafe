@@ -53,7 +53,7 @@ function requireRole($role)
     preventCache();
     requireLogin();
     if (!hasRole($role)) {
-        header('Location: /home2/broscafe/public_html/401.html');
+        header('Location: /home2/broscafe/public_html/401.shtml');
         exit();
     }
 }
@@ -64,7 +64,7 @@ function requireEmployee()
     preventCache();
     requireLogin();
     if (!isEmployee()) {
-        header('Location: /home2/broscafe/public_html/401.html');
+        header('Location: /home2/broscafe/public_html/401.shtml');
         exit();
     }
 }
