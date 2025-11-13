@@ -10,6 +10,12 @@ deployment:
     - mkdir -p $DEPLOYPATH/src
 
     - /bin/cp index.php $DEPLOYPATH
+    - /bin/cp .htaccess $DEPLOYPATH
+    - /bin/cp 400.html $DEPLOYPATH
+    - /bin/cp 401.html $DEPLOYPATH
+    - /bin/cp 403.html $DEPLOYPATH
+    - /bin/cp 404.html $DEPLOYPATH
+    - /bin/cp 500.html $DEPLOYPATH
     - /bin/cp -R config $DEPLOYPATH
     - /bin/cp -R public $DEPLOYPATH
     - /bin/cp -R src $DEPLOYPATH
