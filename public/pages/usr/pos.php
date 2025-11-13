@@ -306,8 +306,67 @@ $current_user = getCurrentUser();
             </div>
         </div>
     </div>
+    
+    <!-- Order Success Popup -->
+<div id="order-popup" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-40 backdrop-blur-sm">
+  <div class="bg-white p-8 rounded-2xl shadow-xl text-center w-80 animate-fadeIn">
+    <div class="flex justify-center mb-4">
+      <div class="w-14 h-14 flex items-center justify-center rounded-full bg-green-100">
+        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 12l2 2l4-4m6 2a9 9 0 11-18 0a9 9 0 0118 0z" />
+        </svg>
+      </div>
+    </div>
+    <h2 class="text-xl font-semibold text-gray-800 mb-2">Order Completed</h2>
+    <p class="text-gray-500 text-sm mb-6">Your order has been processed successfully.</p>
+    <button onclick="closeOrderPopup()" class="px-5 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors">
+      OK
+    </button>
+  </div>
+</div>
+
+<style>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.25s ease-out;
+  }
+</style>
+
 
     <script src="../../assets/js/pos.js"></script>
+  <script>
+  // Override clearCart() so it clears instantly with no confirm dialog
+  function clearCart() {
+    cart = [];
+    updateCart();
+    console.log("Cart cleared automatically!");
+  }
+
+  // Show success popup after processing order
+  function processOrder() {
+    console.log("Order processed!");
+    document.getElementById("order-popup").classList.remove("hidden");
+
+    // Optional: also auto-clear cart after successful order
+    cart = [];
+    updateCart();
+  }
+
+  function closeOrderPopup() {
+    document.getElementById("order-popup").classList.add("hidden");
+  }
+</script>
+
 </body>
 
 </html>
