@@ -52,12 +52,13 @@
                         class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Contact</a>
                 </li>
             </ul>
+            <!--
             <div class="hidden space-x-4 font-medium lg:flex lg:items-center">
                 <a href="login.php" class="transition ease-out hover:-translate-x-0.5">Log in</a>
                 <a href="signup.php"
                     class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Sign
                     up</a>
-            </div>
+            </div>-->
         </div>
 
         <!-- Mobile Menu -->

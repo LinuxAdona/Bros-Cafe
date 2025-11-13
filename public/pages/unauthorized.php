@@ -32,10 +32,11 @@
                         class="block w-full bg-amber-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors">
                         Go to Home
                     </a>
+                    <!--
                     <a href="login.php"
                         class="block w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
                         Login
-                    </a>
+                    </a>-->
                 </div>
             </div>
         </div>

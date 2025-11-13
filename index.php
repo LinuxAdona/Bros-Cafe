@@ -22,7 +22,7 @@
         <!-- Navigation Bar -->
         <nav class="sticky top-0 z-50 flex items-center h-16 shadow-md bg-gray-50/80 backdrop-blur-md">
             <div class="container flex items-center justify-between px-4 mx-auto">
-                <a href="home.php" class="flex items-center">
+                <a href="index.php" class="flex items-center">
                     <img src="public/assets/images/logo.png" alt="Bro's Cafe Logo" class="w-10 h-10 rounded-full">
                     <span class="ml-3 text-xl font-bold">BROS CAFE</span>
                 </a>
@@ -50,12 +50,13 @@
                             class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Contact</a>
                     </li>
                 </ul>
+                <!--
                 <div class="hidden space-x-4 font-medium lg:flex lg:items-center">
                     <a href="public/pages/login.php" class="transition ease-out hover:-translate-x-0.5">Log in</a>
                     <a href="public/pages/signup.php"
                         class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Sign
                         up</a>
-                </div>
+                </div>-->
             </div>
 
             <!-- Mobile Menu -->
