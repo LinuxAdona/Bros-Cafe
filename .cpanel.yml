@@ -2,7 +2,6 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home2/broscafe/public_html/
-    - export REPOPATH=/home/gatherly/repositories/Gatherly-EMS_2025
 
     - mkdir -p $DEPLOYPATH
     - mkdir -p $DEPLOYPATH/config

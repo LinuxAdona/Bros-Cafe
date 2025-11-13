@@ -62,10 +62,13 @@
             <!-- Mobile Menu -->
             <div id="mobile-menu" class="absolute left-0 right-0 hidden bg-white shadow-lg top-16 lg:hidden">
                 <ul class="flex flex-col py-4 space-y-2">
-                    <li><a href="home.php" class="block px-6 py-2 transition bg-amber-50 text-amber-600">Home</a></li>
-                    <li><a href="menu.php" class="block px-6 py-2 transition hover:bg-amber-50">Menu</a></li>
-                    <li><a href="about.php" class="block px-6 py-2 transition hover:bg-amber-50">About</a></li>
-                    <li><a href="contact.php" class="block px-6 py-2 transition hover:bg-amber-50">Contact</a></li>
+                    <li><a href="index.php" class="block px-6 py-2 transition bg-amber-50 text-amber-600">Home</a></li>
+                    <li><a href="public/pages/menu.php" class="block px-6 py-2 transition hover:bg-amber-50">Menu</a>
+                    </li>
+                    <li><a href="public/pages/about.php" class="block px-6 py-2 transition hover:bg-amber-50">About</a>
+                    </li>
+                    <li><a href="public/pages/contact.php"
+                            class="block px-6 py-2 transition hover:bg-amber-50">Contact</a></li>
                     <!--
                     <li class="px-6 pt-4 border-t"><a href="login.php"
                             class="block py-2 transition hover:text-amber-600">Log in</a></li>
@@ -447,13 +450,13 @@
     </div>
 
     <script>
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
     </script>
 </body>
 
