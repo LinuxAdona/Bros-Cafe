@@ -5,9 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bros Cafe</title>
-    <link rel="stylesheet" href="../../src/output.css">
-    <link rel="icon" type="image/png" href="../assets/images/logo.png">
-    <script src="https://kit.fontawesome.com/2a99de0fa5.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="src/output.css">
+    <link rel="icon" type="image/png" href="public/assets/images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
 <body>
@@ -16,35 +24,36 @@
         <nav class="sticky top-0 z-50 flex items-center h-16 shadow-md bg-gray-50/80 backdrop-blur-md">
             <div class="container flex items-center justify-between px-4 mx-auto">
                 <a href="home.php" class="flex items-center">
-                    <img src="../assets/images/logo.png" alt="Bro's Cafe Logo" class="w-10 h-10 rounded-full">
+                    <img src="public/assets/images/logo.png" alt="Bro's Cafe Logo" class="w-10 h-10 rounded-full">
                     <span class="ml-3 text-xl font-bold">BROS CAFE</span>
                 </a>
 
                 <!-- Mobile Menu Button -->
                 <button id="mobile-menu-btn" class="text-gray-700 lg:hidden focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
 
                 <!-- Desktop Menu -->
                 <ul class="hidden space-x-2 font-medium lg:flex">
-                    <li class="transition ease-out hover:-translate-y-0.5"><a href="home.php"
+                    <li class="transition ease-out hover:-translate-y-0.5"><a href="index.php"
                             class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Home</a>
                     </li>
-                    <li class="transition ease-out hover:-translate-y-0.5"><a href="menu.php"
+                    <li class="transition ease-out hover:-translate-y-0.5"><a href="public/pages/menu.php"
                             class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Menu</a>
                     </li>
-                    <li class="transition ease-out hover:-translate-y-0.5"><a href="about.php"
+                    <li class="transition ease-out hover:-translate-y-0.5"><a href="public/pages/about.php"
                             class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">About</a>
                     </li>
-                    <li class="transition ease-out hover:-translate-y-0.5"><a href="contact.php"
+                    <li class="transition ease-out hover:-translate-y-0.5"><a href="public/pages/contact.php"
                             class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Contact</a>
                     </li>
                 </ul>
                 <div class="hidden space-x-4 font-medium lg:flex lg:items-center">
-                    <a href="login.php" class="transition ease-out hover:-translate-x-0.5">Log in</a>
-                    <a href="signup.php"
+                    <a href="public/pages/login.php" class="transition ease-out hover:-translate-x-0.5">Log in</a>
+                    <a href="public/pages/signup.php"
                         class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Sign
                         up</a>
                 </div>
@@ -57,14 +66,17 @@
                     <li><a href="menu.php" class="block px-6 py-2 transition hover:bg-amber-50">Menu</a></li>
                     <li><a href="about.php" class="block px-6 py-2 transition hover:bg-amber-50">About</a></li>
                     <li><a href="contact.php" class="block px-6 py-2 transition hover:bg-amber-50">Contact</a></li>
-                    <li class="px-6 pt-4 border-t"><a href="login.php" class="block py-2 transition hover:text-amber-600">Log in</a></li>
-                    <li class="px-6"><a href="signup.php" class="block px-4 py-2 text-center text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600">Sign up</a></li>
+                    <li class="px-6 pt-4 border-t"><a href="login.php"
+                            class="block py-2 transition hover:text-amber-600">Log in</a></li>
+                    <li class="px-6"><a href="signup.php"
+                            class="block px-4 py-2 text-center text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600">Sign
+                            up</a></li>
                 </ul>
             </div>
         </nav>
         <!-- Hero Section -->
         <header class="relative flex-1 overflow-hidden bg-center bg-cover"
-            style="background-image: url('../assets/images/hero-img.jpg');">
+            style="background-image: url('public/assets/images/hero-img.jpg');">
             <!-- Animated overlay with gradient -->
             <div
                 class="absolute inset-0 bg-linear-to-br from-black/60 via-amber-900/40 to-black/60 backdrop-blur-[2px]">
@@ -105,7 +117,7 @@
 
                     <!-- CTA Buttons -->
                     <div class="flex flex-col items-center justify-center gap-4 delay-300 sm:flex-row animate-slide-up">
-                        <a href="menu.php"
+                        <a href="public/pages/menu.php"
                             class="relative inline-flex items-center px-10 py-4 overflow-hidden font-bold text-white transition-all duration-300 transform rounded-full shadow-2xl group bg-linear-to-r from-amber-600 to-orange-600 hover:shadow-amber-500/50 hover:scale-110 hover:from-amber-500 hover:to-orange-500">
                             <span class="relative z-10 flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
@@ -120,7 +132,7 @@
                             </div>
                         </a>
 
-                        <a href="about.php"
+                        <a href="public/pages/about.php"
                             class="inline-flex items-center px-10 py-4 font-bold text-white transition-all duration-300 transform border-2 rounded-full shadow-lg border-white/80 hover:bg-white hover:text-amber-700 hover:scale-110 backdrop-blur-sm">
                             <span class="flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
@@ -174,10 +186,6 @@
                                     <p class="text-sm text-gray-500">Sedici: <span
                                             class="font-semibold text-amber-600">₱150</span></p>
                                 </div>
-                                <button
-                                    class="px-4 py-2 text-sm font-semibold text-white transition-colors rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Order Now
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -202,10 +210,6 @@
                                     <p class="text-sm text-gray-500">Sedici: <span
                                             class="font-semibold text-amber-600">₱140</span></p>
                                 </div>
-                                <button
-                                    class="px-4 py-2 text-sm font-semibold text-white transition-colors rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Order Now
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -229,10 +233,6 @@
                                     <p class="text-sm text-gray-500">Sedici: <span
                                             class="font-semibold text-amber-600">₱140</span></p>
                                 </div>
-                                <button
-                                    class="px-4 py-2 text-sm font-semibold text-white transition-colors rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Order Now
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -257,10 +257,6 @@
                                     <p class="text-sm text-gray-500">Sedici: <span
                                             class="font-semibold text-amber-600">₱150</span></p>
                                 </div>
-                                <button
-                                    class="px-4 py-2 text-sm font-semibold text-white transition-colors rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Order Now
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -282,10 +278,6 @@
                                     <p class="text-sm text-gray-500">Price: <span
                                             class="font-semibold text-amber-600">₱140</span></p>
                                 </div>
-                                <button
-                                    class="px-4 py-2 text-sm font-semibold text-white transition-colors rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Order Now
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -307,250 +299,16 @@
                                     <p class="text-sm text-gray-500">Price: <span
                                             class="font-semibold text-amber-600">₱180</span></p>
                                 </div>
-                                <button
-                                    class="px-4 py-2 text-sm font-semibold text-white transition-colors rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Order Now
-                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- View Full Menu Button -->
                 <div class="mt-12 text-center">
-                    <a href="menu.php"
+                    <a href="public/pages/menu.php"
                         class="inline-block px-10 py-4 text-lg font-semibold text-white transition-all transform rounded-lg shadow-lg bg-amber-600 hover:bg-amber-700 hover:scale-105">
                         View Full Menu
                     </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Promos & Special Offers Section -->
-        <section class="py-16 bg-white">
-            <div class="container px-4 mx-auto">
-                <!-- Section Header -->
-                <div class="mb-12 text-center">
-                    <h2 class="mb-4 text-3xl font-bold text-gray-800 md:text-4xl lg:text-5xl">Special Offers & Promos
-                    </h2>
-                    <p class="text-lg text-gray-600 md:text-xl">Don't miss out on our exclusive deals!</p>
-                </div>
-
-                <!-- Promos Grid -->
-                <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
-                    <!-- Promo Card 1: Happy Hour -->
-                    <div
-                        class="relative overflow-hidden shadow-xl bg-linear-to-br from-amber-500 to-orange-600 rounded-2xl group">
-                        <div class="absolute top-0 right-0 w-40 h-40 -mt-20 -mr-20 rounded-full bg-white/10"></div>
-                        <div class="absolute bottom-0 left-0 w-32 h-32 -mb-16 -ml-16 rounded-full bg-white/10"></div>
-                        <div class="relative p-8 text-white">
-                            <div class="flex items-start justify-between mb-4">
-                                <div>
-                                    <span
-                                        class="inline-block px-3 py-1 mb-3 text-xs font-bold rounded-full bg-white/20 backdrop-blur-sm">LIMITED
-                                        TIME</span>
-                                    <h3 class="mb-2 text-3xl font-bold">Happy Hour Special</h3>
-                                    <p class="text-xl font-semibold text-amber-100">20% OFF All Beverages</p>
-                                </div>
-                                <div class="text-5xl">☕</div>
-                            </div>
-                            <p class="mb-4 text-white/90">Monday to Friday, 2PM - 5PM</p>
-                            <div class="flex items-center justify-between pt-4 border-t border-white/20">
-                                <span class="text-sm">Valid until: Dec 31, 2025</span>
-                                <a href="menu.php"
-                                    class="px-6 py-2 font-semibold transition-all bg-white rounded-lg text-amber-600 hover:bg-amber-50 hover:shadow-lg">
-                                    Order Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Promo Card 2: Student Discount -->
-                    <div
-                        class="relative overflow-hidden shadow-xl bg-linear-to-br from-blue-500 to-purple-600 rounded-2xl group">
-                        <div class="absolute top-0 right-0 w-40 h-40 -mt-20 -mr-20 rounded-full bg-white/10"></div>
-                        <div class="absolute bottom-0 left-0 w-32 h-32 -mb-16 -ml-16 rounded-full bg-white/10"></div>
-                        <div class="relative p-8 text-white">
-                            <div class="flex items-start justify-between mb-4">
-                                <div>
-                                    <span
-                                        class="inline-block px-3 py-1 mb-3 text-xs font-bold rounded-full bg-white/20 backdrop-blur-sm">EVERYDAY</span>
-                                    <h3 class="mb-2 text-3xl font-bold">Student Discount</h3>
-                                    <p class="text-xl font-semibold text-blue-100">15% OFF with Valid ID</p>
-                                </div>
-                                <div class="text-5xl">🎓</div>
-                            </div>
-                            <p class="mb-4 text-white/90">Show your student ID at checkout</p>
-                            <div class="flex items-center justify-between pt-4 border-t border-white/20">
-                                <span class="text-sm">All day, every day</span>
-                                <a href="menu.php"
-                                    class="px-6 py-2 font-semibold text-blue-600 transition-all bg-white rounded-lg hover:bg-blue-50 hover:shadow-lg">
-                                    Learn More
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Promo Card 3: Buy 1 Get 1 -->
-                    <div
-                        class="relative overflow-hidden shadow-xl bg-linear-to-br from-green-500 to-teal-600 rounded-2xl group">
-                        <div class="absolute top-0 right-0 w-40 h-40 -mt-20 -mr-20 rounded-full bg-white/10"></div>
-                        <div class="absolute bottom-0 left-0 w-32 h-32 -mb-16 -ml-16 rounded-full bg-white/10"></div>
-                        <div class="relative p-8 text-white">
-                            <div class="flex items-start justify-between mb-4">
-                                <div>
-                                    <span
-                                        class="inline-block px-3 py-1 mb-3 text-xs font-bold rounded-full bg-white/20 backdrop-blur-sm">WEEKENDS
-                                        ONLY</span>
-                                    <h3 class="mb-2 text-3xl font-bold">Buy 1 Get 1 Free</h3>
-                                    <p class="text-xl font-semibold text-green-100">On Selected Drinks</p>
-                                </div>
-                                <div class="text-5xl">🎉</div>
-                            </div>
-                            <p class="mb-4 text-white/90">Every Saturday & Sunday</p>
-                            <div class="flex items-center justify-between pt-4 border-t border-white/20">
-                                <span class="text-sm">Check menu for eligible items</span>
-                                <a href="menu.php"
-                                    class="px-6 py-2 font-semibold text-green-600 transition-all bg-white rounded-lg hover:bg-green-50 hover:shadow-lg">
-                                    View Menu
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Promo Card 4: Loyalty Rewards -->
-                    <div
-                        class="relative overflow-hidden shadow-xl bg-linear-to-br from-pink-500 to-rose-600 rounded-2xl group">
-                        <div class="absolute top-0 right-0 w-40 h-40 -mt-20 -mr-20 rounded-full bg-white/10"></div>
-                        <div class="absolute bottom-0 left-0 w-32 h-32 -mb-16 -ml-16 rounded-full bg-white/10"></div>
-                        <div class="relative p-8 text-white">
-                            <div class="flex items-start justify-between mb-4">
-                                <div>
-                                    <span
-                                        class="inline-block px-3 py-1 mb-3 text-xs font-bold rounded-full bg-white/20 backdrop-blur-sm">MEMBERS
-                                        ONLY</span>
-                                    <h3 class="mb-2 text-3xl font-bold">Loyalty Rewards</h3>
-                                    <p class="text-xl font-semibold text-pink-100">Earn Points Every Purchase</p>
-                                </div>
-                                <div class="text-5xl">⭐</div>
-                            </div>
-                            <p class="mb-4 text-white/90">1 Point = ₱1 | Redeem for free items</p>
-                            <div class="flex items-center justify-between pt-4 border-t border-white/20">
-                                <span class="text-sm">Sign up now, it's free!</span>
-                                <a href="signup.php"
-                                    class="px-6 py-2 font-semibold text-pink-600 transition-all bg-white rounded-lg hover:bg-pink-50 hover:shadow-lg">
-                                    Join Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Announcements & Updates Section -->
-        <section class="py-16 bg-linear-to-br from-gray-50 to-amber-50">
-            <div class="container px-4 mx-auto">
-                <!-- Section Header -->
-                <div class="mb-12 text-center">
-                    <h2 class="mb-4 text-3xl font-bold text-gray-800 md:text-4xl lg:text-5xl">Latest Updates</h2>
-                    <p class="text-lg text-gray-600 md:text-xl">Stay informed with what's happening at Bro's Cafe</p>
-                </div>
-
-                <!-- Updates Grid -->
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    <!-- Update Card 1 -->
-                    <div class="overflow-hidden transition-all bg-white shadow-lg rounded-xl hover:shadow-2xl group">
-                        <div class="h-2 bg-linear-to-r from-amber-500 to-orange-500"></div>
-                        <div class="p-6">
-                            <div class="flex items-center mb-3 text-sm text-gray-500">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <span>October 28, 2025</span>
-                            </div>
-                            <h3 class="mb-3 text-xl font-bold text-gray-800">New Seasonal Menu Launch</h3>
-                            <p class="mb-4 text-gray-600">Introducing our Fall Collection with 5 new signature drinks
-                                featuring pumpkin spice, cinnamon, and caramel flavors!</p>
-                            <a href="#"
-                                class="inline-flex items-center font-semibold text-amber-600 hover:text-amber-700">
-                                Read More
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Update Card 2 -->
-                    <div class="overflow-hidden transition-all bg-white shadow-lg rounded-xl hover:shadow-2xl group">
-                        <div class="h-2 bg-linear-to-r from-blue-500 to-purple-500"></div>
-                        <div class="p-6">
-                            <div class="flex items-center mb-3 text-sm text-gray-500">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <span>October 25, 2025</span>
-                            </div>
-                            <h3 class="mb-3 text-xl font-bold text-gray-800">Extended Hours This Weekend</h3>
-                            <p class="mb-4 text-gray-600">We're staying open until midnight on Saturday & Sunday to
-                                serve you better. Perfect for late-night study sessions!</p>
-                            <a href="#"
-                                class="inline-flex items-center font-semibold text-amber-600 hover:text-amber-700">
-                                Read More
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Update Card 3 -->
-                    <div class="overflow-hidden transition-all bg-white shadow-lg rounded-xl hover:shadow-2xl group">
-                        <div class="h-2 bg-linear-to-r from-green-500 to-teal-500"></div>
-                        <div class="p-6">
-                            <div class="flex items-center mb-3 text-sm text-gray-500">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <span>October 20, 2025</span>
-                            </div>
-                            <h3 class="mb-3 text-xl font-bold text-gray-800">Mobile Ordering Now Available</h3>
-                            <p class="mb-4 text-gray-600">Skip the line! Order ahead through our new mobile app and pick
-                                up at your convenience. Download now on iOS & Android.</p>
-                            <a href="#"
-                                class="inline-flex items-center font-semibold text-amber-600 hover:text-amber-700">
-                                Read More
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Newsletter Signup -->
-                <div class="max-w-3xl p-8 mx-auto mt-12 bg-white shadow-xl rounded-2xl">
-                    <div class="text-center">
-                        <h3 class="mb-3 text-2xl font-bold text-gray-800">Stay Updated!</h3>
-                        <p class="mb-6 text-gray-600">Subscribe to our newsletter for exclusive offers, new menu items,
-                            and upcoming events.</p>
-                        <form class="flex flex-col gap-3 sm:flex-row">
-                            <input type="email" placeholder="Enter your email address"
-                                class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                                required>
-                            <button type="submit"
-                                class="px-8 py-3 font-semibold text-white transition-all rounded-lg bg-amber-600 hover:bg-amber-700 hover:shadow-lg">
-                                Subscribe
-                            </button>
-                        </form>
-                        <p class="mt-3 text-xs text-gray-500">We respect your privacy. Unsubscribe anytime.</p>
-                    </div>
                 </div>
             </div>
         </section>
@@ -563,7 +321,8 @@
                     <!-- About Section -->
                     <div>
                         <div class="flex items-center mb-4">
-                            <img src="../assets/images/logo.png" alt="Bro's Cafe Logo" class="w-12 h-12 rounded-full">
+                            <img src="public/assets/images/logo.png" alt="Bro's Cafe Logo"
+                                class="w-12 h-12 rounded-full">
                             <h3 class="ml-3 text-2xl font-bold text-amber-500">Bro's Cafe</h3>
                         </div>
                         <p class="mb-4 text-gray-400">
@@ -597,15 +356,19 @@
                     <div>
                         <h3 class="mb-4 text-xl font-bold text-amber-500">Quick Links</h3>
                         <ul class="space-y-2">
-                            <li><a href="home.php" class="text-gray-400 transition-colors hover:text-amber-500">Home</a>
+                            <li><a href="index.php"
+                                    class="text-gray-400 transition-colors hover:text-amber-500">Home</a>
                             </li>
-                            <li><a href="menu.php" class="text-gray-400 transition-colors hover:text-amber-500">Menu</a>
+                            <li><a href="public/pages/menu.php"
+                                    class="text-gray-400 transition-colors hover:text-amber-500">Menu</a>
                             </li>
-                            <li><a href="about.php" class="text-gray-400 transition-colors hover:text-amber-500">About
+                            <li><a href="public/pages/about.php"
+                                    class="text-gray-400 transition-colors hover:text-amber-500">About
                                     Us</a></li>
-                            <li><a href="contact.php"
+                            <li><a href="public/pages/contact.php"
                                     class="text-gray-400 transition-colors hover:text-amber-500">Contact</a></li>
-                            <li><a href="signin.php" class="text-gray-400 transition-colors hover:text-amber-500">Sign
+                            <li><a href="public/pages/login.php"
+                                    class="text-gray-400 transition-colors hover:text-amber-500">Log
                                     In</a></li>
                         </ul>
                     </div>
@@ -676,11 +439,6 @@
                 <!-- Bottom Footer -->
                 <div class="flex flex-col items-center justify-between text-sm text-gray-400 md:flex-row">
                     <p>&copy; 2025 Bro's Cafe. All rights reserved.</p>
-                    <div class="flex mt-4 space-x-6 md:mt-0">
-                        <a href="#" class="transition-colors hover:text-amber-500">Privacy Policy</a>
-                        <a href="#" class="transition-colors hover:text-amber-500">Terms of Service</a>
-                        <a href="#" class="transition-colors hover:text-amber-500">Cookie Policy</a>
-                    </div>
                 </div>
             </div>
         </footer>

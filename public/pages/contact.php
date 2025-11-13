@@ -14,7 +14,7 @@
     <!-- Navigation Bar -->
     <nav class="sticky top-0 z-50 flex items-center h-16 shadow-md bg-gray-50/80 backdrop-blur-md">
         <div class="container flex items-center justify-between px-4 mx-auto">
-            <a href="home.php" class="flex items-center">
+            <a href="../../index.php" class="flex items-center">
                 <img src="../assets/images/logo.png" alt="Bro's Cafe Logo" class="w-10 h-10 rounded-full">
                 <span class="ml-3 text-xl font-bold">BROS CAFE</span>
             </a>
@@ -29,7 +29,7 @@
             <!-- Desktop Menu -->
             <ul class="hidden space-x-2 font-medium lg:flex">
                 <li class="transition ease-out hover:-translate-y-0.5">
-                    <a href="home.php"
+                    <a href="../../index.php"
                         class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Home</a>
                 </li>
                 <li class="transition ease-out hover:-translate-y-0.5">
@@ -56,7 +56,7 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="absolute left-0 right-0 hidden bg-white shadow-lg top-16 lg:hidden">
             <ul class="flex flex-col py-4 space-y-2">
-                <li><a href="home.php" class="block px-6 py-2 transition hover:bg-amber-50">Home</a></li>
+                <li><a href="../../index.php" class="block px-6 py-2 transition hover:bg-amber-50">Home</a></li>
                 <li><a href="menu.php" class="block px-6 py-2 transition hover:bg-amber-50">Menu</a></li>
                 <li><a href="about.php" class="block px-6 py-2 transition hover:bg-amber-50">About</a></li>
                 <li><a href="contact.php" class="block px-6 py-2 transition bg-amber-50 text-amber-600">Contact</a></li>
@@ -397,7 +397,8 @@
                 <div>
                     <h3 class="mb-4 text-xl font-bold text-amber-500">Quick Links</h3>
                     <ul class="space-y-2">
-                        <li><a href="home.php" class="text-gray-400 transition hover:text-amber-500">Home</a></li>
+                        <li><a href="../../index.php" class="text-gray-400 transition hover:text-amber-500">Home</a>
+                        </li>
                         <li><a href="menu.php" class="text-gray-400 transition hover:text-amber-500">Menu</a></li>
                         <li><a href="about.php" class="text-gray-400 transition hover:text-amber-500">About</a></li>
                         <li><a href="contact.php" class="text-gray-400 transition hover:text-amber-500">Contact</a></li>
@@ -419,43 +420,43 @@
     </footer>
 
     <script>
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Contact form submission
+    const contactForm = document.getElementById('contact-form');
+    const successMessage = document.getElementById('success-message');
+
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Here you would normally send the form data to your server
+        successMessage.classList.remove('hidden');
+        contactForm.reset();
+
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+            successMessage.classList.add('hidden');
+        }, 5000);
+    });
+
+    // FAQ Accordion
+    const faqBtns = document.querySelectorAll('.faq-btn');
+
+    faqBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const content = btn.nextElementSibling;
+            const icon = btn.querySelector('svg');
+
+            // Toggle current FAQ
+            content.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
         });
-
-        // Contact form submission
-        const contactForm = document.getElementById('contact-form');
-        const successMessage = document.getElementById('success-message');
-
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            // Here you would normally send the form data to your server
-            successMessage.classList.remove('hidden');
-            contactForm.reset();
-
-            // Hide success message after 5 seconds
-            setTimeout(() => {
-                successMessage.classList.add('hidden');
-            }, 5000);
-        });
-
-        // FAQ Accordion
-        const faqBtns = document.querySelectorAll('.faq-btn');
-
-        faqBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const content = btn.nextElementSibling;
-                const icon = btn.querySelector('svg');
-
-                // Toggle current FAQ
-                content.classList.toggle('hidden');
-                icon.classList.toggle('rotate-180');
-            });
-        });
+    });
     </script>
 </body>
 

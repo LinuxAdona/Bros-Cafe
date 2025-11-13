@@ -14,7 +14,7 @@
     <!-- Navigation Bar -->
     <nav class="sticky top-0 z-50 flex items-center h-16 shadow-md bg-gray-50/80 backdrop-blur-md">
         <div class="container flex items-center justify-between px-4 mx-auto">
-            <a href="home.php" class="flex items-center">
+            <a href="../../index.php" class="flex items-center">
                 <img src="../assets/images/logo.png" alt="Bro's Cafe Logo" class="w-10 h-10 rounded-full">
                 <span class="ml-3 text-xl font-bold">BROS CAFE</span>
             </a>
@@ -29,33 +29,42 @@
             <!-- Desktop Menu -->
             <ul class="hidden space-x-2 font-medium lg:flex">
                 <li class="transition ease-out hover:-translate-y-0.5">
-                    <a href="home.php" class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Home</a>
+                    <a href="../../index.php"
+                        class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Home</a>
                 </li>
                 <li class="transition ease-out hover:-translate-y-0.5">
-                    <a href="menu.php" class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Menu</a>
+                    <a href="menu.php"
+                        class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Menu</a>
                 </li>
                 <li class="transition ease-out hover:-translate-y-0.5">
-                    <a href="about.php" class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">About</a>
+                    <a href="about.php"
+                        class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">About</a>
                 </li>
                 <li class="transition ease-out hover:-translate-y-0.5">
-                    <a href="contact.php" class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Contact</a>
+                    <a href="contact.php"
+                        class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Contact</a>
                 </li>
             </ul>
             <div class="hidden space-x-4 font-medium lg:flex lg:items-center">
                 <a href="login.php" class="transition ease-out hover:-translate-x-0.5">Log in</a>
-                <a href="signup.php" class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Sign up</a>
+                <a href="signup.php"
+                    class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Sign
+                    up</a>
             </div>
         </div>
 
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="absolute left-0 right-0 hidden bg-white shadow-lg top-16 lg:hidden">
             <ul class="flex flex-col py-4 space-y-2">
-                <li><a href="home.php" class="block px-6 py-2 transition hover:bg-amber-50">Home</a></li>
+                <li><a href="../../index.php" class="block px-6 py-2 transition hover:bg-amber-50">Home</a></li>
                 <li><a href="menu.php" class="block px-6 py-2 transition bg-amber-50 text-amber-600">Menu</a></li>
                 <li><a href="about.php" class="block px-6 py-2 transition hover:bg-amber-50">About</a></li>
                 <li><a href="contact.php" class="block px-6 py-2 transition hover:bg-amber-50">Contact</a></li>
-                <li class="px-6 pt-4 border-t"><a href="login.php" class="block py-2 transition hover:text-amber-600">Log in</a></li>
-                <li class="px-6"><a href="signup.php" class="block px-4 py-2 text-center text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600">Sign up</a></li>
+                <li class="px-6 pt-4 border-t"><a href="login.php"
+                        class="block py-2 transition hover:text-amber-600">Log in</a></li>
+                <li class="px-6"><a href="signup.php"
+                        class="block px-4 py-2 text-center text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600">Sign
+                        up</a></li>
             </ul>
         </div>
     </nav>
@@ -72,19 +81,29 @@
     <section class="py-8 bg-white shadow-md">
         <div class="container px-4 mx-auto">
             <div class="flex flex-wrap justify-center gap-3">
-                <button class="category-btn active px-6 py-2 font-semibold transition-all rounded-full bg-amber-500 text-white hover:bg-amber-600" data-category="all">
+                <button
+                    class="px-6 py-2 font-semibold text-white transition-all rounded-full category-btn active bg-amber-500 hover:bg-amber-600"
+                    data-category="all">
                     All Items
                 </button>
-                <button class="category-btn px-6 py-2 font-semibold transition-all rounded-full bg-gray-200 text-gray-700 hover:bg-amber-500 hover:text-white" data-category="coffee">
+                <button
+                    class="px-6 py-2 font-semibold text-gray-700 transition-all bg-gray-200 rounded-full category-btn hover:bg-amber-500 hover:text-white"
+                    data-category="coffee">
                     Coffee
                 </button>
-                <button class="category-btn px-6 py-2 font-semibold transition-all rounded-full bg-gray-200 text-gray-700 hover:bg-amber-500 hover:text-white" data-category="non-coffee">
+                <button
+                    class="px-6 py-2 font-semibold text-gray-700 transition-all bg-gray-200 rounded-full category-btn hover:bg-amber-500 hover:text-white"
+                    data-category="non-coffee">
                     Non-Coffee
                 </button>
-                <button class="category-btn px-6 py-2 font-semibold transition-all rounded-full bg-gray-200 text-gray-700 hover:bg-amber-500 hover:text-white" data-category="frappe">
+                <button
+                    class="px-6 py-2 font-semibold text-gray-700 transition-all bg-gray-200 rounded-full category-btn hover:bg-amber-500 hover:text-white"
+                    data-category="frappe">
                     Frappe
                 </button>
-                <button class="category-btn px-6 py-2 font-semibold transition-all rounded-full bg-gray-200 text-gray-700 hover:bg-amber-500 hover:text-white" data-category="food">
+                <button
+                    class="px-6 py-2 font-semibold text-gray-700 transition-all bg-gray-200 rounded-full category-btn hover:bg-amber-500 hover:text-white"
+                    data-category="food">
                     Food & Snacks
                 </button>
             </div>
@@ -100,7 +119,7 @@
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     <!-- Item 1 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-amber-100 to-amber-200 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-amber-100 to-amber-200">
                             <span class="text-7xl">☕</span>
                         </div>
                         <div class="p-6">
@@ -108,19 +127,19 @@
                             <p class="mb-4 text-gray-600">Espresso and milk topped with sea salt cream</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Dodici: <span class="font-semibold text-amber-600">₱120</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span class="font-semibold text-amber-600">₱150</span></p>
+                                    <p class="text-sm text-gray-500">Dodici: <span
+                                            class="font-semibold text-amber-600">₱120</span></p>
+                                    <p class="text-sm text-gray-500">Sedici: <span
+                                            class="font-semibold text-amber-600">₱150</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 2 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-orange-100 to-orange-200 flex items-center justify-center">
+                        <div
+                            class="flex items-center justify-center h-48 bg-linear-to-br from-orange-100 to-orange-200">
                             <span class="text-7xl">☕</span>
                         </div>
                         <div class="p-6">
@@ -128,19 +147,18 @@
                             <p class="mb-4 text-gray-600">Sweet twist on a classic iced cafe latte</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Dodici: <span class="font-semibold text-amber-600">₱120</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span class="font-semibold text-amber-600">₱140</span></p>
+                                    <p class="text-sm text-gray-500">Dodici: <span
+                                            class="font-semibold text-amber-600">₱120</span></p>
+                                    <p class="text-sm text-gray-500">Sedici: <span
+                                            class="font-semibold text-amber-600">₱140</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 3 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-pink-100 to-pink-200 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-pink-100 to-pink-200">
                             <span class="text-7xl">☕</span>
                         </div>
                         <div class="p-6">
@@ -148,19 +166,19 @@
                             <p class="mb-4 text-gray-600">Espresso, white chocolate sauce, milk and ice</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Dodici: <span class="font-semibold text-amber-600">₱120</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span class="font-semibold text-amber-600">₱140</span></p>
+                                    <p class="text-sm text-gray-500">Dodici: <span
+                                            class="font-semibold text-amber-600">₱120</span></p>
+                                    <p class="text-sm text-gray-500">Sedici: <span
+                                            class="font-semibold text-amber-600">₱140</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 4 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-yellow-100 to-yellow-200 flex items-center justify-center">
+                        <div
+                            class="flex items-center justify-center h-48 bg-linear-to-br from-yellow-100 to-yellow-200">
                             <span class="text-7xl">☕</span>
                         </div>
                         <div class="p-6">
@@ -168,19 +186,18 @@
                             <p class="mb-4 text-gray-600">Espresso shot with vanilla, caramel sauce, milk and ice</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Dodici: <span class="font-semibold text-amber-600">₱130</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span class="font-semibold text-amber-600">₱150</span></p>
+                                    <p class="text-sm text-gray-500">Dodici: <span
+                                            class="font-semibold text-amber-600">₱130</span></p>
+                                    <p class="text-sm text-gray-500">Sedici: <span
+                                            class="font-semibold text-amber-600">₱150</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 5 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-amber-200 to-orange-200 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-amber-200 to-orange-200">
                             <span class="text-7xl">☕</span>
                         </div>
                         <div class="p-6">
@@ -188,19 +205,18 @@
                             <p class="mb-4 text-gray-600">Pure espresso with hot water</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Dodici: <span class="font-semibold text-amber-600">₱90</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span class="font-semibold text-amber-600">₱110</span></p>
+                                    <p class="text-sm text-gray-500">Dodici: <span
+                                            class="font-semibold text-amber-600">₱90</span></p>
+                                    <p class="text-sm text-gray-500">Sedici: <span
+                                            class="font-semibold text-amber-600">₱110</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 6 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-brown-100 to-amber-300 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-brown-100 to-amber-300">
                             <span class="text-7xl">☕</span>
                         </div>
                         <div class="p-6">
@@ -208,12 +224,11 @@
                             <p class="mb-4 text-gray-600">Espresso with steamed milk foam</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Dodici: <span class="font-semibold text-amber-600">₱110</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span class="font-semibold text-amber-600">₱130</span></p>
+                                    <p class="text-sm text-gray-500">Dodici: <span
+                                            class="font-semibold text-amber-600">₱110</span></p>
+                                    <p class="text-sm text-gray-500">Sedici: <span
+                                            class="font-semibold text-amber-600">₱130</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -226,7 +241,7 @@
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     <!-- Item 1 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-green-100 to-green-200 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-green-100 to-green-200">
                             <span class="text-7xl">🍵</span>
                         </div>
                         <div class="p-6">
@@ -234,18 +249,16 @@
                             <p class="mb-4 text-gray-600">Creamy matcha with oat milk</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱140</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱140</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 2 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-lime-100 to-lime-200 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-lime-100 to-lime-200">
                             <span class="text-7xl">🍵</span>
                         </div>
                         <div class="p-6">
@@ -253,18 +266,16 @@
                             <p class="mb-4 text-gray-600">Matcha latte topped with banana pudding</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱180</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱180</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 3 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-red-100 to-pink-200 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-red-100 to-pink-200">
                             <span class="text-7xl">🍓</span>
                         </div>
                         <div class="p-6">
@@ -272,18 +283,17 @@
                             <p class="mb-4 text-gray-600">Fresh strawberries blended with yogurt</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱150</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱150</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 4 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-purple-100 to-purple-200 flex items-center justify-center">
+                        <div
+                            class="flex items-center justify-center h-48 bg-linear-to-br from-purple-100 to-purple-200">
                             <span class="text-7xl">🫐</span>
                         </div>
                         <div class="p-6">
@@ -291,18 +301,17 @@
                             <p class="mb-4 text-gray-600">Classic taro with fresh milk and pearls</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱130</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱130</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 5 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-orange-100 to-orange-200 flex items-center justify-center">
+                        <div
+                            class="flex items-center justify-center h-48 bg-linear-to-br from-orange-100 to-orange-200">
                             <span class="text-7xl">🍊</span>
                         </div>
                         <div class="p-6">
@@ -310,18 +319,16 @@
                             <p class="mb-4 text-gray-600">Tropical mango blended to perfection</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱150</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱150</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 6 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-blue-100 to-blue-200">
                             <span class="text-7xl">🧊</span>
                         </div>
                         <div class="p-6">
@@ -329,11 +336,9 @@
                             <p class="mb-4 text-gray-600">Fresh lemonade with blueberry burst</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱120</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱120</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -346,7 +351,7 @@
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     <!-- Item 1 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-amber-200 to-orange-300 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-amber-200 to-orange-300">
                             <span class="text-7xl">🥤</span>
                         </div>
                         <div class="p-6">
@@ -354,18 +359,16 @@
                             <p class="mb-4 text-gray-600">Frozen caramel coffee topped with whipped cream</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱160</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱160</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 2 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-pink-200 to-rose-300 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-pink-200 to-rose-300">
                             <span class="text-7xl">🥤</span>
                         </div>
                         <div class="p-6">
@@ -373,18 +376,17 @@
                             <p class="mb-4 text-gray-600">Rich chocolate coffee frappe with whipped cream</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱160</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱160</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 3 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-green-200 to-emerald-300 flex items-center justify-center">
+                        <div
+                            class="flex items-center justify-center h-48 bg-linear-to-br from-green-200 to-emerald-300">
                             <span class="text-7xl">🥤</span>
                         </div>
                         <div class="p-6">
@@ -392,18 +394,16 @@
                             <p class="mb-4 text-gray-600">Frozen matcha green tea with cream</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱170</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱170</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 4 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-yellow-200 to-amber-300 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-yellow-200 to-amber-300">
                             <span class="text-7xl">🥤</span>
                         </div>
                         <div class="p-6">
@@ -411,11 +411,9 @@
                             <p class="mb-4 text-gray-600">Classic vanilla frozen coffee delight</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱150</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱150</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -428,7 +426,7 @@
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     <!-- Item 1 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-yellow-100 to-amber-200 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-yellow-100 to-amber-200">
                             <span class="text-7xl">🥐</span>
                         </div>
                         <div class="p-6">
@@ -436,18 +434,16 @@
                             <p class="mb-4 text-gray-600">Freshly baked flaky croissant</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱85</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱85</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 2 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-orange-100 to-red-200 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-orange-100 to-red-200">
                             <span class="text-7xl">🍰</span>
                         </div>
                         <div class="p-6">
@@ -455,18 +451,16 @@
                             <p class="mb-4 text-gray-600">Rich and moist chocolate layer cake</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱120</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱120</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 3 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-red-100 to-pink-200 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-red-100 to-pink-200">
                             <span class="text-7xl">🍓</span>
                         </div>
                         <div class="p-6">
@@ -474,18 +468,16 @@
                             <p class="mb-4 text-gray-600">Creamy cheesecake with fresh strawberries</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱130</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱130</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 4 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-amber-100 to-orange-200 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-amber-100 to-orange-200">
                             <span class="text-7xl">🥪</span>
                         </div>
                         <div class="p-6">
@@ -493,18 +485,16 @@
                             <p class="mb-4 text-gray-600">Triple-decker with chicken, bacon, and veggies</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱180</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱180</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 5 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-green-100 to-lime-200 flex items-center justify-center">
+                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-green-100 to-lime-200">
                             <span class="text-7xl">🥗</span>
                         </div>
                         <div class="p-6">
@@ -512,18 +502,17 @@
                             <p class="mb-4 text-gray-600">Fresh greens with caesar dressing and croutons</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱160</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱160</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Item 6 -->
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="h-48 bg-linear-to-br from-yellow-100 to-yellow-200 flex items-center justify-center">
+                        <div
+                            class="flex items-center justify-center h-48 bg-linear-to-br from-yellow-100 to-yellow-200">
                             <span class="text-7xl">🍪</span>
                         </div>
                         <div class="p-6">
@@ -531,11 +520,9 @@
                             <p class="mb-4 text-gray-600">Freshly baked cookies (3 pieces)</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm text-gray-500">Price: <span class="font-semibold text-amber-600">₱90</span></p>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">₱90</span></p>
                                 </div>
-                                <button class="px-4 py-2 text-sm font-semibold text-white transition rounded-lg bg-amber-600 hover:bg-amber-700">
-                                    Add to Cart
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -558,7 +545,8 @@
                 <div>
                     <h3 class="mb-4 text-xl font-bold text-amber-500">Quick Links</h3>
                     <ul class="space-y-2">
-                        <li><a href="home.php" class="text-gray-400 transition hover:text-amber-500">Home</a></li>
+                        <li><a href="../../index.php" class="text-gray-400 transition hover:text-amber-500">Home</a>
+                        </li>
                         <li><a href="menu.php" class="text-gray-400 transition hover:text-amber-500">Menu</a></li>
                         <li><a href="about.php" class="text-gray-400 transition hover:text-amber-500">About</a></li>
                         <li><a href="contact.php" class="text-gray-400 transition hover:text-amber-500">Contact</a></li>

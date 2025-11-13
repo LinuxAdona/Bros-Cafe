@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="w-full max-w-md space-y-8">
             <!-- Logo and Title -->
             <div class="text-center">
-                <a href="home.php" class="inline-block">
+                <a href="../../index.php" class="inline-block">
                     <img src="../assets/images/logo.png" alt="Bro's Cafe Logo" class="w-20 h-20 mx-auto rounded-full">
                 </a>
                 <h2 class="mt-6 text-3xl font-bold text-gray-900">Welcome Back</h2>
