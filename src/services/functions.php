@@ -42,7 +42,7 @@ function requireLogin()
 {
     preventCache();
     if (!isLoggedIn()) {
-        header('Location: /home2/broscafe/public_html/public/pages/login.php');
+        header('Location: /../../public/pages/login.php');
         exit();
     }
 }
@@ -53,7 +53,7 @@ function requireRole($role)
     preventCache();
     requireLogin();
     if (!hasRole($role)) {
-        header('Location: /home2/broscafe/public_html/401.shtml');
+        header('Location: /../../401.shtml');
         exit();
     }
 }
@@ -64,7 +64,7 @@ function requireEmployee()
     preventCache();
     requireLogin();
     if (!isEmployee()) {
-        header('Location: /home2/broscafe/public_html/401.shtml');
+        header('Location: /../../401.shtml');
         exit();
     }
 }
@@ -104,7 +104,7 @@ function logout()
     preventCache();
 
     // Redirect to login
-    header('Location: /home2/broscafe/public_html/public/pages/login.php');
+    header('Location: /../../public/pages/login.php');
     exit();
 }
 
