@@ -42,7 +42,7 @@ function requireLogin()
 {
     preventCache();
     if (!isLoggedIn()) {
-        header('Location: /Bros-Cafe/public/pages/login.php');
+        header('Location: ../../public/pages/login.php');
         exit();
     }
 }
@@ -53,7 +53,7 @@ function requireRole($role)
     preventCache();
     requireLogin();
     if (!hasRole($role)) {
-        header('Location: /Bros-Cafe/public/pages/unauthorized.php');
+        header('Location: ../../401.html');
         exit();
     }
 }
@@ -64,7 +64,7 @@ function requireEmployee()
     preventCache();
     requireLogin();
     if (!isEmployee()) {
-        header('Location: /Bros-Cafe/public/pages/unauthorized.php');
+        header('Location: ../../401.html');
         exit();
     }
 }
@@ -104,7 +104,7 @@ function logout()
     preventCache();
 
     // Redirect to login
-    header('Location: /Bros-Cafe/public/pages/login.php');
+    header('Location: ../../public/pages/login.php');
     exit();
 }
 

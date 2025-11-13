@@ -54,7 +54,8 @@ $items = $stmt->fetchAll();
         </div>
         <div>
             <p class="text-sm font-medium text-gray-500">Order Date</p>
-            <p class="text-lg font-semibold text-gray-900"><?php echo date('M d, Y h:i A', strtotime($order['created_at'])); ?></p>
+            <p class="text-lg font-semibold text-gray-900">
+                <?php echo date('M d, Y h:i A', strtotime($order['created_at'])); ?></p>
         </div>
         <div>
             <p class="text-sm font-medium text-gray-500">Status</p>
@@ -130,7 +131,8 @@ $items = $stmt->fetchAll();
         </div>
         <div class="flex items-center justify-between pt-2 border-t border-gray-300">
             <span class="text-lg font-semibold text-gray-900">Total Amount:</span>
-            <span class="text-2xl font-bold text-amber-600">₱<?php echo number_format($order['total_amount'], 2); ?></span>
+            <span
+                class="text-2xl font-bold text-amber-600">₱<?php echo number_format($order['total_amount'], 2); ?></span>
         </div>
     </div>
 
