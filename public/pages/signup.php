@@ -70,53 +70,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - Bro's Cafe</title>
-    <link rel="stylesheet" href="../../src/output.css">
     <link rel="stylesheet" href="../assets/css/signup.css">
     <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
     <!-- Modal for Success/Error Messages -->
     <?php if ($error || $success): ?>
-    <div id="messageModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 modal-overlay"
-        style="background-color: rgba(0, 0, 0, 0.5);">
-        <div class="w-full max-w-md p-6 bg-white shadow-2xl modal-content rounded-2xl">
-            <div class="text-center">
-                <?php if ($success): ?>
-                <!-- Success Icon -->
-                <div
-                    class="flex items-center justify-center w-20 h-20 mx-auto mb-4 bg-green-100 rounded-full success-icon">
-                    <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                </div>
-                <h3 class="mb-2 text-2xl font-bold text-gray-900">Success!</h3>
-                <p class="mb-6 text-gray-600"><?php echo $success; ?></p>
-                <button onclick="window.location.href='login.php'"
-                    class="w-full px-6 py-3 text-white transition-colors bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                    Go to Login
-                </button>
-                <?php endif; ?>
+        <div id="messageModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 modal-overlay"
+            style="background-color: rgba(0, 0, 0, 0.5);">
+            <div class="w-full max-w-md p-6 bg-white shadow-2xl modal-content rounded-2xl">
+                <div class="text-center">
+                    <?php if ($success): ?>
+                        <!-- Success Icon -->
+                        <div
+                            class="flex items-center justify-center w-20 h-20 mx-auto mb-4 bg-green-100 rounded-full success-icon">
+                            <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="mb-2 text-2xl font-bold text-gray-900">Success!</h3>
+                        <p class="mb-6 text-gray-600"><?php echo $success; ?></p>
+                        <button onclick="window.location.href='login.php'"
+                            class="w-full px-6 py-3 text-white transition-colors bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                            Go to Login
+                        </button>
+                    <?php endif; ?>
 
-                <?php if ($error): ?>
-                <!-- Error Icon -->
-                <div
-                    class="flex items-center justify-center w-20 h-20 mx-auto mb-4 bg-red-100 rounded-full success-icon">
-                    <svg class="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
-                    </svg>
+                    <?php if ($error): ?>
+                        <!-- Error Icon -->
+                        <div
+                            class="flex items-center justify-center w-20 h-20 mx-auto mb-4 bg-red-100 rounded-full success-icon">
+                            <svg class="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="mb-2 text-2xl font-bold text-gray-900">Oops!</h3>
+                        <p class="mb-6 text-gray-600"><?php echo $error; ?></p>
+                        <button onclick="closeModal()"
+                            class="w-full px-6 py-3 text-white transition-colors bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                            Try Again
+                        </button>
+                    <?php endif; ?>
                 </div>
-                <h3 class="mb-2 text-2xl font-bold text-gray-900">Oops!</h3>
-                <p class="mb-6 text-gray-600"><?php echo $error; ?></p>
-                <button onclick="closeModal()"
-                    class="w-full px-6 py-3 text-white transition-colors bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                    Try Again
-                </button>
-                <?php endif; ?>
             </div>
         </div>
-    </div>
     <?php endif; ?>
 
     <div class="flex items-center justify-center min-h-screen px-4 py-12 sm:px-6 lg:px-8">
@@ -189,36 +197,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-    function closeModal() {
-        const modal = document.getElementById('messageModal');
-        if (modal) {
-            modal.style.animation = 'fadeOut 0.3s ease-out';
+        function closeModal() {
+            const modal = document.getElementById('messageModal');
+            if (modal) {
+                modal.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        // Auto redirect for success messages
+        <?php if ($success): ?>
             setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
-        }
-    }
+                window.location.href = 'login.php';
+            }, 3000);
+        <?php endif; ?>
 
-    // Auto redirect for success messages
-    <?php if ($success): ?>
-    setTimeout(() => {
-        window.location.href = 'login.php';
-    }, 3000);
-    <?php endif; ?>
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
 
-    // Close modal on Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeModal();
-        }
-    });
-
-    // Close modal when clicking outside
-    document.getElementById('messageModal')?.addEventListener('click', function(event) {
-        if (event.target === this) {
-            closeModal();
-        }
-    });
+        // Close modal when clicking outside
+        document.getElementById('messageModal')?.addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 

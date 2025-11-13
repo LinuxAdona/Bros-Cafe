@@ -177,10 +177,17 @@ $current_user = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analytics - Bro's Cafe</title>
-    <link rel="stylesheet" href="../../../src/output.css">
     <link rel="stylesheet" href="../../assets/css/admin.css">
     <link rel="icon" type="image/png" href="../../assets/images/logo.png">
-    <script src="https://kit.fontawesome.com/2a99de0fa5.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -199,7 +206,8 @@ $current_user = getCurrentUser();
                     </div>
                     <button onclick="toggleSidebar()" class="text-gray-400 transition-colors hover:text-white">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
@@ -208,7 +216,8 @@ $current_user = getCurrentUser();
             <nav class="flex-1 p-4 overflow-y-auto">
                 <ul class="space-y-2">
                     <li>
-                        <a href="dashboard.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="dashboard.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -217,7 +226,8 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="pos.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="pos.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -226,7 +236,8 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="orders.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="orders.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -235,7 +246,8 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="inventory.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="inventory.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -250,7 +262,8 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="products.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="products.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -259,7 +272,8 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="users.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="users.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -294,7 +308,8 @@ $current_user = getCurrentUser();
                         <button onclick="toggleSidebar()" id="hamburger-btn"
                             class="p-3 mr-4 text-white transition-all rounded-full shadow-lg bg-amber-600 hover:bg-amber-700 hover:shadow-xl">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
                         <div>
@@ -306,11 +321,16 @@ $current_user = getCurrentUser();
                         <form method="GET" class="flex items-center gap-2">
                             <select name="period" onchange="this.form.submit()"
                                 class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
-                                <option value="today" <?php echo $period === 'today' ? 'selected' : ''; ?>>Today</option>
-                                <option value="7days" <?php echo $period === '7days' ? 'selected' : ''; ?>>Last 7 Days</option>
-                                <option value="30days" <?php echo $period === '30days' ? 'selected' : ''; ?>>Last 30 Days</option>
-                                <option value="thismonth" <?php echo $period === 'thismonth' ? 'selected' : ''; ?>>This Month</option>
-                                <option value="lastmonth" <?php echo $period === 'lastmonth' ? 'selected' : ''; ?>>Last Month</option>
+                                <option value="today" <?php echo $period === 'today' ? 'selected' : ''; ?>>Today
+                                </option>
+                                <option value="7days" <?php echo $period === '7days' ? 'selected' : ''; ?>>Last 7 Days
+                                </option>
+                                <option value="30days" <?php echo $period === '30days' ? 'selected' : ''; ?>>Last 30
+                                    Days</option>
+                                <option value="thismonth" <?php echo $period === 'thismonth' ? 'selected' : ''; ?>>This
+                                    Month</option>
+                                <option value="lastmonth" <?php echo $period === 'lastmonth' ? 'selected' : ''; ?>>Last
+                                    Month</option>
                             </select>
                         </form>
                     </div>
@@ -322,7 +342,8 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Total Revenue</p>
-                                <p class="text-2xl font-bold text-gray-800">₱<?php echo number_format($total_revenue, 2); ?></p>
+                                <p class="text-2xl font-bold text-gray-800">
+                                    ₱<?php echo number_format($total_revenue, 2); ?></p>
                             </div>
                             <div class="p-3 bg-green-100 rounded-full">
                                 <i class="text-2xl text-green-600 fa-solid fa-peso-sign"></i>
@@ -334,7 +355,8 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Total Orders</p>
-                                <p class="text-2xl font-bold text-gray-800"><?php echo number_format($total_orders); ?></p>
+                                <p class="text-2xl font-bold text-gray-800"><?php echo number_format($total_orders); ?>
+                                </p>
                             </div>
                             <div class="p-3 bg-blue-100 rounded-full">
                                 <i class="text-2xl text-blue-600 fa-solid fa-shopping-cart"></i>
@@ -346,7 +368,8 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Avg Order Value</p>
-                                <p class="text-2xl font-bold text-gray-800">₱<?php echo number_format($avg_order_value, 2); ?></p>
+                                <p class="text-2xl font-bold text-gray-800">
+                                    ₱<?php echo number_format($avg_order_value, 2); ?></p>
                             </div>
                             <div class="p-3 rounded-full bg-amber-100">
                                 <i class="text-2xl fa-solid fa-chart-line text-amber-600"></i>
@@ -358,7 +381,8 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Items Sold</p>
-                                <p class="text-2xl font-bold text-gray-800"><?php echo number_format($total_items); ?></p>
+                                <p class="text-2xl font-bold text-gray-800"><?php echo number_format($total_items); ?>
+                                </p>
                             </div>
                             <div class="p-3 bg-purple-100 rounded-full">
                                 <i class="text-2xl text-purple-600 fa-solid fa-box"></i>
@@ -412,7 +436,8 @@ $current_user = getCurrentUser();
                             <?php foreach ($top_products as $index => $product): ?>
                                 <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                                     <div class="flex items-center">
-                                        <span class="flex items-center justify-center w-8 h-8 mr-3 text-white rounded-full bg-amber-600">
+                                        <span
+                                            class="flex items-center justify-center w-8 h-8 mr-3 text-white rounded-full bg-amber-600">
                                             <?php echo $index + 1; ?>
                                         </span>
                                         <div>
@@ -421,7 +446,8 @@ $current_user = getCurrentUser();
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <p class="font-semibold text-gray-800">₱<?php echo number_format($product['revenue'], 2); ?></p>
+                                        <p class="font-semibold text-gray-800">
+                                            ₱<?php echo number_format($product['revenue'], 2); ?></p>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -436,7 +462,8 @@ $current_user = getCurrentUser();
                                 <div class="p-4 border border-gray-200 rounded-lg">
                                     <div class="flex items-center justify-between mb-2">
                                         <p class="font-medium text-gray-800"><?php echo $employee['full_name']; ?></p>
-                                        <p class="font-semibold text-gray-800">₱<?php echo number_format($employee['revenue_generated'], 2); ?></p>
+                                        <p class="font-semibold text-gray-800">
+                                            ₱<?php echo number_format($employee['revenue_generated'], 2); ?></p>
                                     </div>
                                     <div class="flex items-center text-sm text-gray-600">
                                         <i class="mr-2 fa-solid fa-receipt"></i>

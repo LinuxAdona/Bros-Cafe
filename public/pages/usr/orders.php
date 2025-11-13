@@ -75,10 +75,17 @@ $current_user = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders Management - Bro's Cafe</title>
-    <link rel="stylesheet" href="../../../src/output.css">
     <link rel="stylesheet" href="../../assets/css/admin.css">
     <link rel="icon" type="image/png" href="../../assets/images/logo.png">
-    <script src="https://kit.fontawesome.com/2a99de0fa5.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
@@ -96,7 +103,8 @@ $current_user = getCurrentUser();
                     </div>
                     <button onclick="toggleSidebar()" class="text-gray-400 transition-colors hover:text-white">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
@@ -106,7 +114,8 @@ $current_user = getCurrentUser();
                 <ul class="space-y-2">
                     <?php if (isAdmin()): ?>
                         <li>
-                            <a href="dashboard.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <a href="dashboard.php"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -116,7 +125,8 @@ $current_user = getCurrentUser();
                         </li>
                     <?php endif; ?>
                     <li>
-                        <a href="pos.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="pos.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -134,7 +144,8 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="inventory.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="inventory.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -144,14 +155,16 @@ $current_user = getCurrentUser();
                     </li>
                     <?php if (isAdmin()): ?>
                         <li>
-                            <a href="analytics.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <a href="analytics.php"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                                 <i class="w-5 h-5 mr-3 fa-solid fa-chart-simple"></i>
                                 Analytics
                             </a>
                         </li>
                     <?php endif; ?>
                     <li>
-                        <a href="products.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                        <a href="products.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -161,7 +174,8 @@ $current_user = getCurrentUser();
                     </li>
                     <?php if (isAdmin()): ?>
                         <li>
-                            <a href="users.php" class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <a href="users.php"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -196,7 +210,8 @@ $current_user = getCurrentUser();
                     <button onclick="toggleSidebar()" id="hamburger-btn"
                         class="p-3 mr-4 text-white transition-all rounded-full shadow-lg bg-amber-600 hover:bg-amber-700 hover:shadow-xl">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
                     <div>
@@ -247,7 +262,8 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Revenue</p>
-                                <p class="text-2xl font-bold text-gray-800">₱<?php echo number_format($stats['total_revenue'], 2); ?></p>
+                                <p class="text-2xl font-bold text-gray-800">
+                                    ₱<?php echo number_format($stats['total_revenue'], 2); ?></p>
                             </div>
                             <div class="p-3 rounded-full bg-amber-100">
                                 <i class="text-2xl fa-solid fa-peso-sign text-amber-600"></i>
@@ -268,12 +284,18 @@ $current_user = getCurrentUser();
                             <label class="block mb-2 text-sm font-medium text-gray-700">Status</label>
                             <select name="status"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
-                                <option value="all" <?php echo $status_filter === 'all' ? 'selected' : ''; ?>>All Status</option>
-                                <option value="pending" <?php echo $status_filter === 'pending' ? 'selected' : ''; ?>>Pending</option>
-                                <option value="preparing" <?php echo $status_filter === 'preparing' ? 'selected' : ''; ?>>Preparing</option>
-                                <option value="ready" <?php echo $status_filter === 'ready' ? 'selected' : ''; ?>>Ready</option>
-                                <option value="completed" <?php echo $status_filter === 'completed' ? 'selected' : ''; ?>>Completed</option>
-                                <option value="cancelled" <?php echo $status_filter === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
+                                <option value="all" <?php echo $status_filter === 'all' ? 'selected' : ''; ?>>All Status
+                                </option>
+                                <option value="pending" <?php echo $status_filter === 'pending' ? 'selected' : ''; ?>>
+                                    Pending</option>
+                                <option value="preparing"
+                                    <?php echo $status_filter === 'preparing' ? 'selected' : ''; ?>>Preparing</option>
+                                <option value="ready" <?php echo $status_filter === 'ready' ? 'selected' : ''; ?>>Ready
+                                </option>
+                                <option value="completed"
+                                    <?php echo $status_filter === 'completed' ? 'selected' : ''; ?>>Completed</option>
+                                <option value="cancelled"
+                                    <?php echo $status_filter === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
                             </select>
                         </div>
                         <div>
@@ -297,34 +319,44 @@ $current_user = getCurrentUser();
                         <table class="w-full">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Order #
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Customer
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Employee
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Items
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Amount
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Payment
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Type
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Status
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Date
                                     </th>
-                                    <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Actions
                                     </th>
                                 </tr>
@@ -388,7 +420,8 @@ $current_user = getCurrentUser();
                                                     <i class="fa-solid fa-eye"></i>
                                                 </button>
                                                 <?php if ($order['status'] !== 'completed' && $order['status'] !== 'cancelled'): ?>
-                                                    <button onclick="updateOrderStatus(<?php echo $order['id']; ?>, '<?php echo $order['status']; ?>')"
+                                                    <button
+                                                        onclick="updateOrderStatus(<?php echo $order['id']; ?>, '<?php echo $order['status']; ?>')"
                                                         class="ml-3 text-green-600 hover:text-green-800">
                                                         <i class="fa-solid fa-edit"></i>
                                                     </button>
@@ -412,11 +445,13 @@ $current_user = getCurrentUser();
     </div>
 
     <!-- Order Details Modal -->
-    <div id="orderModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div id="orderModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
         <div class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+            <div
+                class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
                 <div class="px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">Order Details</h3>

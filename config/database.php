@@ -3,8 +3,8 @@
 class Database
 {
     private $host = 'localhost';
-    private $user = 'root';
-    private $pass = '';
+    private $user = 'broscafe_sys';
+    private $pass = '-Ski;c5)nQL9';
     private $dbname = 'broscafe_db';
     private $conn;
     private $error;

@@ -89,10 +89,17 @@ $current_user = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Bro's Cafe</title>
-    <link rel="stylesheet" href="../../../src/output.css">
     <link rel="stylesheet" href="../../assets/css/admin.css">
     <link rel="icon" type="image/png" href="../../assets/images/logo.png">
-    <script src="https://kit.fontawesome.com/2a99de0fa5.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
 </head>
 
@@ -111,7 +118,8 @@ $current_user = getCurrentUser();
                     </div>
                     <button onclick="toggleSidebar()" class="text-gray-400 transition-colors hover:text-white">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
@@ -211,7 +219,8 @@ $current_user = getCurrentUser();
                     <button onclick="toggleSidebar()" id="hamburger-btn"
                         class="p-3 mr-4 text-white transition-all rounded-full shadow-lg bg-amber-600 hover:bg-amber-700 hover:shadow-xl">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
                     <div>
@@ -226,10 +235,12 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Today's Sales</p>
-                                <p class="text-3xl font-bold text-gray-900"><?php echo formatCurrency($today_sales); ?></p>
+                                <p class="text-3xl font-bold text-gray-900"><?php echo formatCurrency($today_sales); ?>
+                                </p>
                             </div>
                             <div class="p-3 bg-green-100 rounded-full">
-                                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
@@ -244,7 +255,8 @@ $current_user = getCurrentUser();
                                 <p class="text-3xl font-bold text-gray-900"><?php echo $today_orders; ?></p>
                             </div>
                             <div class="p-3 bg-blue-100 rounded-full">
-                                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                 </svg>
@@ -276,7 +288,8 @@ $current_user = getCurrentUser();
                                 </p>
                             </div>
                             <div class="p-3 bg-purple-100 rounded-full">
-                                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                                 </svg>
@@ -327,7 +340,8 @@ $current_user = getCurrentUser();
                         <div class="p-6">
                             <div class="space-y-4">
                                 <?php foreach ($recent_orders as $order): ?>
-                                    <div class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+                                    <div
+                                        class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
                                         <div>
                                             <p class="font-medium text-gray-900"><?php echo $order['order_number']; ?></p>
                                             <p class="text-sm text-gray-500">
@@ -336,7 +350,8 @@ $current_user = getCurrentUser();
                                         <div class="text-right">
                                             <p class="font-semibold text-amber-600">
                                                 <?php echo formatCurrency($order['total_amount']); ?></p>
-                                            <span class="inline-block px-2 py-1 text-xs rounded-full
+                                            <span
+                                                class="inline-block px-2 py-1 text-xs rounded-full
                                             <?php echo $order['status'] === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'; ?>">
                                                 <?php echo ucfirst($order['status']); ?>
                                             </span>
@@ -355,14 +370,17 @@ $current_user = getCurrentUser();
                         <div class="p-6">
                             <div class="space-y-4">
                                 <?php foreach ($top_products as $index => $product): ?>
-                                    <div class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+                                    <div
+                                        class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
                                         <div class="flex items-center">
-                                            <div class="flex items-center justify-center w-8 h-8 mr-3 text-white rounded-full bg-gradient-to-br from-amber-400 to-amber-600">
+                                            <div
+                                                class="flex items-center justify-center w-8 h-8 mr-3 text-white rounded-full bg-gradient-to-br from-amber-400 to-amber-600">
                                                 <span class="text-sm font-bold"><?php echo $index + 1; ?></span>
                                             </div>
                                             <div>
                                                 <p class="font-medium text-gray-900"><?php echo $product['name']; ?></p>
-                                                <p class="text-sm text-gray-500"><?php echo $product['total_sold']; ?> sold</p>
+                                                <p class="text-sm text-gray-500"><?php echo $product['total_sold']; ?> sold
+                                                </p>
                                             </div>
                                         </div>
                                         <p class="font-semibold text-green-600">

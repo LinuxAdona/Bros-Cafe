@@ -71,10 +71,17 @@ $current_user = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Management - Bro's Cafe</title>
-    <link rel="stylesheet" href="../../../src/output.css">
     <link rel="stylesheet" href="../../assets/css/admin.css">
     <link rel="icon" type="image/png" href="../../assets/images/logo.png">
-    <script src="https://kit.fontawesome.com/2a99de0fa5.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -304,85 +311,109 @@ $current_user = getCurrentUser();
                     </div>
                 </div>
 
-                <!-- Analytics Section -->
-                <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
-                    <!-- Stock Status Chart -->
-                    <div class="p-6 bg-white rounded-lg shadow">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Stock Status Distribution</h3>
-                        <div class="h-64">
-                            <canvas id="stockStatusChart"></canvas>
+                <?php if (isAdmin()): ?>
+                    <!-- Analytics Section -->
+                    <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+                        <!-- Stock Status Chart -->
+                        <div class="p-6 bg-white rounded-lg shadow">
+                            <h3 class="mb-4 text-lg font-semibold text-gray-800">Stock Status Distribution</h3>
+                            <div class="h-64">
+                                <canvas id="stockStatusChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Category Stock Chart -->
+                        <div class="p-6 bg-white rounded-lg shadow">
+                            <h3 class="mb-4 text-lg font-semibold text-gray-800">Stock by Category</h3>
+                            <div class="h-64">
+                                <canvas id="categoryStockChart"></canvas>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Category Stock Chart -->
-                    <div class="p-6 bg-white rounded-lg shadow">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Stock by Category</h3>
-                        <div class="h-64">
-                            <canvas id="categoryStockChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Restocks and Category Analytics -->
-                <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
-                    <!-- Recent Restocks -->
-                    <div class="p-6 bg-white rounded-lg shadow">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Recent Restocks</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Product</th>
-                                        <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Date</th>
-                                        <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Stock</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <?php if (count($recent_restocks) > 0): ?>
-                                        <?php foreach ($recent_restocks as $restock): ?>
+                    <!-- Recent Restocks and Category Analytics -->
+                    <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+                        <!-- Recent Restocks -->
+                        <div class="p-6 bg-white rounded-lg shadow">
+                            <h3 class="mb-4 text-lg font-semibold text-gray-800">Recent Restocks</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Product</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Date</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Stock</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <?php if (count($recent_restocks) > 0): ?>
+                                            <?php foreach ($recent_restocks as $restock): ?>
+                                                <tr>
+                                                    <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap">
+                                                        <?php echo $restock['name']; ?></td>
+                                                    <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                        <?php echo date('M d, Y', strtotime($restock['last_restocked'])); ?></td>
+                                                    <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                        <?php echo $restock['quantity']; ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
                                             <tr>
-                                                <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap"><?php echo $restock['name']; ?></td>
-                                                <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap"><?php echo date('M d, Y', strtotime($restock['last_restocked'])); ?></td>
-                                                <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap"><?php echo $restock['quantity']; ?></td>
+                                                <td colspan="3" class="px-4 py-3 text-sm text-center text-gray-500">No recent
+                                                    restocks</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Category Analytics -->
+                        <div class="p-6 bg-white rounded-lg shadow">
+                            <h3 class="mb-4 text-lg font-semibold text-gray-800">Category Analytics</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Category</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Products</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Low Stock</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Avg Stock</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <?php foreach ($category_analytics as $category): ?>
+                                            <tr>
+                                                <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap">
+                                                    <?php echo $category['category']; ?></td>
+                                                <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                    <?php echo $category['product_count']; ?></td>
+                                                <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                    <?php echo $category['low_stock_count']; ?></td>
+                                                <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                    <?php echo round($category['avg_stock'], 1); ?></td>
                                             </tr>
                                         <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <tr>
-                                            <td colspan="3" class="px-4 py-3 text-sm text-center text-gray-500">No recent restocks</td>
-                                        </tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Category Analytics -->
-                    <div class="p-6 bg-white rounded-lg shadow">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Category Analytics</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Category</th>
-                                        <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Products</th>
-                                        <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Low Stock</th>
-                                        <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Avg Stock</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <?php foreach ($category_analytics as $category): ?>
-                                        <tr>
-                                            <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap"><?php echo $category['category']; ?></td>
-                                            <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap"><?php echo $category['product_count']; ?></td>
-                                            <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap"><?php echo $category['low_stock_count']; ?></td>
-                                            <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap"><?php echo round($category['avg_stock'], 1); ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <?php endif; ?>
 
                 <!-- Products Table -->
                 <div class="overflow-hidden bg-white rounded-lg shadow">
@@ -390,10 +421,12 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <h3 class="text-lg font-semibold text-gray-800">Product Inventory</h3>
                             <div class="flex space-x-2">
-                                <button onclick="exportInventory()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">
+                                <button onclick="exportInventory()"
+                                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">
                                     Export
                                 </button>
-                                <button onclick="openBulkRestockModal()" class="px-4 py-2 text-sm font-medium text-white rounded-md bg-amber-600 hover:bg-amber-700">
+                                <button onclick="openBulkRestockModal()"
+                                    class="px-4 py-2 text-sm font-medium text-white rounded-md bg-amber-600 hover:bg-amber-700">
                                     Bulk Restock
                                 </button>
                             </div>
@@ -446,7 +479,8 @@ $current_user = getCurrentUser();
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <?php if ($product['quantity'] == 0): ?>
                                                 <span
-                                                    class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">Out of Stock</span>
+                                                    class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">Out
+                                                    of Stock</span>
                                             <?php elseif ($product['quantity'] <= $product['reorder_level']): ?>
                                                 <span
                                                     class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">Low
@@ -517,27 +551,32 @@ $current_user = getCurrentUser();
     </div>
 
     <!-- Bulk Restock Modal -->
-    <div id="bulkRestockModal" class="fixed inset-0 z-50 hidden w-full h-full overflow-y-auto bg-gray-600 bg-opacity-50">
+    <div id="bulkRestockModal"
+        class="fixed inset-0 z-50 hidden w-full h-full overflow-y-auto bg-gray-600 bg-opacity-50">
         <div class="relative p-5 mx-auto bg-white border rounded-md shadow-lg top-20 w-96">
             <div class="mt-3">
                 <h3 class="mb-4 text-lg font-medium text-gray-900">Bulk Restock</h3>
                 <form id="bulkRestockForm" onsubmit="submitBulkRestock(event)">
                     <div class="mb-4">
                         <label for="bulk_category" class="block mb-2 text-sm font-medium text-gray-700">Category</label>
-                        <select id="bulk_category" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500">
+                        <select id="bulk_category"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500">
                             <option value="">All Categories</option>
                             <?php foreach ($category_analytics as $category): ?>
-                                <option value="<?php echo $category['category']; ?>"><?php echo $category['category']; ?></option>
+                                <option value="<?php echo $category['category']; ?>"><?php echo $category['category']; ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="mb-4">
-                        <label for="bulk_quantity" class="block mb-2 text-sm font-medium text-gray-700">Add Quantity</label>
+                        <label for="bulk_quantity" class="block mb-2 text-sm font-medium text-gray-700">Add
+                            Quantity</label>
                         <input type="number" id="bulk_quantity" min="1" required
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500">
                     </div>
                     <div class="mb-4">
-                        <label for="bulk_notes" class="block mb-2 text-sm font-medium text-gray-700">Notes (Optional)</label>
+                        <label for="bulk_notes" class="block mb-2 text-sm font-medium text-gray-700">Notes
+                            (Optional)</label>
                         <textarea id="bulk_notes" rows="2"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500"></textarea>
                     </div>
@@ -570,7 +609,7 @@ $current_user = getCurrentUser();
                         backgroundColor: [
                             '#10B981', // Green
                             '#F59E0B', // Amber
-                            '#EF4444'  // Red
+                            '#EF4444' // Red
                         ],
                         borderWidth: 1
                     }]
