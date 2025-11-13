@@ -51,7 +51,6 @@ function requireLogin()
 function requireRole($role)
 {
     preventCache();
-    requireLogin();
     if (!hasRole($role)) {
         header('Location: /../../401.shtml');
         exit();
@@ -62,7 +61,6 @@ function requireRole($role)
 function requireEmployee()
 {
     preventCache();
-    requireLogin();
     if (!isEmployee()) {
         header('Location: /../../401.shtml');
         exit();
