@@ -10,6 +10,6 @@ deployment:
     - mkdir -p $DEPLOYPATH/src
 
     - /bin/cp index.php $DEPLOYPATH
-    - /bin/cp -R $REPOPATH/config $DEPLOYPATH
-    - /bin/cp -R $REPOPATH/public $DEPLOYPATH
-    - /bin/cp -R $REPOPATH/src $DEPLOYPATH
+    - /bin/cp -R config $DEPLOYPATH
+    - /bin/cp -R public $DEPLOYPATH
+    - /bin/cp -R src $DEPLOYPATH
