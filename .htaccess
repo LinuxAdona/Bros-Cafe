@@ -1,9 +1,9 @@
 # Custom Error Pages for cPanel
-ErrorDocument 400 /400.html
-ErrorDocument 401 /401.html
-ErrorDocument 403 /403.html
-ErrorDocument 404 /404.html
-ErrorDocument 500 /500.html
+ErrorDocument 400 /400.shtml
+ErrorDocument 401 /401.shtml
+ErrorDocument 403 /403.shtml
+ErrorDocument 404 /404.shtml
+ErrorDocument 500 /500.shtml
 
 # Deny access to .cpanel.yml file
 <Files .cpanel.yml>
