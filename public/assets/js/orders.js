@@ -1,9 +1,27 @@
 function viewOrderDetails(orderId) {
-    document.getElementById('orderModal').classList.remove('hidden');
+    const modal = document.getElementById('orderModal');
+    const content = document.getElementById('orderDetailsContent');
+    
+    // Show modal
+    modal.classList.remove('hidden');
+    
+    // Show loading state
+    content.innerHTML = '<div class="text-center py-8"><p class="text-gray-500">Loading order details...</p></div>';
+    
+    // Fetch order details
     fetch(`get_order_details.php?id=${orderId}`)
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
         .then(data => {
-            document.getElementById('orderDetailsContent').innerHTML = data;
+            content.innerHTML = data;
+        })
+        .catch(error => {
+            console.error('Error fetching order details:', error);
+            content.innerHTML = '<div class="text-center py-8"><p class="text-red-500">Error loading order details. Please try again.</p></div>';
         });
 }
 

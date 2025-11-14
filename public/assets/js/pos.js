@@ -242,6 +242,11 @@ function removeFromCart(index) {
 
 // Clear cart
 function clearCart() {
+    if (cart.length === 0) {
+        showErrorPopup('Cart is already empty!');
+        return;
+    }
+    
     if (confirm('Clear all items from cart?')) {
         cart = [];
         updateCart();
@@ -255,8 +260,9 @@ function formatPHP(amount) {
 
 // Process order
 function processOrder() {
+    // Check if cart is empty
     if (cart.length === 0) {
-        alert('Cart is empty!');
+        showErrorPopup('No items selected. Please add items to your cart first.');
         return;
     }
 
@@ -282,16 +288,56 @@ function processOrder() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Order placed successfully!\nOrder #: ' + orderNumber);
+                // Clear cart first
                 cart = [];
                 updateCart();
-                location.reload();
+                
+                // Show success popup
+                showSuccessPopup('Order #' + orderNumber);
             } else {
-                alert('Error: ' + data.message);
+                showErrorPopup(data.message || 'Failed to process order');
             }
         })
         .catch(error => {
-            alert('Error processing order');
+            showErrorPopup('Error processing order. Please try again.');
             console.error(error);
         });
+}
+
+// Show success popup
+function showSuccessPopup(orderNumber) {
+    const popup = document.getElementById('order-popup');
+    const message = document.getElementById('popup-message');
+    
+    message.textContent = `Your order has been processed successfully.`;
+    document.getElementById('popup-order-number').textContent = orderNumber;
+    
+    popup.classList.remove('hidden');
+    popup.classList.add('flex');
+}
+
+// Show error popup
+function showErrorPopup(message) {
+    const popup = document.getElementById('error-popup');
+    const messageElement = document.getElementById('error-message');
+    
+    messageElement.textContent = message;
+    popup.classList.remove('hidden');
+    popup.classList.add('flex');
+}
+
+// Close success popup
+function closeOrderPopup() {
+    const popup = document.getElementById('order-popup');
+    popup.classList.remove('flex');
+    popup.classList.add('hidden');
+    // Reload page to get new order number
+    location.reload();
+}
+
+// Close error popup
+function closeErrorPopup() {
+    const popup = document.getElementById('error-popup');
+    popup.classList.remove('flex');
+    popup.classList.add('hidden');
 }

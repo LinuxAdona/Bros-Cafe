@@ -243,8 +243,8 @@ $current_user = getCurrentUser();
             <div id="cart-section" class="flex flex-col bg-white border-l border-gray-200 w-96">
                 <div class="flex items-center justify-between p-6 border-b border-gray-200">
                     <div>
-                        <h2 class="text-xl font-bold text-gray-800">Current Order</h2>
-                        <p class="text-sm text-gray-600">Order #<span
+                        <h2 class="text-xl font-bold text-gray-800">Order Details</h2>
+                        <p class="hidden text-sm text-gray-600">Order #<span
                                 id="order-number"><?php echo generateOrderNumber(); ?></span></p>
                     </div>
                     <button onclick="toggleCart()" class="text-gray-400 transition-colors hover:text-gray-600">
@@ -315,6 +315,55 @@ $current_user = getCurrentUser();
     </div>
 
     <script src="../../assets/js/pos.js"></script>
+
+    <!-- Order Success Modal -->
+    <div id="order-popup" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+        <div class="w-full max-w-md mx-4 bg-white shadow-2xl rounded-2xl animate-modal">
+            <div class="p-6 text-center border-b border-gray-200">
+                <div class="flex justify-center mb-4">
+                    <div class="flex items-center justify-center w-16 h-16 rounded-full bg-green-100">
+                        <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2l4-4m6 2a9 9 0 11-18 0a9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800">Order Completed!</h3>
+            </div>
+            <div class="p-6 text-center">
+                <p id="popup-message" class="mb-2 text-gray-600">Your order has been processed successfully.</p>
+                <p id="popup-order-number" class="mb-6 text-xl font-bold text-amber-600"></p>
+                <button onclick="closeOrderPopup()"
+                    class="w-full py-3 font-semibold text-white transition-all rounded-lg bg-amber-600 hover:bg-amber-700">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-popup" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+        <div class="w-full max-w-md mx-4 bg-white shadow-2xl rounded-2xl animate-modal">
+            <div class="p-6 text-center border-b border-gray-200">
+                <div class="flex justify-center mb-4">
+                    <div class="flex items-center justify-center w-16 h-16 rounded-full bg-red-100">
+                        <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800">Oops!</h3>
+            </div>
+            <div class="p-6 text-center">
+                <p id="error-message" class="mb-6 text-gray-600"></p>
+                <button onclick="closeErrorPopup()"
+                    class="w-full py-3 font-semibold text-white transition-all rounded-lg bg-red-600 hover:bg-red-700">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
