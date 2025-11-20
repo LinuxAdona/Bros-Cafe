@@ -42,7 +42,7 @@ function requireLogin()
 {
     preventCache();
     if (!isLoggedIn()) {
-        header('Location: /../../public/pages/login.php');
+        header('Location: ../../public/pages/login.php');
         exit();
     }
 }
@@ -52,7 +52,7 @@ function requireRole($role)
 {
     preventCache();
     if (!hasRole($role)) {
-        header('Location: /../../401.shtml');
+        header('Location: ../../401.shtml');
         exit();
     }
 }
@@ -62,7 +62,7 @@ function requireEmployee()
 {
     preventCache();
     if (!isEmployee()) {
-        header('Location: /../../401.shtml');
+        header('Location: ../../401.shtml');
         exit();
     }
 }
@@ -102,7 +102,7 @@ function logout()
     preventCache();
 
     // Redirect to login
-    header('Location: /../../public/pages/login.php');
+    header('Location: ../../public/pages/login.php');
     exit();
 }
 

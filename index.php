@@ -50,13 +50,13 @@
                             class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Contact</a>
                     </li>
                 </ul>
-                <!--
+
                 <div class="hidden space-x-4 font-medium lg:flex lg:items-center">
                     <a href="public/pages/login.php" class="transition ease-out hover:-translate-x-0.5">Log in</a>
                     <a href="public/pages/signup.php"
                         class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Sign
                         up</a>
-                </div>-->
+                </div>
             </div>
 
             <!-- Mobile Menu -->
@@ -450,13 +450,13 @@
     </div>
 
     <script>
-    // Mobile menu toggle
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
 
-    mobileMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
     </script>
 </body>
 

@@ -213,8 +213,14 @@ $current_user = getCurrentUser();
                                 onclick='addToCart(<?php echo json_encode($product); ?>)'>
                                 <div class="p-4">
                                     <div
-                                        class="flex items-center justify-center w-full h-32 mb-3 rounded-lg bg-linear-to-br from-amber-100 to-amber-200">
-                                        <span class="text-4xl">☕</span>
+                                        class="flex items-center justify-center w-full h-32 mb-3 overflow-hidden bg-gray-100 rounded-lg">
+                                        <?php if ($product['image']): ?>
+                                            <img src="../get_image.php?id=<?php echo $product['id']; ?>" 
+                                                 alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                                 class="object-cover w-full h-full">
+                                        <?php else: ?>
+                                            <span class="text-4xl">☕</span>
+                                        <?php endif; ?>
                                     </div>
                                     <h3 class="mb-1 font-semibold text-gray-800"><?php echo $product['name']; ?></h3>
                                     <p class="mb-2 text-sm text-gray-600">Stock: <?php echo $product['stock']; ?></p>

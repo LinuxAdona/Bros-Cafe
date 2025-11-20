@@ -2,9 +2,10 @@
 // Create connection
 class Database
 {
+    private const ENVIRONMENT = 'development';
     private $host = 'localhost';
-    private $user = 'root';
-    private $pass = '';
+    private $user = self::ENVIRONMENT === 'production' ? 'broscafe_sys' : 'root';
+    private $pass = self::ENVIRONMENT === 'production' ? '-Ski;c5)nQL9' : '';
     private $dbname = 'broscafe_db';
     private $conn;
     private $error;

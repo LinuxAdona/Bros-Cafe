@@ -1,3 +1,34 @@
+<?php
+require_once '../../config/database.php';
+require_once '../../src/services/functions.php';
+
+$db = new Database();
+$conn = $db->getConnection();
+
+// Get all categories
+$stmt = $conn->query("SELECT * FROM categories ORDER BY name");
+$categories = $stmt->fetchAll();
+
+// Get all products with category information
+$stmt = $conn->query("
+    SELECT p.*, c.name as category_name 
+    FROM products p 
+    LEFT JOIN categories c ON p.category_id = c.id 
+    WHERE p.status = 'available'
+    ORDER BY c.name, p.name
+");
+$products = $stmt->fetchAll();
+
+// Group products by category
+$productsByCategory = [];
+foreach ($products as $product) {
+    $categoryName = $product['category_name'] ?? 'Uncategorized';
+    if (!isset($productsByCategory[$categoryName])) {
+        $productsByCategory[$categoryName] = [];
+    }
+    $productsByCategory[$categoryName][] = $product;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,13 +83,13 @@
                         class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Contact</a>
                 </li>
             </ul>
-            <!--
+
             <div class="hidden space-x-4 font-medium lg:flex lg:items-center">
                 <a href="login.php" class="transition ease-out hover:-translate-x-0.5">Log in</a>
                 <a href="signup.php"
                     class="px-4 py-2 text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600 hover:shadow-md">Sign
                     up</a>
-            </div>-->
+            </div>
         </div>
 
         <!-- Mobile Menu -->
@@ -95,26 +126,13 @@
                     data-category="all">
                     All Items
                 </button>
+                <?php foreach ($categories as $category): ?>
                 <button
                     class="px-6 py-2 font-semibold text-gray-700 transition-all bg-gray-200 rounded-full category-btn hover:bg-amber-500 hover:text-white"
-                    data-category="coffee">
-                    Coffee
+                    data-category="<?php echo strtolower(str_replace(' ', '-', $category['name'])); ?>">
+                    <?php echo htmlspecialchars($category['name']); ?>
                 </button>
-                <button
-                    class="px-6 py-2 font-semibold text-gray-700 transition-all bg-gray-200 rounded-full category-btn hover:bg-amber-500 hover:text-white"
-                    data-category="non-coffee">
-                    Non-Coffee
-                </button>
-                <button
-                    class="px-6 py-2 font-semibold text-gray-700 transition-all bg-gray-200 rounded-full category-btn hover:bg-amber-500 hover:text-white"
-                    data-category="frappe">
-                    Frappe
-                </button>
-                <button
-                    class="px-6 py-2 font-semibold text-gray-700 transition-all bg-gray-200 rounded-full category-btn hover:bg-amber-500 hover:text-white"
-                    data-category="food">
-                    Food & Snacks
-                </button>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
@@ -122,421 +140,49 @@
     <!-- Menu Items -->
     <section class="py-16">
         <div class="container px-4 mx-auto">
-            <!-- Coffee Section -->
-            <div class="mb-16" data-category-section="coffee">
-                <h2 class="mb-8 text-3xl font-bold text-center text-gray-800 md:text-4xl">☕ Signature Coffee</h2>
+            <?php foreach ($productsByCategory as $categoryName => $categoryProducts): ?>
+            <!-- <?php echo htmlspecialchars($categoryName); ?> Section -->
+            <div class="mb-16" data-category-section="<?php echo strtolower(str_replace(' ', '-', $categoryName)); ?>">
+                <h2 class="mb-8 text-3xl font-bold text-center text-gray-800 md:text-4xl">
+                    <?php echo htmlspecialchars($categoryName); ?>
+                </h2>
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    <!-- Item 1 -->
+                    <?php foreach ($categoryProducts as $product): ?>
                     <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-amber-100 to-amber-200">
-                            <span class="text-7xl">☕</span>
+                        <div class="flex items-center justify-center h-48 overflow-hidden bg-gray-100">
+                            <?php if ($product['image']): ?>
+                                <img src="get_image.php?id=<?php echo $product['id']; ?>" 
+                                     alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                     class="object-cover w-full h-full">
+                            <?php else: ?>
+                                <span class="text-7xl">☕</span>
+                            <?php endif; ?>
                         </div>
                         <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Sea Salt Latte</h3>
-                            <p class="mb-4 text-gray-600">Espresso and milk topped with sea salt cream</p>
+                            <h3 class="mb-2 text-xl font-bold"><?php echo htmlspecialchars($product['name']); ?></h3>
+                            <p class="mb-4 text-gray-600"><?php echo htmlspecialchars($product['description'] ?? 'Delicious item from our menu'); ?></p>
                             <div class="flex items-center justify-between">
-                                <div>
+                                <div class="w-full">
+                                    <?php if ($product['price_dodici']): ?>
                                     <p class="text-sm text-gray-500">Dodici: <span
-                                            class="font-semibold text-amber-600">₱120</span></p>
+                                            class="font-semibold text-amber-600"><?php echo formatCurrency($product['price_dodici']); ?></span></p>
+                                    <?php endif; ?>
+                                    <?php if ($product['price_sedici']): ?>
                                     <p class="text-sm text-gray-500">Sedici: <span
-                                            class="font-semibold text-amber-600">₱150</span></p>
+                                            class="font-semibold text-amber-600"><?php echo formatCurrency($product['price_sedici']); ?></span></p>
+                                    <?php endif; ?>
+                                    <?php if (!$product['price_dodici'] && !$product['price_sedici']): ?>
+                                    <p class="text-sm text-gray-500">Price: <span
+                                            class="font-semibold text-amber-600">Contact us</span></p>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Item 2 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div
-                            class="flex items-center justify-center h-48 bg-linear-to-br from-orange-100 to-orange-200">
-                            <span class="text-7xl">☕</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Spanish Latte</h3>
-                            <p class="mb-4 text-gray-600">Sweet twist on a classic iced cafe latte</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Dodici: <span
-                                            class="font-semibold text-amber-600">₱120</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span
-                                            class="font-semibold text-amber-600">₱140</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 3 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-pink-100 to-pink-200">
-                            <span class="text-7xl">☕</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">White Chocolate Mocha</h3>
-                            <p class="mb-4 text-gray-600">Espresso, white chocolate sauce, milk and ice</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Dodici: <span
-                                            class="font-semibold text-amber-600">₱120</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span
-                                            class="font-semibold text-amber-600">₱140</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 4 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div
-                            class="flex items-center justify-center h-48 bg-linear-to-br from-yellow-100 to-yellow-200">
-                            <span class="text-7xl">☕</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Caramel Macchiato</h3>
-                            <p class="mb-4 text-gray-600">Espresso shot with vanilla, caramel sauce, milk and ice</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Dodici: <span
-                                            class="font-semibold text-amber-600">₱130</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span
-                                            class="font-semibold text-amber-600">₱150</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 5 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-amber-200 to-orange-200">
-                            <span class="text-7xl">☕</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Americano</h3>
-                            <p class="mb-4 text-gray-600">Pure espresso with hot water</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Dodici: <span
-                                            class="font-semibold text-amber-600">₱90</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span
-                                            class="font-semibold text-amber-600">₱110</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 6 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-brown-100 to-amber-300">
-                            <span class="text-7xl">☕</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Cappuccino</h3>
-                            <p class="mb-4 text-gray-600">Espresso with steamed milk foam</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Dodici: <span
-                                            class="font-semibold text-amber-600">₱110</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span
-                                            class="font-semibold text-amber-600">₱130</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
-
-            <!-- Non-Coffee Section -->
-            <div class="mb-16" data-category-section="non-coffee">
-                <h2 class="mb-8 text-3xl font-bold text-center text-gray-800 md:text-4xl">🍵 Non-Coffee Delights</h2>
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    <!-- Item 1 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-green-100 to-green-200">
-                            <span class="text-7xl">🍵</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Matcha Latte</h3>
-                            <p class="mb-4 text-gray-600">Creamy matcha with oat milk</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱140</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 2 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-lime-100 to-lime-200">
-                            <span class="text-7xl">🍵</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Banana Pudding Matcha</h3>
-                            <p class="mb-4 text-gray-600">Matcha latte topped with banana pudding</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱180</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 3 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-red-100 to-pink-200">
-                            <span class="text-7xl">🍓</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Strawberry Smoothie</h3>
-                            <p class="mb-4 text-gray-600">Fresh strawberries blended with yogurt</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱150</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 4 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div
-                            class="flex items-center justify-center h-48 bg-linear-to-br from-purple-100 to-purple-200">
-                            <span class="text-7xl">🫐</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Taro Milk Tea</h3>
-                            <p class="mb-4 text-gray-600">Classic taro with fresh milk and pearls</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱130</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 5 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div
-                            class="flex items-center justify-center h-48 bg-linear-to-br from-orange-100 to-orange-200">
-                            <span class="text-7xl">🍊</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Mango Smoothie</h3>
-                            <p class="mb-4 text-gray-600">Tropical mango blended to perfection</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱150</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 6 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-blue-100 to-blue-200">
-                            <span class="text-7xl">🧊</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Blueberry Lemonade</h3>
-                            <p class="mb-4 text-gray-600">Fresh lemonade with blueberry burst</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱120</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Frappe Section -->
-            <div class="mb-16" data-category-section="frappe">
-                <h2 class="mb-8 text-3xl font-bold text-center text-gray-800 md:text-4xl">🥤 Frozen Frappes</h2>
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    <!-- Item 1 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-amber-200 to-orange-300">
-                            <span class="text-7xl">🥤</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Caramel Frappe</h3>
-                            <p class="mb-4 text-gray-600">Frozen caramel coffee topped with whipped cream</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱160</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 2 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-pink-200 to-rose-300">
-                            <span class="text-7xl">🥤</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Mocha Frappe</h3>
-                            <p class="mb-4 text-gray-600">Rich chocolate coffee frappe with whipped cream</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱160</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 3 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div
-                            class="flex items-center justify-center h-48 bg-linear-to-br from-green-200 to-emerald-300">
-                            <span class="text-7xl">🥤</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Matcha Frappe</h3>
-                            <p class="mb-4 text-gray-600">Frozen matcha green tea with cream</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱170</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 4 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-yellow-200 to-amber-300">
-                            <span class="text-7xl">🥤</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Vanilla Frappe</h3>
-                            <p class="mb-4 text-gray-600">Classic vanilla frozen coffee delight</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱150</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Food & Snacks Section -->
-            <div class="mb-16" data-category-section="food">
-                <h2 class="mb-8 text-3xl font-bold text-center text-gray-800 md:text-4xl">🍰 Food & Snacks</h2>
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    <!-- Item 1 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-yellow-100 to-amber-200">
-                            <span class="text-7xl">🥐</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Butter Croissant</h3>
-                            <p class="mb-4 text-gray-600">Freshly baked flaky croissant</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱85</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 2 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-orange-100 to-red-200">
-                            <span class="text-7xl">🍰</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Chocolate Cake</h3>
-                            <p class="mb-4 text-gray-600">Rich and moist chocolate layer cake</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱120</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 3 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-red-100 to-pink-200">
-                            <span class="text-7xl">🍓</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Strawberry Cheesecake</h3>
-                            <p class="mb-4 text-gray-600">Creamy cheesecake with fresh strawberries</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱130</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 4 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-amber-100 to-orange-200">
-                            <span class="text-7xl">🥪</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Club Sandwich</h3>
-                            <p class="mb-4 text-gray-600">Triple-decker with chicken, bacon, and veggies</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱180</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 5 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-green-100 to-lime-200">
-                            <span class="text-7xl">🥗</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Caesar Salad</h3>
-                            <p class="mb-4 text-gray-600">Fresh greens with caesar dressing and croutons</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱160</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 6 -->
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div
-                            class="flex items-center justify-center h-48 bg-linear-to-br from-yellow-100 to-yellow-200">
-                            <span class="text-7xl">🍪</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Chocolate Chip Cookies</h3>
-                            <p class="mb-4 text-gray-600">Freshly baked cookies (3 pieces)</p>
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱90</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </section>
 
