@@ -215,9 +215,9 @@ $current_user = getCurrentUser();
                                     <div
                                         class="flex items-center justify-center w-full h-32 mb-3 overflow-hidden bg-gray-100 rounded-lg">
                                         <?php if ($product['image']): ?>
-                                            <img src="../get_image.php?id=<?php echo $product['id']; ?>" 
-                                                 alt="<?php echo htmlspecialchars($product['name']); ?>"
-                                                 class="object-cover w-full h-full">
+                                            <img src="../get_image.php?id=<?php echo $product['id']; ?>"
+                                                alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                                class="object-cover w-full h-full">
                                         <?php else: ?>
                                             <span class="text-4xl">☕</span>
                                         <?php endif; ?>

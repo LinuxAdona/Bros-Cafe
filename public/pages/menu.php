@@ -127,11 +127,11 @@ foreach ($products as $product) {
                     All Items
                 </button>
                 <?php foreach ($categories as $category): ?>
-                <button
-                    class="px-6 py-2 font-semibold text-gray-700 transition-all bg-gray-200 rounded-full category-btn hover:bg-amber-500 hover:text-white"
-                    data-category="<?php echo strtolower(str_replace(' ', '-', $category['name'])); ?>">
-                    <?php echo htmlspecialchars($category['name']); ?>
-                </button>
+                    <button
+                        class="px-6 py-2 font-semibold text-gray-700 transition-all bg-gray-200 rounded-full category-btn hover:bg-amber-500 hover:text-white"
+                        data-category="<?php echo strtolower(str_replace(' ', '-', $category['name'])); ?>">
+                        <?php echo htmlspecialchars($category['name']); ?>
+                    </button>
                 <?php endforeach; ?>
             </div>
         </div>
@@ -141,47 +141,51 @@ foreach ($products as $product) {
     <section class="py-16">
         <div class="container px-4 mx-auto">
             <?php foreach ($productsByCategory as $categoryName => $categoryProducts): ?>
-            <!-- <?php echo htmlspecialchars($categoryName); ?> Section -->
-            <div class="mb-16" data-category-section="<?php echo strtolower(str_replace(' ', '-', $categoryName)); ?>">
-                <h2 class="mb-8 text-3xl font-bold text-center text-gray-800 md:text-4xl">
-                    <?php echo htmlspecialchars($categoryName); ?>
-                </h2>
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    <?php foreach ($categoryProducts as $product): ?>
-                    <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
-                        <div class="flex items-center justify-center h-48 overflow-hidden bg-gray-100">
-                            <?php if ($product['image']): ?>
-                                <img src="get_image.php?id=<?php echo $product['id']; ?>" 
-                                     alt="<?php echo htmlspecialchars($product['name']); ?>"
-                                     class="object-cover w-full h-full">
-                            <?php else: ?>
-                                <span class="text-7xl">☕</span>
-                            <?php endif; ?>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold"><?php echo htmlspecialchars($product['name']); ?></h3>
-                            <p class="mb-4 text-gray-600"><?php echo htmlspecialchars($product['description'] ?? 'Delicious item from our menu'); ?></p>
-                            <div class="flex items-center justify-between">
-                                <div class="w-full">
-                                    <?php if ($product['price_dodici']): ?>
-                                    <p class="text-sm text-gray-500">Dodici: <span
-                                            class="font-semibold text-amber-600"><?php echo formatCurrency($product['price_dodici']); ?></span></p>
-                                    <?php endif; ?>
-                                    <?php if ($product['price_sedici']): ?>
-                                    <p class="text-sm text-gray-500">Sedici: <span
-                                            class="font-semibold text-amber-600"><?php echo formatCurrency($product['price_sedici']); ?></span></p>
-                                    <?php endif; ?>
-                                    <?php if (!$product['price_dodici'] && !$product['price_sedici']): ?>
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">Contact us</span></p>
+                <!-- <?php echo htmlspecialchars($categoryName); ?> Section -->
+                <div class="mb-16" data-category-section="<?php echo strtolower(str_replace(' ', '-', $categoryName)); ?>">
+                    <h2 class="mb-8 text-3xl font-bold text-center text-gray-800 md:text-4xl">
+                        <?php echo htmlspecialchars($categoryName); ?>
+                    </h2>
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        <?php foreach ($categoryProducts as $product): ?>
+                            <div class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105">
+                                <div class="flex items-center justify-center h-48 overflow-hidden bg-gray-100">
+                                    <?php if ($product['image']): ?>
+                                        <img src="get_image.php?id=<?php echo $product['id']; ?>"
+                                            alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                            class="object-cover w-full h-full">
+                                    <?php else: ?>
+                                        <span class="text-7xl">☕</span>
                                     <?php endif; ?>
                                 </div>
+                                <div class="p-6">
+                                    <h3 class="mb-2 text-xl font-bold"><?php echo htmlspecialchars($product['name']); ?></h3>
+                                    <p class="mb-4 text-gray-600">
+                                        <?php echo htmlspecialchars($product['description'] ?? 'Delicious item from our menu'); ?>
+                                    </p>
+                                    <div class="flex items-center justify-between">
+                                        <div class="w-full">
+                                            <?php if ($product['price_dodici']): ?>
+                                                <p class="text-sm text-gray-500">Dodici: <span
+                                                        class="font-semibold text-amber-600"><?php echo formatCurrency($product['price_dodici']); ?></span>
+                                                </p>
+                                            <?php endif; ?>
+                                            <?php if ($product['price_sedici']): ?>
+                                                <p class="text-sm text-gray-500">Sedici: <span
+                                                        class="font-semibold text-amber-600"><?php echo formatCurrency($product['price_sedici']); ?></span>
+                                                </p>
+                                            <?php endif; ?>
+                                            <?php if (!$product['price_dodici'] && !$product['price_sedici']): ?>
+                                                <p class="text-sm text-gray-500">Price: <span
+                                                        class="font-semibold text-amber-600">Contact us</span></p>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
-                    <?php endforeach; ?>
                 </div>
-            </div>
             <?php endforeach; ?>
         </div>
     </section>
