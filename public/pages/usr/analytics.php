@@ -12,22 +12,29 @@ $period = isset($_GET['period']) ? $_GET['period'] : '7days';
 $start_date = '';
 $end_date = date('Y-m-d');
 
+// Set period label for display
+$period_label = '';
 switch ($period) {
     case 'today':
         $start_date = date('Y-m-d');
+        $period_label = 'Today';
         break;
     case '7days':
         $start_date = date('Y-m-d', strtotime('-7 days'));
+        $period_label = 'Last 7 Days';
         break;
     case '30days':
         $start_date = date('Y-m-d', strtotime('-30 days'));
+        $period_label = 'Last 30 Days';
         break;
     case 'thismonth':
         $start_date = date('Y-m-01');
+        $period_label = 'This Month';
         break;
     case 'lastmonth':
         $start_date = date('Y-m-01', strtotime('-1 month'));
         $end_date = date('Y-m-t', strtotime('-1 month'));
+        $period_label = 'Last Month';
         break;
 }
 
@@ -64,11 +71,24 @@ $stmt = $conn->prepare("
 $stmt->execute(['start' => $start_date, 'end' => $end_date]);
 $total_items = $stmt->fetch()['total'];
 
-// Sales by Day
+// Top selling products
 $stmt = $conn->prepare("
-    SELECT DATE(created_at) as date, 
-           COUNT(*) as orders, 
-           SUM(total_amount) as revenue
+    SELECT p.name, SUM(oi.quantity) as total_sold, SUM(oi.subtotal) as revenue
+    FROM order_items oi
+    JOIN products p ON oi.product_id = p.id
+    JOIN orders o ON oi.order_id = o.id
+    WHERE DATE(o.created_at) BETWEEN :start AND :end
+    AND o.status != 'cancelled'
+    GROUP BY oi.product_id
+    ORDER BY total_sold DESC
+    LIMIT 5
+");
+$stmt->execute(['start' => $start_date, 'end' => $end_date]);
+$top_products = $stmt->fetchAll();
+
+// Sales by day
+$stmt = $conn->prepare("
+    SELECT DATE(created_at) as date, COUNT(*) as orders, SUM(total_amount) as revenue
     FROM orders
     WHERE DATE(created_at) BETWEEN :start AND :end
     AND status != 'cancelled'
@@ -78,29 +98,9 @@ $stmt = $conn->prepare("
 $stmt->execute(['start' => $start_date, 'end' => $end_date]);
 $daily_sales = $stmt->fetchAll();
 
-// Top Selling Products
+// Sales by category
 $stmt = $conn->prepare("
-    SELECT p.name, 
-           p.image,
-           SUM(oi.quantity) as total_sold,
-           SUM(oi.subtotal) as revenue
-    FROM order_items oi
-    JOIN products p ON oi.product_id = p.id
-    JOIN orders o ON oi.order_id = o.id
-    WHERE DATE(o.created_at) BETWEEN :start AND :end
-    AND o.status != 'cancelled'
-    GROUP BY oi.product_id
-    ORDER BY total_sold DESC
-    LIMIT 10
-");
-$stmt->execute(['start' => $start_date, 'end' => $end_date]);
-$top_products = $stmt->fetchAll();
-
-// Sales by Category
-$stmt = $conn->prepare("
-    SELECT c.name, 
-           SUM(oi.quantity) as items_sold,
-           SUM(oi.subtotal) as revenue
+    SELECT c.name, SUM(oi.subtotal) as revenue
     FROM order_items oi
     JOIN products p ON oi.product_id = p.id
     JOIN categories c ON p.category_id = c.id
@@ -113,37 +113,9 @@ $stmt = $conn->prepare("
 $stmt->execute(['start' => $start_date, 'end' => $end_date]);
 $category_sales = $stmt->fetchAll();
 
-// Sales by Payment Method
+// Hourly sales pattern
 $stmt = $conn->prepare("
-    SELECT payment_method, 
-           COUNT(*) as count,
-           SUM(total_amount) as revenue
-    FROM orders
-    WHERE DATE(created_at) BETWEEN :start AND :end
-    AND status != 'cancelled'
-    GROUP BY payment_method
-");
-$stmt->execute(['start' => $start_date, 'end' => $end_date]);
-$payment_methods = $stmt->fetchAll();
-
-// Sales by Order Type
-$stmt = $conn->prepare("
-    SELECT order_type, 
-           COUNT(*) as count,
-           SUM(total_amount) as revenue
-    FROM orders
-    WHERE DATE(created_at) BETWEEN :start AND :end
-    AND status != 'cancelled'
-    GROUP BY order_type
-");
-$stmt->execute(['start' => $start_date, 'end' => $end_date]);
-$order_types = $stmt->fetchAll();
-
-// Peak Hours
-$stmt = $conn->prepare("
-    SELECT HOUR(created_at) as hour,
-           COUNT(*) as orders,
-           SUM(total_amount) as revenue
+    SELECT HOUR(created_at) as hour, COUNT(*) as orders, SUM(total_amount) as revenue
     FROM orders
     WHERE DATE(created_at) BETWEEN :start AND :end
     AND status != 'cancelled'
@@ -152,6 +124,17 @@ $stmt = $conn->prepare("
 ");
 $stmt->execute(['start' => $start_date, 'end' => $end_date]);
 $hourly_sales = $stmt->fetchAll();
+
+// Order Types
+$stmt = $conn->prepare("
+    SELECT order_type, COUNT(*) as count
+    FROM orders
+    WHERE DATE(created_at) BETWEEN :start AND :end
+    AND status != 'cancelled'
+    GROUP BY order_type
+");
+$stmt->execute(['start' => $start_date, 'end' => $end_date]);
+$order_types = $stmt->fetchAll();
 
 // Employee Performance
 $stmt = $conn->prepare("
@@ -391,72 +374,97 @@ $current_user = getCurrentUser();
                     </div>
                 </div>
 
-                <!-- Charts Row -->
-                <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
-                    <!-- Sales Trend Chart -->
-                    <div class="p-6 bg-white rounded-lg shadow-md">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Sales Trend</h3>
-                        <canvas id="salesTrendChart"></canvas>
+                <!-- Top Products -->
+                <div class="bg-white rounded-lg shadow-lg lg:col-span-2 mb-6">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-800">Top Selling Products
+                            (<?php echo $period_label; ?>)</h3>
                     </div>
-
-                    <!-- Category Distribution -->
-                    <div class="p-6 bg-white rounded-lg shadow-md">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Sales by Category</h3>
-                        <canvas id="categoryChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Payment & Order Type Charts -->
-                <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
-                    <!-- Payment Methods -->
-                    <div class="p-6 bg-white rounded-lg shadow-md">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Payment Methods</h3>
-                        <canvas id="paymentChart"></canvas>
-                    </div>
-
-                    <!-- Order Types -->
-                    <div class="p-6 bg-white rounded-lg shadow-md">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Order Types</h3>
-                        <canvas id="orderTypeChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Peak Hours Chart -->
-                <div class="p-6 mb-6 bg-white rounded-lg shadow-md">
-                    <h3 class="mb-4 text-lg font-semibold text-gray-800">Peak Hours</h3>
-                    <canvas id="peakHoursChart"></canvas>
-                </div>
-
-                <!-- Top Products & Employee Performance -->
-                <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
-                    <!-- Top Products -->
-                    <div class="p-6 bg-white rounded-lg shadow-md">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Top Selling Products</h3>
-                        <div class="space-y-4">
+                    <div class="p-4">
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
                             <?php foreach ($top_products as $index => $product): ?>
-                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                                    <div class="flex items-center">
-                                        <span
-                                            class="flex items-center justify-center w-8 h-8 mr-3 text-white rounded-full bg-amber-600">
-                                            <?php echo $index + 1; ?>
-                                        </span>
-                                        <div>
-                                            <p class="font-medium text-gray-800"><?php echo $product['name']; ?></p>
-                                            <p class="text-sm text-gray-500"><?php echo $product['total_sold']; ?> sold</p>
-                                        </div>
+                                <div class="flex items-center p-3 border border-gray-200 rounded-lg">
+                                    <div
+                                        class="flex items-center justify-center flex-shrink-0 w-10 h-10 mr-3 text-white rounded-full bg-gradient-to-br from-amber-400 to-amber-600">
+                                        <span class="font-bold"><?php echo $index + 1; ?></span>
                                     </div>
-                                    <div class="text-right">
-                                        <p class="font-semibold text-gray-800">
-                                            ₱<?php echo number_format($product['revenue'], 2); ?></p>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 truncate">
+                                            <?php echo $product['name']; ?></p>
+                                        <p class="text-xs text-gray-500"><?php echo $product['total_sold']; ?> sold</p>
+                                        <p class="text-sm font-semibold text-green-600">
+                                            <?php echo formatCurrency($product['revenue']); ?></p>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
                     </div>
+                </div>
 
+                <!-- Charts Row -->
+                <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+                    <!-- Sales Trend Chart -->
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Sales Trend (<?php echo $period_label; ?>)
+                            </h3>
+                        </div>
+                        <div class="p-4">
+                            <div style="height: 250px;">
+                                <canvas id="salesTrendChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category Sales Chart -->
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Sales by Category
+                                (<?php echo $period_label; ?>)</h3>
+                        </div>
+                        <div class="p-4">
+                            <div style="height: 250px;">
+                                <canvas id="categorySalesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Peak Hours & Order Type Charts -->
+                <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+                    <!-- Peak Hours Chart -->
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Peak Hours Analysis
+                                (<?php echo $period_label; ?>)</h3>
+                        </div>
+                        <div class="p-4">
+                            <div style="height: 250px;">
+                                <canvas id="hourlyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Types -->
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Order Types (<?php echo $period_label; ?>)
+                            </h3>
+                        </div>
+                        <div class="p-4">
+                            <div style="height: 250px;">
+                                <canvas id="orderTypeChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Products & Employee Performance -->
+                <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-1">
                     <!-- Employee Performance -->
                     <div class="p-6 bg-white rounded-lg shadow-md">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Employee Performance</h3>
+                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Employee Performance
+                            (<?php echo $period_label; ?>)</h3>
                         <div class="space-y-4">
                             <?php foreach ($employee_performance as $employee): ?>
                                 <div class="p-4 border border-gray-200 rounded-lg">
@@ -480,75 +488,79 @@ $current_user = getCurrentUser();
 
     <script src="../../assets/js/admin.js"></script>
     <script>
+        // Prepare data with fallbacks for empty datasets
+        const dailySalesData = <?php echo json_encode($daily_sales); ?>;
+        const categorySalesData = <?php echo json_encode($category_sales); ?>;
+        const hourlySalesData = <?php echo json_encode($hourly_sales); ?>;
+        const orderTypesData = <?php echo json_encode($order_types); ?>;
+
         // Sales Trend Chart
-        const salesTrendCtx = document.getElementById('salesTrendChart').getContext('2d');
-        new Chart(salesTrendCtx, {
+        const salesCtx = document.getElementById('salesTrendChart').getContext('2d');
+        new Chart(salesCtx, {
             type: 'line',
             data: {
-                labels: <?php echo json_encode(array_map(function ($d) {
-                            return date('M d', strtotime($d['date']));
-                        }, $daily_sales)); ?>,
+                labels: dailySalesData.length > 0 ? dailySalesData.map(d => {
+                    const date = new Date(d.date);
+                    return date.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                }) : ['No Data'],
                 datasets: [{
                     label: 'Revenue',
-                    data: <?php echo json_encode(array_column($daily_sales, 'revenue')); ?>,
-                    borderColor: 'rgb(217, 119, 6)',
-                    backgroundColor: 'rgba(217, 119, 6, 0.1)',
+                    data: dailySalesData.length > 0 ? dailySalesData.map(d => parseFloat(d.revenue)) : [0],
+                    borderColor: 'rgb(245, 158, 11)',
+                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                    fill: true,
                     tension: 0.4
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        display: true
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '₱' + value.toLocaleString();
+                            }
+                        }
                     }
                 }
             }
         });
 
-        // Category Chart
-        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        // Category Sales Chart
+        const categoryCtx = document.getElementById('categorySalesChart').getContext('2d');
         new Chart(categoryCtx, {
             type: 'doughnut',
             data: {
-                labels: <?php echo json_encode(array_column($category_sales, 'name')); ?>,
+                labels: categorySalesData.length > 0 ? categorySalesData.map(c => c.name) : ['No Data'],
                 datasets: [{
-                    data: <?php echo json_encode(array_column($category_sales, 'revenue')); ?>,
+                    data: categorySalesData.length > 0 ? categorySalesData.map(c => parseFloat(c.revenue)) : [1],
                     backgroundColor: [
-                        'rgba(217, 119, 6, 0.8)',
-                        'rgba(59, 130, 246, 0.8)',
-                        'rgba(34, 197, 94, 0.8)',
-                        'rgba(168, 85, 247, 0.8)',
-                        'rgba(239, 68, 68, 0.8)'
+                        'rgb(245, 158, 11)',
+                        'rgb(59, 130, 246)',
+                        'rgb(16, 185, 129)',
+                        'rgb(239, 68, 68)',
+                        'rgb(139, 92, 246)'
                     ]
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true
-            }
-        });
-
-        // Payment Methods Chart
-        const paymentCtx = document.getElementById('paymentChart').getContext('2d');
-        new Chart(paymentCtx, {
-            type: 'pie',
-            data: {
-                labels: <?php echo json_encode(array_map('ucfirst', array_column($payment_methods, 'payment_method'))); ?>,
-                datasets: [{
-                    data: <?php echo json_encode(array_column($payment_methods, 'count')); ?>,
-                    backgroundColor: [
-                        'rgba(34, 197, 94, 0.8)',
-                        'rgba(59, 130, 246, 0.8)',
-                        'rgba(168, 85, 247, 0.8)',
-                        'rgba(251, 191, 36, 0.8)'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
             }
         });
 
@@ -557,44 +569,78 @@ $current_user = getCurrentUser();
         new Chart(orderTypeCtx, {
             type: 'bar',
             data: {
-                labels: <?php echo json_encode(array_map('ucfirst', array_column($order_types, 'order_type'))); ?>,
-                datasets: [{
-                    label: 'Orders',
-                    data: <?php echo json_encode(array_column($order_types, 'count')); ?>,
-                    backgroundColor: 'rgba(217, 119, 6, 0.8)'
+                labels: orderTypesData.length > 0 ? orderTypesData.map(t => t.order_type.charAt(0).toUpperCase() + t
+                    .order_type.slice(1)) : ['No Data'],
+                datasets: orderTypesData.length > 0 ? orderTypesData.map((t, index) => ({
+                    label: t.order_type.charAt(0).toUpperCase() + t.order_type.slice(1),
+                    data: orderTypesData.map((item, i) => i === index ? parseInt(item.count) : 0),
+                    backgroundColor: [
+                        'rgba(245, 158, 11, 0.8)', // Amber for first type
+                        'rgba(59, 130, 246, 0.8)', // Blue for second type
+                        'rgba(16, 185, 129, 0.8)', // Green for third type
+                        'rgba(139, 92, 246, 0.8)' // Purple for fourth type
+                    ][index],
+                    borderColor: [
+                        'rgb(245, 158, 11)',
+                        'rgb(59, 130, 246)',
+                        'rgb(16, 185, 129)',
+                        'rgb(139, 92, 246)'
+                    ][index],
+                    borderWidth: 2
+                })) : [{
+                    label: 'No Data',
+                    data: [0],
+                    backgroundColor: 'rgba(209, 213, 219, 0.8)'
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
+                },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
                     }
                 }
             }
         });
 
-        // Peak Hours Chart
-        const peakHoursCtx = document.getElementById('peakHoursChart').getContext('2d');
-        new Chart(peakHoursCtx, {
+        // Hourly Sales Chart
+        const hourlyCtx = document.getElementById('hourlyChart').getContext('2d');
+        new Chart(hourlyCtx, {
             type: 'bar',
             data: {
-                labels: <?php echo json_encode(array_map(function ($h) {
-                            return $h['hour'] . ':00';
-                        }, $hourly_sales)); ?>,
+                labels: hourlySalesData.length > 0 ? hourlySalesData.map(h => h.hour + ':00') : ['No Data'],
                 datasets: [{
                     label: 'Orders',
-                    data: <?php echo json_encode(array_column($hourly_sales, 'orders')); ?>,
-                    backgroundColor: 'rgba(59, 130, 246, 0.8)'
+                    data: hourlySalesData.length > 0 ? hourlySalesData.map(h => parseInt(h.orders)) : [0],
+                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                    borderColor: 'rgb(59, 130, 246)',
+                    borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
                     }
                 }
             }
