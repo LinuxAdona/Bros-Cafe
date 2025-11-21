@@ -138,6 +138,55 @@ $current_user = getCurrentUser();
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Prevent sidebar jitter on page load -->
+    <script>
+        (function() {
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                document.documentElement.classList.add('sidebar-collapsed-init');
+            }
+        })();
+    </script>
+    <style>
+        /* Apply collapsed state immediately to prevent jitter */
+        .sidebar-collapsed-init #sidebar {
+            width: 5rem;
+        }
+
+        .sidebar-collapsed-init #sidebar .sidebar-text,
+        .sidebar-collapsed-init #sidebar .sidebar-logo-text {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar .sidebar-logo {
+            justify-content: center;
+        }
+
+        .sidebar-collapsed-init #sidebar .logo-content {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar .toggle-btn-collapsed {
+            display: flex;
+        }
+
+        .sidebar-collapsed-init #sidebar .toggle-btn-expanded {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar nav ul li a {
+            justify-content: center;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+
+        .sidebar-collapsed-init #sidebar .user-info {
+            justify-content: center;
+        }
+
+        .sidebar-collapsed-init #sidebar .user-info>div {
+            display: none;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
@@ -235,7 +284,8 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="users.php" data-tooltip="Employees" class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
+                        <a href="users.php" data-tooltip="Employees"
+                            class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
                             <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -264,7 +314,7 @@ $current_user = getCurrentUser();
 
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto">
-            <div class="flex items-center justify-between bg-white shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between bg-white shadow-lg p-6">
                 <div class="flex items-center">
                     <div class="flex flex-col justify-center">
                         <h2 class="text-3xl font-bold text-gray-800">User Management</h2>

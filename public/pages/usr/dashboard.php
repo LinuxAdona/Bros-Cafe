@@ -34,6 +34,39 @@ $stmt = $conn->query("
 ");
 $recent_orders = $stmt->fetchAll();
 
+// Get pending orders count
+$stmt = $conn->query("SELECT COUNT(*) as count FROM orders WHERE status = 'pending'");
+$pending_orders = $stmt->fetch()['count'];
+
+// Get low stock products
+$stmt = $conn->query("
+    SELECT p.name, i.quantity, i.reorder_level 
+    FROM inventory i 
+    JOIN products p ON i.product_id = p.id 
+    WHERE i.quantity <= i.reorder_level 
+    ORDER BY i.quantity ASC 
+    LIMIT 5
+");
+$low_stock_items = $stmt->fetchAll();
+
+// Get top selling products today
+$stmt = $conn->prepare("
+    SELECT p.name, SUM(oi.quantity) as total_sold, SUM(oi.subtotal) as revenue
+    FROM order_items oi
+    JOIN products p ON oi.product_id = p.id
+    JOIN orders o ON oi.order_id = o.id
+    WHERE DATE(o.created_at) = :today AND o.status != 'cancelled'
+    GROUP BY p.id
+    ORDER BY total_sold DESC
+    LIMIT 5
+");
+$stmt->execute(['today' => $today]);
+$top_products = $stmt->fetchAll();
+
+// Get active employees count
+$stmt = $conn->query("SELECT COUNT(*) as count FROM users WHERE role = 'employee' AND status = 'active'");
+$active_employees = $stmt->fetch()['count'];
+
 $current_user = getCurrentUser();
 ?>
 <!DOCTYPE html>
@@ -55,6 +88,55 @@ $current_user = getCurrentUser();
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <!-- Prevent sidebar jitter on page load -->
+    <script>
+        (function() {
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                document.documentElement.classList.add('sidebar-collapsed-init');
+            }
+        })();
+    </script>
+    <style>
+        /* Apply collapsed state immediately to prevent jitter */
+        .sidebar-collapsed-init #sidebar {
+            width: 5rem;
+        }
+
+        .sidebar-collapsed-init #sidebar .sidebar-text,
+        .sidebar-collapsed-init #sidebar .sidebar-logo-text {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar .sidebar-logo {
+            justify-content: center;
+        }
+
+        .sidebar-collapsed-init #sidebar .logo-content {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar .toggle-btn-collapsed {
+            display: flex;
+        }
+
+        .sidebar-collapsed-init #sidebar .toggle-btn-expanded {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar nav ul li a {
+            justify-content: center;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+
+        .sidebar-collapsed-init #sidebar .user-info {
+            justify-content: center;
+        }
+
+        .sidebar-collapsed-init #sidebar .user-info>div {
+            display: none;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
@@ -262,6 +344,182 @@ $current_user = getCurrentUser();
                                         d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                                 </svg>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions & Alerts Grid -->
+                <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-3">
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Quick Actions</h3>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <a href="pos.php"
+                                class="flex items-center p-3 transition-all rounded-lg bg-amber-50 hover:bg-amber-100 group">
+                                <div class="p-2 rounded-lg bg-amber-100 group-hover:bg-amber-200">
+                                    <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="font-semibold text-gray-900">New Order</p>
+                                    <p class="text-xs text-gray-500">Create a new order</p>
+                                </div>
+                            </a>
+
+                            <a href="products.php"
+                                class="flex items-center p-3 transition-all rounded-lg bg-blue-50 hover:bg-blue-100 group">
+                                <div class="p-2 rounded-lg bg-blue-100 group-hover:bg-blue-200">
+                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4v16m8-8H4" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="font-semibold text-gray-900">Add Product</p>
+                                    <p class="text-xs text-gray-500">Add new menu item</p>
+                                </div>
+                            </a>
+
+                            <a href="users.php"
+                                class="flex items-center p-3 transition-all rounded-lg bg-green-50 hover:bg-green-100 group">
+                                <div class="p-2 rounded-lg bg-green-100 group-hover:bg-green-200">
+                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="font-semibold text-gray-900">Add Employee</p>
+                                    <p class="text-xs text-gray-500">Register new staff</p>
+                                </div>
+                            </a>
+
+                            <a href="analytics.php"
+                                class="flex items-center p-3 transition-all rounded-lg bg-purple-50 hover:bg-purple-100 group">
+                                <div class="p-2 rounded-lg bg-purple-100 group-hover:bg-purple-200">
+                                    <i class="w-6 h-6 text-purple-600 fa-solid fa-chart-simple"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="font-semibold text-gray-900">View Analytics</p>
+                                    <p class="text-xs text-gray-500">Detailed reports</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Top Products Today -->
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Top Products Today</h3>
+                        </div>
+                        <div class="p-4" style="max-height: 300px; overflow-y: auto;">
+                            <?php if (count($top_products) > 0): ?>
+                                <div class="space-y-3">
+                                    <?php foreach ($top_products as $index => $product): ?>
+                                        <div class="flex items-center justify-between p-3 rounded-lg bg-gray-50">
+                                            <div class="flex items-center">
+                                                <div
+                                                    class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-sm font-bold text-white rounded-full bg-amber-600">
+                                                    <?php echo $index + 1; ?>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="text-sm font-semibold text-gray-900">
+                                                        <?php echo $product['name']; ?></p>
+                                                    <p class="text-xs text-gray-500"><?php echo $product['total_sold']; ?> sold
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <p class="text-sm font-bold text-amber-600">
+                                                <?php echo formatCurrency($product['revenue']); ?></p>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php else: ?>
+                                <p class="py-8 text-sm text-center text-gray-400">No sales today yet</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- System Alerts -->
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">System Alerts</h3>
+                        </div>
+                        <div class="p-4 space-y-3" style="max-height: 300px; overflow-y: auto;">
+                            <!-- Pending Orders Alert -->
+                            <?php if ($pending_orders > 0): ?>
+                                <a href="orders.php"
+                                    class="flex items-start p-3 transition-all border-l-4 border-yellow-500 rounded-lg bg-yellow-50 hover:bg-yellow-100">
+                                    <svg class="flex-shrink-0 w-5 h-5 mt-0.5 text-yellow-600" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div class="ml-3">
+                                        <p class="text-sm font-semibold text-yellow-800"><?php echo $pending_orders; ?>
+                                            Pending Order<?php echo $pending_orders > 1 ? 's' : ''; ?></p>
+                                        <p class="text-xs text-yellow-600">Action required</p>
+                                    </div>
+                                </a>
+                            <?php endif; ?>
+
+                            <!-- Low Stock Alert -->
+                            <?php if ($low_stock_count > 0): ?>
+                                <a href="inventory.php"
+                                    class="flex items-start p-3 transition-all border-l-4 border-red-500 rounded-lg bg-red-50 hover:bg-red-100">
+                                    <svg class="flex-shrink-0 w-5 h-5 mt-0.5 text-red-600" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                    <div class="ml-3">
+                                        <p class="text-sm font-semibold text-red-800">Low Stock Alert</p>
+                                        <p class="text-xs text-red-600"><?php echo $low_stock_count; ?>
+                                            item<?php echo $low_stock_count > 1 ? 's need' : ' needs'; ?> restocking</p>
+                                        <?php if (count($low_stock_items) > 0): ?>
+                                            <ul class="mt-2 ml-3 space-y-1 text-xs text-red-700 list-disc">
+                                                <?php foreach ($low_stock_items as $item): ?>
+                                                    <li><?php echo $item['name']; ?> (<?php echo $item['quantity']; ?> left)</li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </div>
+                                </a>
+                            <?php endif; ?>
+
+                            <!-- Active Status -->
+                            <div class="flex items-start p-3 border-l-4 border-green-500 rounded-lg bg-green-50">
+                                <svg class="flex-shrink-0 w-5 h-5 mt-0.5 text-green-600" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <div class="ml-3">
+                                    <p class="text-sm font-semibold text-green-800">System Active</p>
+                                    <p class="text-xs text-green-600"><?php echo $active_employees; ?>
+                                        employee<?php echo $active_employees > 1 ? 's' : ''; ?> online</p>
+                                </div>
+                            </div>
+
+                            <?php if ($pending_orders == 0 && $low_stock_count == 0): ?>
+                                <div class="flex items-center justify-center py-6">
+                                    <div class="text-center">
+                                        <svg class="w-12 h-12 mx-auto text-green-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <p class="mt-2 text-sm font-medium text-gray-600">All systems normal</p>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

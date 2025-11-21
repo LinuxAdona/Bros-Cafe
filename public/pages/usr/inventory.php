@@ -83,6 +83,55 @@ $current_user = getCurrentUser();
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Prevent sidebar jitter on page load -->
+    <script>
+        (function() {
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                document.documentElement.classList.add('sidebar-collapsed-init');
+            }
+        })();
+    </script>
+    <style>
+        /* Apply collapsed state immediately to prevent jitter */
+        .sidebar-collapsed-init #sidebar {
+            width: 5rem;
+        }
+
+        .sidebar-collapsed-init #sidebar .sidebar-text,
+        .sidebar-collapsed-init #sidebar .sidebar-logo-text {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar .sidebar-logo {
+            justify-content: center;
+        }
+
+        .sidebar-collapsed-init #sidebar .logo-content {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar .toggle-btn-collapsed {
+            display: flex;
+        }
+
+        .sidebar-collapsed-init #sidebar .toggle-btn-expanded {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar nav ul li a {
+            justify-content: center;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+
+        .sidebar-collapsed-init #sidebar .user-info {
+            justify-content: center;
+        }
+
+        .sidebar-collapsed-init #sidebar .user-info>div {
+            display: none;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
@@ -155,7 +204,8 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="inventory.php" data-tooltip="Inventory" class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
+                        <a href="inventory.php" data-tooltip="Inventory"
+                            class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
                             <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -215,7 +265,7 @@ $current_user = getCurrentUser();
 
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto">
-            <div class="flex items-center bg-white shadow-lg mb-6 p-6">
+            <div class="flex items-center bg-white shadow-lg p-6">
                 <div class="flex flex-col justify-center">
                     <h2 class="text-3xl font-bold text-gray-800">Inventory Management</h2>
                     <p class="text-md text-gray-600">Track and manage product stock levels</p>

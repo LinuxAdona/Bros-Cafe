@@ -10,6 +10,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Note: toggleSidebar() is handled by admin.js for consistency across all pages
 
+// Search products
+function searchProducts() {
+    const searchInput = document.getElementById('product-search');
+    const searchTerm = searchInput.value.toLowerCase().trim();
+    const products = document.querySelectorAll('.product-card');
+    
+    products.forEach(product => {
+        const productName = product.querySelector('h3').textContent.toLowerCase();
+        
+        if (productName.includes(searchTerm)) {
+            product.style.display = 'block';
+            product.classList.add('fade-in');
+        } else {
+            product.style.display = 'none';
+        }
+    });
+    
+    // If search is active, reset category filter to show all matching results
+    if (searchTerm) {
+        const buttons = document.querySelectorAll('.category-btn');
+        buttons.forEach(btn => {
+            btn.classList.remove('bg-amber-600', 'text-white', 'hover:bg-amber-700');
+            btn.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-50');
+        });
+        // Highlight "All" button
+        buttons[0].classList.add('bg-amber-600', 'text-white', 'hover:bg-amber-700');
+        buttons[0].classList.remove('bg-white', 'text-gray-700', 'hover:bg-gray-50');
+    }
+}
+
 // Cart toggle with animation
 function toggleCart() {
     const cartSection = document.getElementById('cart-section');

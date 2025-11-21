@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
     
+    // Remove the init class from html element
+    document.documentElement.classList.remove('sidebar-collapsed-init');
+    
     // Load sidebar state from localStorage
     const savedState = localStorage.getItem('sidebarCollapsed');
     if (savedState === 'true') {

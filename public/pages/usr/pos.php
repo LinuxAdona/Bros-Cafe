@@ -43,6 +43,55 @@ $current_user = getCurrentUser();
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Prevent sidebar jitter on page load -->
+    <script>
+        (function() {
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                document.documentElement.classList.add('sidebar-collapsed-init');
+            }
+        })();
+    </script>
+    <style>
+        /* Apply collapsed state immediately to prevent jitter */
+        .sidebar-collapsed-init #sidebar {
+            width: 5rem;
+        }
+
+        .sidebar-collapsed-init #sidebar .sidebar-text,
+        .sidebar-collapsed-init #sidebar .sidebar-logo-text {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar .sidebar-logo {
+            justify-content: center;
+        }
+
+        .sidebar-collapsed-init #sidebar .logo-content {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar .toggle-btn-collapsed {
+            display: flex;
+        }
+
+        .sidebar-collapsed-init #sidebar .toggle-btn-expanded {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar nav ul li a {
+            justify-content: center;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+
+        .sidebar-collapsed-init #sidebar .user-info {
+            justify-content: center;
+        }
+
+        .sidebar-collapsed-init #sidebar .user-info>div {
+            display: none;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
@@ -202,6 +251,20 @@ $current_user = getCurrentUser();
                 </div>
 
                 <div class="px-6">
+                    <!-- Search Bar -->
+                    <div class="mb-4">
+                        <div class="relative">
+                            <input type="text" id="product-search" placeholder="Search products..."
+                                class="w-full px-4 py-3 pl-12 text-gray-700 transition-all bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                oninput="searchProducts()">
+                            <svg class="absolute w-5 h-5 text-gray-400 transform -translate-y-1/2 left-4 top-1/2"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                    </div>
+
                     <!-- Category Filter -->
                     <div class="flex gap-2 pb-2 mb-6 overflow-x-auto">
                         <button onclick="filterCategory('all')"

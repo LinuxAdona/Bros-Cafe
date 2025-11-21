@@ -119,6 +119,55 @@ $current_user = getCurrentUser();
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Prevent sidebar jitter on page load -->
+    <script>
+        (function() {
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                document.documentElement.classList.add('sidebar-collapsed-init');
+            }
+        })();
+    </script>
+    <style>
+        /* Apply collapsed state immediately to prevent jitter */
+        .sidebar-collapsed-init #sidebar {
+            width: 5rem;
+        }
+
+        .sidebar-collapsed-init #sidebar .sidebar-text,
+        .sidebar-collapsed-init #sidebar .sidebar-logo-text {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar .sidebar-logo {
+            justify-content: center;
+        }
+
+        .sidebar-collapsed-init #sidebar .logo-content {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar .toggle-btn-collapsed {
+            display: flex;
+        }
+
+        .sidebar-collapsed-init #sidebar .toggle-btn-expanded {
+            display: none;
+        }
+
+        .sidebar-collapsed-init #sidebar nav ul li a {
+            justify-content: center;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+
+        .sidebar-collapsed-init #sidebar .user-info {
+            justify-content: center;
+        }
+
+        .sidebar-collapsed-init #sidebar .user-info>div {
+            display: none;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
@@ -181,7 +230,8 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <li>
-                        <a href="orders.php" data-tooltip="Orders" class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
+                        <a href="orders.php" data-tooltip="Orders"
+                            class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
                             <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -251,8 +301,8 @@ $current_user = getCurrentUser();
 
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto">
-            <div class="flex items-center bg-white shadow-lg mb-6 p-6">
-                <div>
+            <div class="flex items-center bg-white shadow-lg p-6">
+                <div class="flex flex-col justify-center">
                     <h2 class="text-3xl font-bold text-gray-800">Orders Management</h2>
                     <p class="text-md text-gray-600">View and manage customer orders</p>
                 </div>
