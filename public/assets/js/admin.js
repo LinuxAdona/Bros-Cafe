@@ -6,15 +6,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
     
-    // Remove the init class from html element
-    document.documentElement.classList.remove('sidebar-collapsed-init');
-    
     // Load sidebar state from localStorage
     const savedState = localStorage.getItem('sidebarCollapsed');
     if (savedState === 'true') {
-        sidebar.classList.add('sidebar-collapsed');
         isSidebarCollapsed = true;
+        sidebar.classList.add('sidebar-collapsed');
+    } else {
+        isSidebarCollapsed = false;
+        sidebar.classList.remove('sidebar-collapsed');
     }
+    
+    // Remove the init class from html element after applying correct state
+    document.documentElement.classList.remove('sidebar-collapsed-init');
     
     // Add transition class after a small delay to prevent animation on load
     setTimeout(() => {
