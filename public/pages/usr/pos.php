@@ -69,56 +69,56 @@ $current_user = getCurrentUser();
             <nav class="flex-1 p-4">
                 <ul class="space-y-2">
                     <?php if (isAdmin()): ?>
-                        <li>
-                            <a href="dashboard.php"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                                </svg>
-                                Dashboard
-                            </a>
-                        </li>
+                    <li>
+                        <a href="dashboard.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
                     <?php endif; ?>
                     <?php if (isEmployee()): ?>
-                        <li>
-                            <a href="pos.php" class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                POS
-                            </a>
-                        </li>
-                        <li>
-                            <a href="orders.php"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                                Orders
-                            </a>
-                        </li>
-                        <li>
-                            <a href="inventory.php"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                </svg>
-                                Inventory
-                            </a>
-                        </li>
+                    <li>
+                        <a href="pos.php" class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            POS
+                        </a>
+                    </li>
+                    <li>
+                        <a href="orders.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            Orders
+                        </a>
+                    </li>
+                    <li>
+                        <a href="inventory.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                            Inventory
+                        </a>
+                    </li>
                     <?php endif; ?>
                     <?php if (isAdmin()): ?>
-                        <li>
-                            <a href="analytics.php"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <i class="w-5 h-5 mr-3 fa-solid fa-chart-simple"></i>
-                                Analytics
-                            </a>
-                        </li>
+                    <li>
+                        <a href="analytics.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <i class="w-5 h-5 mr-3 fa-solid fa-chart-simple"></i>
+                            Analytics
+                        </a>
+                    </li>
                     <?php endif; ?>
                     <li>
                         <a href="products.php"
@@ -131,16 +131,16 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <?php if (isAdmin()): ?>
-                        <li>
-                            <a href="users.php"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                </svg>
-                                Employees
-                            </a>
-                        </li>
+                    <li>
+                        <a href="users.php"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            Employees
+                        </a>
+                    </li>
                     <?php endif; ?>
                 </ul>
             </nav>
@@ -200,46 +200,55 @@ $current_user = getCurrentUser();
                         <button onclick="filterCategory('all')"
                             class="px-4 py-2 text-white rounded-lg category-btn bg-amber-600 whitespace-nowrap">All</button>
                         <?php foreach ($categories as $category): ?>
-                            <button onclick="filterCategory('<?php echo $category['id']; ?>')"
-                                class="px-4 py-2 text-gray-700 transition-all bg-white rounded-lg category-btn whitespace-nowrap"><?php echo $category['name']; ?></button>
+                        <button onclick="filterCategory('<?php echo $category['id']; ?>')"
+                            class="px-4 py-2 text-gray-700 transition-all bg-white rounded-lg category-btn whitespace-nowrap"><?php echo $category['name']; ?></button>
                         <?php endforeach; ?>
                     </div>
 
                     <!-- Products Grid -->
                     <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4" id="products-grid">
-                        <?php foreach ($products as $product): ?>
-                            <div class="transition-shadow bg-white rounded-lg shadow cursor-pointer product-card hover:shadow-lg"
-                                data-category="<?php echo $product['category_id']; ?>"
-                                onclick='addToCart(<?php echo json_encode($product); ?>)'>
-                                <div class="p-4">
-                                    <div
-                                        class="flex items-center justify-center w-full h-32 mb-3 overflow-hidden bg-gray-100 rounded-lg">
-                                        <?php if ($product['image']): ?>
-                                            <img src="../get_image.php?id=<?php echo $product['id']; ?>"
-                                                alt="<?php echo htmlspecialchars($product['name']); ?>"
-                                                class="object-cover w-full h-full">
-                                        <?php else: ?>
-                                            <span class="text-4xl">☕</span>
-                                        <?php endif; ?>
+                        <?php foreach ($products as $product): 
+                            // Create product data without the image blob for onclick
+                            $productData = [
+                                'id' => $product['id'],
+                                'name' => $product['name'],
+                                'price_dodici' => $product['price_dodici'],
+                                'price_sedici' => $product['price_sedici'],
+                                'category_id' => $product['category_id']
+                            ];
+                        ?>
+                        <div class="transition-shadow bg-white rounded-lg shadow cursor-pointer product-card hover:shadow-lg"
+                            data-category="<?php echo $product['category_id']; ?>"
+                            onclick='addToCart(<?php echo json_encode($productData); ?>)'>
+                            <div class="p-4">
+                                <div
+                                    class="flex items-center justify-center w-full h-32 mb-3 overflow-hidden bg-gray-100 rounded-lg">
+                                    <?php if ($product['image']): ?>
+                                    <img src="../get_image.php?id=<?php echo $product['id']; ?>"
+                                        alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                        class="object-cover w-full h-full">
+                                    <?php else: ?>
+                                    <span class="text-4xl">☕</span>
+                                    <?php endif; ?>
+                                </div>
+                                <h3 class="mb-1 font-semibold text-gray-800"><?php echo $product['name']; ?></h3>
+                                <p class="mb-2 text-sm text-gray-600">Stock: <?php echo $product['stock']; ?></p>
+                                <div class="text-sm">
+                                    <?php if ($product['price_dodici']): ?>
+                                    <div class="flex items-center justify-between font-semibold text-amber-600">
+                                        <p>Dodici</p>
+                                        <span><?php echo formatCurrency($product['price_dodici']); ?></span>
                                     </div>
-                                    <h3 class="mb-1 font-semibold text-gray-800"><?php echo $product['name']; ?></h3>
-                                    <p class="mb-2 text-sm text-gray-600">Stock: <?php echo $product['stock']; ?></p>
-                                    <div class="text-sm">
-                                        <?php if ($product['price_dodici']): ?>
-                                            <div class="flex items-center justify-between font-semibold text-amber-600">
-                                                <p>Dodici</p>
-                                                <span><?php echo formatCurrency($product['price_dodici']); ?></span>
-                                            </div>
-                                        <?php endif; ?>
-                                        <?php if ($product['price_sedici']): ?>
-                                            <div class="flex items-center justify-between font-semibold text-amber-600">
-                                                <p>Sedici</p>
-                                                <span><?php echo formatCurrency($product['price_sedici']); ?></span>
-                                            </div>
-                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                    <?php if ($product['price_sedici']): ?>
+                                    <div class="flex items-center justify-between font-semibold text-amber-600">
+                                        <p>Sedici</p>
+                                        <span><?php echo formatCurrency($product['price_sedici']); ?></span>
                                     </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
+                        </div>
                         <?php endforeach; ?>
                     </div>
                 </div>
