@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 20, 2025 at 01:30 PM
+-- Generation Time: Nov 21, 2025 at 06:52 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -75,7 +75,7 @@ INSERT INTO `inventory` (`id`, `product_id`, `quantity`, `unit`, `reorder_level`
 (7, 7, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
 (8, 8, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
 (9, 9, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(10, 10, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
+(10, 10, 100, 'servings', 20, NULL, '2025-11-21 05:47:15'),
 (16, 11, 100, 'servings', 20, NULL, '2025-11-20 12:26:24'),
 (17, 12, 100, 'servings', 20, NULL, '2025-11-20 12:26:24'),
 (18, 13, 100, 'servings', 20, NULL, '2025-11-20 12:26:24');
@@ -96,6 +96,44 @@ CREATE TABLE `inventory_transactions` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `inventory_transactions`
+--
+
+INSERT INTO `inventory_transactions` (`id`, `product_id`, `transaction_type`, `quantity`, `user_id`, `notes`, `created_at`) VALUES
+(1, 10, 'sale', -1, 1, NULL, '2025-11-21 05:40:08'),
+(67, 6, 'sale', -1, 1, NULL, '2025-11-12 01:24:38'),
+(68, 1, 'sale', -1, 1, NULL, '2025-11-12 01:24:38'),
+(69, 9, 'sale', -1, 1, NULL, '2025-11-12 01:24:52'),
+(70, 3, 'sale', -2, 1, NULL, '2025-11-12 01:24:52'),
+(71, 9, 'sale', -2, 1, NULL, '2025-11-12 01:24:59'),
+(72, 9, 'sale', -1, 1, NULL, '2025-11-12 01:25:49'),
+(73, 4, 'sale', -1, 1, NULL, '2025-11-12 01:25:49'),
+(74, 8, 'sale', -1, 1, NULL, '2025-11-12 01:25:49'),
+(75, 2, 'sale', -1, 1, NULL, '2025-11-12 01:25:49'),
+(76, 10, 'sale', -1, 1, NULL, '2025-11-12 01:39:07'),
+(77, 3, 'sale', -1, 1, NULL, '2025-11-12 01:39:07'),
+(78, 9, 'sale', -1, 1, NULL, '2025-11-12 01:45:43'),
+(79, 5, 'sale', -1, 1, NULL, '2025-11-12 01:46:01'),
+(80, 1, 'sale', -1, 1, NULL, '2025-11-12 01:46:01'),
+(81, 7, 'sale', -1, 1, NULL, '2025-11-12 01:46:01'),
+(82, 8, 'sale', -1, 1, NULL, '2025-11-12 01:46:01'),
+(83, 9, 'sale', -1, 1, NULL, '2025-11-12 01:46:30'),
+(84, 7, 'sale', -8, 1, NULL, '2025-11-12 01:46:30'),
+(85, 6, 'sale', -1, 1, NULL, '2025-11-12 23:53:39'),
+(86, 4, 'sale', -1, 1, NULL, '2025-11-12 23:53:39'),
+(87, 3, 'sale', -1, 1, NULL, '2025-11-12 23:53:40'),
+(88, 4, 'sale', -1, 1, NULL, '2025-11-16 02:30:37'),
+(89, 8, 'sale', -1, 1, NULL, '2025-11-16 02:34:24'),
+(90, 10, 'sale', -21, 1, NULL, '2025-11-16 02:43:55'),
+(91, 5, 'sale', -1, 1, NULL, '2025-11-16 02:52:32'),
+(92, 9, 'sale', -1, 1, NULL, '2025-11-16 02:52:40'),
+(93, 4, 'sale', -20, 1, NULL, '2025-11-16 03:07:10'),
+(94, 10, 'sale', -29, 1, NULL, '2025-11-16 03:08:35'),
+(95, 10, 'sale', -42, 1, NULL, '2025-11-16 03:09:00'),
+(96, 10, 'restock', 30, 1, '', '2025-11-16 03:10:09'),
+(97, 10, 'restock', 10, 1, '', '2025-11-16 03:10:35');
+
 -- --------------------------------------------------------
 
 --
@@ -115,6 +153,31 @@ CREATE TABLE `orders` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `order_number`, `customer_id`, `employee_id`, `total_amount`, `payment_method`, `status`, `order_type`, `created_at`, `updated_at`) VALUES
+(1, 'ORD-20251121-33E1CC', NULL, 1, 150.00, 'cash', 'pending', 'dine-in', '2025-11-21 05:40:08', '2025-11-21 05:40:08'),
+(2, 'ORD-20251112-E4BAFF', NULL, 1, 300.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:24:05', '2025-11-12 01:24:05'),
+(3, 'ORD-20251112-DA2C4E', NULL, 1, 390.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:24:38', '2025-11-12 01:24:38'),
+(4, 'ORD-20251112-8D570D', NULL, 1, 340.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:24:52', '2025-11-12 01:24:52'),
+(5, 'ORD-20251112-6253B8', NULL, 1, 200.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:24:59', '2025-11-12 01:24:59'),
+(6, 'ORD-20251112-09E8F3', NULL, 1, 550.00, 'cash', 'pending', 'takeout', '2025-11-12 01:25:49', '2025-11-12 01:25:49'),
+(7, 'ORD-20251112-7C8D5D', NULL, 1, 290.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:39:07', '2025-11-12 01:39:07'),
+(8, 'ORD-20251112-70218A', NULL, 1, 100.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:45:43', '2025-11-12 01:45:43'),
+(9, 'ORD-20251112-8C6675', NULL, 1, 550.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:46:01', '2025-11-12 01:46:01'),
+(10, 'ORD-20251112-BBC41B', NULL, 1, 1220.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:46:30', '2025-11-12 01:46:30'),
+(11, 'ORD-20251113-B33D36', NULL, 1, 370.00, 'cash', 'pending', 'dine-in', '2025-11-12 23:53:39', '2025-11-12 23:53:39'),
+(12, 'ORD-20251116-94FFD2', NULL, 1, 150.00, 'cash', 'completed', 'dine-in', '2025-11-16 02:30:37', '2025-11-16 02:47:13'),
+(13, 'ORD-20251116-D9BB7B', NULL, 1, 180.00, 'cash', 'completed', 'dine-in', '2025-11-16 02:34:24', '2025-11-16 02:47:08'),
+(14, 'ORD-20251116-E2BCCF', NULL, 1, 3150.00, 'cash', 'completed', 'dine-in', '2025-11-16 02:43:55', '2025-11-16 02:46:38'),
+(15, 'ORD-20251116-5B62BD', NULL, 1, 100.00, 'cash', 'completed', 'dine-in', '2025-11-16 02:52:32', '2025-11-16 03:01:56'),
+(16, 'ORD-20251116-237AC7', NULL, 1, 100.00, 'cash', 'completed', 'dine-in', '2025-11-16 02:52:40', '2025-11-16 03:01:44'),
+(17, 'ORD-20251116-60A095', NULL, 1, 3000.00, 'cash', 'completed', 'dine-in', '2025-11-16 03:07:10', '2025-11-16 03:07:27'),
+(18, 'ORD-20251116-E28F83', NULL, 1, 4350.00, 'cash', 'pending', 'dine-in', '2025-11-16 03:08:35', '2025-11-16 03:08:35'),
+(19, 'ORD-20251116-E681F0', NULL, 1, 6300.00, 'cash', 'pending', 'dine-in', '2025-11-16 03:09:00', '2025-11-16 03:09:00');
+
 -- --------------------------------------------------------
 
 --
@@ -130,6 +193,44 @@ CREATE TABLE `order_items` (
   `price` decimal(10,2) NOT NULL,
   `subtotal` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `size`, `quantity`, `price`, `subtotal`) VALUES
+(1, 1, 10, 'dodici', 1, 150.00, 150.00),
+(2, 1, 4, 'sedici', 2, 150.00, 300.00),
+(3, 2, 10, 'dodici', 1, 150.00, 150.00),
+(4, 2, 6, 'sedici', 1, 120.00, 120.00),
+(5, 2, 1, 'dodici', 1, 120.00, 120.00),
+(6, 3, 9, 'dodici', 1, 100.00, 100.00),
+(7, 3, 3, 'dodici', 2, 120.00, 240.00),
+(8, 4, 9, 'dodici', 2, 100.00, 200.00),
+(9, 5, 9, 'dodici', 1, 100.00, 100.00),
+(10, 5, 4, 'dodici', 1, 130.00, 130.00),
+(11, 5, 8, 'dodici', 1, 180.00, 180.00),
+(12, 5, 2, 'sedici', 1, 140.00, 140.00),
+(13, 6, 10, 'dodici', 1, 150.00, 150.00),
+(14, 6, 3, 'sedici', 1, 140.00, 140.00),
+(15, 7, 9, 'dodici', 1, 100.00, 100.00),
+(16, 8, 5, 'dodici', 1, 80.00, 80.00),
+(17, 8, 1, 'sedici', 1, 150.00, 150.00),
+(18, 8, 7, 'dodici', 1, 140.00, 140.00),
+(19, 8, 8, 'dodici', 1, 180.00, 180.00),
+(20, 9, 9, 'dodici', 1, 100.00, 100.00),
+(21, 9, 7, 'dodici', 8, 140.00, 1120.00),
+(22, 10, 6, 'sedici', 1, 120.00, 120.00),
+(23, 10, 4, 'dodici', 1, 130.00, 130.00),
+(24, 10, 3, 'dodici', 1, 120.00, 120.00),
+(25, 11, 4, 'sedici', 1, 150.00, 150.00),
+(26, 12, 8, 'dodici', 1, 180.00, 180.00),
+(27, 13, 10, 'dodici', 21, 150.00, 3150.00),
+(28, 14, 5, 'sedici', 1, 100.00, 100.00),
+(29, 15, 9, 'dodici', 1, 100.00, 100.00),
+(30, 16, 4, 'sedici', 20, 150.00, 3000.00),
+(31, 17, 10, 'dodici', 29, 150.00, 4350.00),
+(32, 18, 10, 'dodici', 42, 150.00, 6300.00);
 
 -- --------------------------------------------------------
 
@@ -194,6 +295,16 @@ CREATE TABLE `sales_summary` (
   `total_items_sold` int(11) DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sales_summary`
+--
+
+INSERT INTO `sales_summary` (`id`, `date`, `total_orders`, `total_revenue`, `total_items_sold`, `created_at`) VALUES
+(1, '2025-11-21', 1, 150.00, 1, '2025-11-21 05:40:08'),
+(2, '2025-11-12', 9, 3940.00, 30, '2025-11-12 01:24:05'),
+(3, '2025-11-13', 1, 370.00, 3, '2025-11-12 23:53:40'),
+(4, '2025-11-16', 8, 17330.00, 116, '2025-11-16 02:30:37');
 
 -- --------------------------------------------------------
 
@@ -329,19 +440,19 @@ ALTER TABLE `inventory`
 -- AUTO_INCREMENT for table `inventory_transactions`
 --
 ALTER TABLE `inventory_transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -353,7 +464,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `sales_summary`
 --
 ALTER TABLE `sales_summary`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `shifts`

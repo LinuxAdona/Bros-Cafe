@@ -9,8 +9,13 @@ $conn = $db->getConnection();
 
 // Get filter parameters
 $status_filter = isset($_GET['status']) ? $_GET['status'] : 'all';
-$date_filter = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
+$date_filter = isset($_GET['date']) ? $_GET['date'] : '';
 $search = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Pagination parameters
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$per_page = 10; // Orders per page
+$offset = ($page - 1) * $per_page;
 
 // Build query based on filters
 $where = ["1=1"];
@@ -21,7 +26,7 @@ if ($status_filter !== 'all') {
     $params['status'] = $status_filter;
 }
 
-if ($date_filter) {
+if ($date_filter && $date_filter !== '') {
     $where[] = "DATE(o.created_at) = :date";
     $params['date'] = $date_filter;
 }
@@ -33,7 +38,19 @@ if ($search) {
 
 $where_clause = implode(' AND ', $where);
 
-// Get orders
+// Get total count for pagination
+$count_stmt = $conn->prepare("
+    SELECT COUNT(*) as total
+    FROM orders o
+    LEFT JOIN users u ON o.customer_id = u.id
+    LEFT JOIN users e ON o.employee_id = e.id
+    WHERE $where_clause
+");
+$count_stmt->execute($params);
+$total_orders = $count_stmt->fetch()['total'];
+$total_pages = ceil($total_orders / $per_page);
+
+// Get orders with pagination
 $stmt = $conn->prepare("
     SELECT o.*, 
            u.full_name as customer_name,
@@ -46,12 +63,21 @@ $stmt = $conn->prepare("
     WHERE $where_clause
     GROUP BY o.id
     ORDER BY o.created_at DESC
+    LIMIT :limit OFFSET :offset
 ");
-$stmt->execute($params);
+
+// Bind parameters
+foreach ($params as $key => $value) {
+    $stmt->bindValue(":$key", $value);
+}
+$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+$stmt->execute();
 $orders = $stmt->fetchAll();
 
 // Get order statistics
-$stmt = $conn->prepare("
+$stats_query = "
     SELECT 
         COUNT(*) as total_orders,
         SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
@@ -61,9 +87,16 @@ $stmt = $conn->prepare("
         SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled,
         SUM(total_amount) as total_revenue
     FROM orders
-    WHERE DATE(created_at) = :date
-");
-$stmt->execute(['date' => $date_filter]);
+";
+
+if ($date_filter && $date_filter !== '') {
+    $stats_query .= " WHERE DATE(created_at) = :date";
+    $stmt = $conn->prepare($stats_query);
+    $stmt->execute(['date' => $date_filter]);
+} else {
+    $stmt = $conn->prepare($stats_query);
+    $stmt->execute();
+}
 $stats = $stmt->fetch();
 
 $current_user = getCurrentUser();
@@ -221,52 +254,64 @@ $current_user = getCurrentUser();
                 </div>
 
                 <!-- Order Statistics -->
-                <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-2 lg:grid-cols-4">
-                    <div class="p-6 bg-white rounded-lg shadow-md">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-gray-600">Total Orders</p>
-                                <p class="text-2xl font-bold text-gray-800"><?php echo $stats['total_orders']; ?></p>
-                            </div>
-                            <div class="p-3 bg-blue-100 rounded-full">
-                                <i class="text-2xl text-blue-600 fa-solid fa-receipt"></i>
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-700">
+                            <?php if ($date_filter): ?>
+                                Statistics for <?php echo date('F d, Y', strtotime($date_filter)); ?>
+                            <?php else: ?>
+                                All Time Statistics
+                            <?php endif; ?>
+                        </h3>
+                    </div>
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                        <div class="p-6 bg-white rounded-lg shadow-md">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Total Orders</p>
+                                    <p class="text-2xl font-bold text-gray-800"><?php echo $stats['total_orders']; ?>
+                                    </p>
+                                </div>
+                                <div class="p-3 bg-blue-100 rounded-full">
+                                    <i class="text-2xl text-blue-600 fa-solid fa-receipt"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="p-6 bg-white rounded-lg shadow-md">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-gray-600">Pending</p>
-                                <p class="text-2xl font-bold text-yellow-600"><?php echo $stats['pending']; ?></p>
-                            </div>
-                            <div class="p-3 bg-yellow-100 rounded-full">
-                                <i class="text-2xl text-yellow-600 fa-solid fa-clock"></i>
+                        <div class="p-6 bg-white rounded-lg shadow-md">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Pending</p>
+                                    <p class="text-2xl font-bold text-yellow-600"><?php echo $stats['pending']; ?></p>
+                                </div>
+                                <div class="p-3 bg-yellow-100 rounded-full">
+                                    <i class="text-2xl text-yellow-600 fa-solid fa-clock"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="p-6 bg-white rounded-lg shadow-md">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-gray-600">Completed</p>
-                                <p class="text-2xl font-bold text-green-600"><?php echo $stats['completed']; ?></p>
-                            </div>
-                            <div class="p-3 bg-green-100 rounded-full">
-                                <i class="text-2xl text-green-600 fa-solid fa-check-circle"></i>
+                        <div class="p-6 bg-white rounded-lg shadow-md">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Completed</p>
+                                    <p class="text-2xl font-bold text-green-600"><?php echo $stats['completed']; ?></p>
+                                </div>
+                                <div class="p-3 bg-green-100 rounded-full">
+                                    <i class="text-2xl text-green-600 fa-solid fa-check-circle"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="p-6 bg-white rounded-lg shadow-md">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-gray-600">Revenue</p>
-                                <p class="text-2xl font-bold text-gray-800">
-                                    ₱<?php echo number_format($stats['total_revenue'], 2); ?></p>
-                            </div>
-                            <div class="p-3 rounded-full bg-amber-100">
-                                <i class="text-2xl fa-solid fa-peso-sign text-amber-600"></i>
+                        <div class="p-6 bg-white rounded-lg shadow-md">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Revenue</p>
+                                    <p class="text-2xl font-bold text-gray-800">
+                                        ₱<?php echo number_format($stats['total_revenue'], 2); ?></p>
+                                </div>
+                                <div class="p-3 rounded-full bg-amber-100">
+                                    <i class="text-2xl fa-solid fa-peso-sign text-amber-600"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -277,7 +322,8 @@ $current_user = getCurrentUser();
                     <form method="GET" class="grid grid-cols-1 gap-4 md:grid-cols-4">
                         <div>
                             <label class="block mb-2 text-sm font-medium text-gray-700">Date</label>
-                            <input type="date" name="date" value="<?php echo $date_filter; ?>"
+                            <input type="date" name="date" value="<?php echo htmlspecialchars($date_filter); ?>"
+                                placeholder="All dates"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
                         </div>
                         <div>
@@ -304,11 +350,15 @@ $current_user = getCurrentUser();
                                 placeholder="Order # or customer name"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
                         </div>
-                        <div class="flex items-end">
+                        <div class="flex items-end gap-2">
                             <button type="submit"
-                                class="w-full px-6 py-2 text-white transition-colors rounded-lg bg-amber-600 hover:bg-amber-700">
+                                class="flex-1 px-6 py-2 text-white transition-colors rounded-lg bg-amber-600 hover:bg-amber-700">
                                 <i class="mr-2 fa-solid fa-filter"></i>Apply Filters
                             </button>
+                            <a href="orders.php"
+                                class="px-6 py-2 text-gray-700 transition-colors bg-gray-200 rounded-lg hover:bg-gray-300">
+                                <i class="fa-solid fa-times"></i>
+                            </a>
                         </div>
                     </form>
                 </div>
@@ -439,6 +489,87 @@ $current_user = getCurrentUser();
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination -->
+                    <?php if ($total_pages > 1): ?>
+                        <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+                            <div class="flex items-center text-sm text-gray-700">
+                                <span>Showing <span class="font-semibold"><?php echo $offset + 1; ?></span> to
+                                    <span
+                                        class="font-semibold"><?php echo min($offset + $per_page, $total_orders); ?></span>
+                                    of
+                                    <span class="font-semibold"><?php echo $total_orders; ?></span> orders</span>
+                            </div>
+
+                            <div class="flex gap-2">
+                                <!-- Previous Button -->
+                                <?php if ($page > 1): ?>
+                                    <a href="?page=<?php echo $page - 1; ?>&status=<?php echo $status_filter; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
+                                    </a>
+                                <?php else: ?>
+                                    <span
+                                        class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
+                                    </span>
+                                <?php endif; ?>
+
+                                <!-- Page Numbers -->
+                                <div class="flex gap-1">
+                                    <?php
+                                    $start_page = max(1, $page - 2);
+                                    $end_page = min($total_pages, $page + 2);
+
+                                    if ($start_page > 1): ?>
+                                        <a href="?page=1&status=<?php echo $status_filter; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                            1
+                                        </a>
+                                        <?php if ($start_page > 2): ?>
+                                            <span class="px-3 py-2 text-sm text-gray-500">...</span>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+
+                                    <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
+                                        <?php if ($i == $page): ?>
+                                            <span class="px-3 py-2 text-sm font-medium text-white rounded-lg bg-amber-600">
+                                                <?php echo $i; ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <a href="?page=<?php echo $i; ?>&status=<?php echo $status_filter; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                                class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                                <?php echo $i; ?>
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php endfor; ?>
+
+                                    <?php if ($end_page < $total_pages): ?>
+                                        <?php if ($end_page < $total_pages - 1): ?>
+                                            <span class="px-3 py-2 text-sm text-gray-500">...</span>
+                                        <?php endif; ?>
+                                        <a href="?page=<?php echo $total_pages; ?>&status=<?php echo $status_filter; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                            <?php echo $total_pages; ?>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+
+                                <!-- Next Button -->
+                                <?php if ($page < $total_pages): ?>
+                                    <a href="?page=<?php echo $page + 1; ?>&status=<?php echo $status_filter; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        Next <i class="ml-1 fa-solid fa-chevron-right"></i>
+                                    </a>
+                                <?php else: ?>
+                                    <span
+                                        class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+                                        Next <i class="ml-1 fa-solid fa-chevron-right"></i>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
