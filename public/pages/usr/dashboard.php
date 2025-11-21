@@ -298,15 +298,17 @@ $current_user = getCurrentUser();
                     </div>
                 </div>
 
-                <!-- Charts Row -->
+                <!-- Charts Row - 2 Columns -->
                 <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
                     <!-- Sales Trend Chart -->
                     <div class="bg-white rounded-lg shadow-lg">
                         <div class="px-6 py-4 border-b border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800">Sales Trend (Last 7 Days)</h3>
                         </div>
-                        <div class="p-6">
-                            <canvas id="salesTrendChart"></canvas>
+                        <div class="p-4">
+                            <div style="height: 250px;">
+                                <canvas id="salesTrendChart"></canvas>
+                            </div>
                         </div>
                     </div>
 
@@ -315,43 +317,46 @@ $current_user = getCurrentUser();
                         <div class="px-6 py-4 border-b border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800">Sales by Category (30 Days)</h3>
                         </div>
-                        <div class="p-6">
-                            <canvas id="categorySalesChart"></canvas>
+                        <div class="p-4">
+                            <div style="height: 250px;">
+                                <canvas id="categorySalesChart"></canvas>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Peak Hours Chart -->
-                <div class="mb-6 bg-white rounded-lg shadow-lg">
-                    <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-800">Peak Hours Analysis (Last 7 Days)</h3>
+                    <!-- Peak Hours Chart -->
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Peak Hours Analysis (Last 7 Days)</h3>
+                        </div>
+                        <div class="p-4">
+                            <div style="height: 250px;">
+                                <canvas id="hourlyChart"></canvas>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-6">
-                        <canvas id="hourlyChart"></canvas>
-                    </div>
-                </div>
 
-                <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
                     <!-- Recent Orders -->
                     <div class="bg-white rounded-lg shadow-lg">
                         <div class="px-6 py-4 border-b border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800">Recent Orders</h3>
                         </div>
-                        <div class="p-6">
-                            <div class="space-y-4">
+                        <div class="p-4" style="height: 250px; overflow-y: auto;">
+                            <div class="space-y-3">
                                 <?php foreach ($recent_orders as $order): ?>
                                     <div
-                                        class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+                                        class="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
                                         <div>
-                                            <p class="font-medium text-gray-900"><?php echo $order['order_number']; ?></p>
-                                            <p class="text-sm text-gray-500">
+                                            <p class="text-sm font-medium text-gray-900">
+                                                <?php echo $order['order_number']; ?></p>
+                                            <p class="text-xs text-gray-500">
                                                 <?php echo date('M d, Y h:i A', strtotime($order['created_at'])); ?></p>
                                         </div>
                                         <div class="text-right">
-                                            <p class="font-semibold text-amber-600">
+                                            <p class="text-sm font-semibold text-amber-600">
                                                 <?php echo formatCurrency($order['total_amount']); ?></p>
                                             <span
-                                                class="inline-block px-2 py-1 text-xs rounded-full
+                                                class="inline-block px-2 py-0.5 text-xs rounded-full
                                             <?php echo $order['status'] === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'; ?>">
                                                 <?php echo ucfirst($order['status']); ?>
                                             </span>
@@ -363,28 +368,25 @@ $current_user = getCurrentUser();
                     </div>
 
                     <!-- Top Products -->
-                    <div class="bg-white rounded-lg shadow-lg">
+                    <div class="bg-white rounded-lg shadow-lg lg:col-span-2">
                         <div class="px-6 py-4 border-b border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800">Top Selling Products (30 Days)</h3>
                         </div>
-                        <div class="p-6">
-                            <div class="space-y-4">
+                        <div class="p-4">
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
                                 <?php foreach ($top_products as $index => $product): ?>
-                                    <div
-                                        class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
-                                        <div class="flex items-center">
-                                            <div
-                                                class="flex items-center justify-center w-8 h-8 mr-3 text-white rounded-full bg-gradient-to-br from-amber-400 to-amber-600">
-                                                <span class="text-sm font-bold"><?php echo $index + 1; ?></span>
-                                            </div>
-                                            <div>
-                                                <p class="font-medium text-gray-900"><?php echo $product['name']; ?></p>
-                                                <p class="text-sm text-gray-500"><?php echo $product['total_sold']; ?> sold
-                                                </p>
-                                            </div>
+                                    <div class="flex items-center p-3 border border-gray-200 rounded-lg">
+                                        <div
+                                            class="flex items-center justify-center flex-shrink-0 w-10 h-10 mr-3 text-white rounded-full bg-gradient-to-br from-amber-400 to-amber-600">
+                                            <span class="font-bold"><?php echo $index + 1; ?></span>
                                         </div>
-                                        <p class="font-semibold text-green-600">
-                                            <?php echo formatCurrency($product['revenue']); ?></p>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-gray-900 truncate">
+                                                <?php echo $product['name']; ?></p>
+                                            <p class="text-xs text-gray-500"><?php echo $product['total_sold']; ?> sold</p>
+                                            <p class="text-sm font-semibold text-green-600">
+                                                <?php echo formatCurrency($product['revenue']); ?></p>
+                                        </div>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -413,6 +415,7 @@ $current_user = getCurrentUser();
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
                         display: false
@@ -450,6 +453,7 @@ $current_user = getCurrentUser();
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
                         position: 'bottom'
@@ -474,6 +478,7 @@ $current_user = getCurrentUser();
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
                         display: false
