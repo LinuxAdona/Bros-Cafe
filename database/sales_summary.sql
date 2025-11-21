@@ -27,23 +27,15 @@ SET time_zone = "+00:00";
 -- Table structure for table `sales_summary`
 --
 
-CREATE TABLE `sales_summary` (
-  `id` int(11) NOT NULL,
-  `date` date NOT NULL,
-  `total_orders` int(11) DEFAULT 0,
-  `total_revenue` decimal(10,2) DEFAULT 0.00,
-  `total_items_sold` int(11) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `sales_summary`
 --
 
-INSERT INTO `sales_summary` (`id`, `date`, `total_orders`, `total_revenue`, `total_items_sold`, `created_at`) VALUES
-(1, '2025-11-12', 9, 3940.00, 30, '2025-11-12 09:24:05'),
-(2, '2025-11-13', 1, 370.00, 3, '2025-11-13 07:53:40'),
-(3, '2025-11-16', 8, 17330.00, 116, '2025-11-16 10:30:37');
+INSERT INTO `sales_summary` (`date`, `total_orders`, `total_revenue`, `total_items_sold`, `created_at`) VALUES
+('2025-11-12', 9, 3940.00, 30, '2025-11-12 09:24:05'),
+('2025-11-13', 1, 370.00, 3, '2025-11-13 07:53:40'),
+('2025-11-16', 8, 17330.00, 116, '2025-11-16 10:30:37');
 
 --
 -- Indexes for dumped tables
@@ -52,21 +44,3 @@ INSERT INTO `sales_summary` (`id`, `date`, `total_orders`, `total_revenue`, `tot
 --
 -- Indexes for table `sales_summary`
 --
-ALTER TABLE `sales_summary`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `date` (`date`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `sales_summary`
---
-ALTER TABLE `sales_summary`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
