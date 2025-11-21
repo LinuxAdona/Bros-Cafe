@@ -60,103 +60,125 @@ $current_user = getCurrentUser();
 <body class="bg-gray-100 font-['Montserrat']">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside id="sidebar" class="flex flex-col w-64 text-white bg-gray-900">
+        <aside id="sidebar" class="flex flex-col text-white bg-gray-900">
             <div class="p-4 border-b border-gray-800">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <img src="../../assets/images/logo.png" alt="Logo" class="w-10 h-10 rounded-full">
-                        <div class="ml-3">
+                <div class="flex items-center justify-between sidebar-logo">
+                    <!-- Logo and text (shown when expanded) -->
+                    <div class="flex items-center logo-content">
+                        <img src="../../assets/images/logo.png" alt="Logo" class="flex-shrink-0 w-10 h-10 rounded-full">
+                        <div class="ml-3 sidebar-logo-text">
                             <h1 class="text-lg font-bold">Bro's Cafe</h1>
                             <p class="text-xs text-gray-400"><?php echo ucfirst($current_user['role']); ?> Panel</p>
                         </div>
                     </div>
-                    <button onclick="toggleSidebar()" class="text-gray-400 transition-colors hover:text-white">
+
+                    <!-- Toggle button when expanded -->
+                    <button onclick="toggleSidebar()" data-tooltip="Collapse"
+                        class="text-gray-400 transition-colors toggle-btn-expanded hover:text-white">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
+                                d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                        </svg>
+                    </button>
+
+                    <!-- Toggle button when collapsed (replaces logo) -->
+                    <button onclick="toggleSidebar()" data-tooltip="Expand"
+                        class="flex items-center justify-center w-10 h-10 text-gray-400 transition-colors rounded-full toggle-btn-collapsed hover:text-white hover:bg-gray-800">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 5l7 7-7 7M5 5l7 7-7 7" />
                         </svg>
                     </button>
                 </div>
             </div>
 
-            <nav class="flex-1 p-4">
+            <nav class="flex-1 p-4 overflow-y-auto">
                 <ul class="space-y-2">
+                    <?php if (isAdmin()): ?>
+                        <li>
+                            <a href="dashboard.php" data-tooltip="Dashboard"
+                                class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
+                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                </svg>
+                                <span class="ml-3 sidebar-text">Dashboard</span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                    <?php if (isEmployee()): ?>
+                        <li>
+                            <a href="pos.php" data-tooltip="POS"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                <span class="ml-3 sidebar-text">POS</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="orders.php" data-tooltip="Orders"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                                <span class="ml-3 sidebar-text">Orders</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="inventory.php" data-tooltip="Inventory"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                </svg>
+                                <span class="ml-3 sidebar-text">Inventory</span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                    <?php if (isAdmin()): ?>
+                        <li>
+                            <a href="analytics.php" data-tooltip="Analytics"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <i class="flex-shrink-0 w-5 h-5 fa-solid fa-chart-simple"></i>
+                                <span class="ml-3 sidebar-text">Analytics</span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
                     <li>
-                        <a href="dashboard.php" class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                            </svg>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="pos.php"
+                        <a href="products.php" data-tooltip="Products"
                             class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
-                            POS
-                        </a>
-                    </li>
-                    <li>
-                        <a href="orders.php"
-                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                            </svg>
-                            Orders
-                        </a>
-                    </li>
-                    <li>
-                        <a href="inventory.php"
-                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                            </svg>
-                            Inventory
-                        </a>
-                    </li>
-                    <li>
-                        <a href="analytics.php"
-                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <i class="w-5 h-5 mr-3 fa-solid fa-chart-simple"></i>
-                            Analytics
-                        </a>
-                    </li>
-                    <li>
-                        <a href="products.php"
-                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                             </svg>
-                            Products
+                            <span class="ml-3 sidebar-text">Products</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="users.php"
-                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                            Employees
-                        </a>
-                    </li>
+                    <?php if (isAdmin()): ?>
+                        <li>
+                            <a href="users.php" data-tooltip="Employees"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span class="ml-3 sidebar-text">Employees</span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </nav>
 
             <div class="p-4 border-t border-gray-800">
-                <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between user-info">
                     <div>
                         <p class="text-sm font-semibold"><?php echo $current_user['full_name']; ?></p>
                         <p class="text-xs text-gray-400">Administrator</p>
                     </div>
-                    <a href="../logout.php" class="text-red-400 hover:text-red-300">
+                    <a href="../logout.php" data-tooltip="Logout" class="text-red-400 hover:text-red-300">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -168,21 +190,13 @@ $current_user = getCurrentUser();
 
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto">
-            <div class="p-6">
-                <div class="flex items-center mb-6">
-                    <button onclick="toggleSidebar()" id="hamburger-btn"
-                        class="p-3 mr-4 text-white transition-all rounded-full shadow-lg bg-amber-600 hover:bg-amber-700 hover:shadow-xl">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
-                    <div>
-                        <h2 class="text-3xl font-bold text-gray-800">Dashboard</h2>
-                        <p class="text-gray-600">Welcome back, <?php echo $current_user['full_name']; ?>!</p>
-                    </div>
+            <div class="bg-white shadow-lg">
+                <div class="flex flex-col justify-center p-6">
+                    <h2 class="text-3xl font-bold text-gray-800">Dashboard</h2>
+                    <p class="text-md text-gray-600">Welcome back, <?php echo $current_user['full_name']; ?>!</p>
                 </div>
-
+            </div>
+            <div class="p-6">
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-2 lg:grid-cols-4">
                     <div class="p-6 transition-transform bg-white rounded-lg shadow-lg hover:scale-105">
@@ -285,6 +299,7 @@ $current_user = getCurrentUser();
         </div>
     </div>
 
+    <script src="../../assets/js/admin.js"></script>
     <script>
         // Sales Trend Chart
         const salesCtx = document.getElementById('salesTrendChart').getContext('2d');
@@ -383,7 +398,6 @@ $current_user = getCurrentUser();
             }
         });
     </script>
-    <script src="../../assets/js/admin.js"></script>
 </body>
 
 </html>

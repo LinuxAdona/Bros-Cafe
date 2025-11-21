@@ -1,61 +1,40 @@
 // Global variables
-let isSidebarVisible = true;
+let isSidebarCollapsed = false;
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if we're on mobile and hide sidebar by default
-    if (window.innerWidth < 768) {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.add('sidebar-hidden');
-        isSidebarVisible = false;
+    const sidebar = document.getElementById('sidebar');
+    if (!sidebar) return;
+    
+    // Load sidebar state from localStorage
+    const savedState = localStorage.getItem('sidebarCollapsed');
+    if (savedState === 'true') {
+        sidebar.classList.add('sidebar-collapsed');
+        isSidebarCollapsed = true;
     }
+    
+    // Add transition class after a small delay to prevent animation on load
+    setTimeout(() => {
+        sidebar.classList.add('sidebar-ready');
+    }, 100);
 });
 
 // Sidebar toggle with animation
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     
-    if (isSidebarVisible) {
-        sidebar.classList.add('sidebar-hidden');
-        isSidebarVisible = false;
+    if (!sidebar) return;
+    
+    if (isSidebarCollapsed) {
+        sidebar.classList.remove('sidebar-collapsed');
+        isSidebarCollapsed = false;
+        localStorage.setItem('sidebarCollapsed', 'false');
     } else {
-        sidebar.classList.remove('sidebar-hidden');
-        isSidebarVisible = true;
+        sidebar.classList.add('sidebar-collapsed');
+        isSidebarCollapsed = true;
+        localStorage.setItem('sidebarCollapsed', 'true');
     }
 }
-
-// Handle window resize
-window.addEventListener('resize', function() {
-    const sidebar = document.getElementById('sidebar');
-    
-    if (window.innerWidth >= 768) {
-        // Desktop: always show sidebar
-        sidebar.classList.remove('sidebar-hidden');
-        isSidebarVisible = true;
-    } else {
-        // Mobile: use toggle state
-        if (!isSidebarVisible) {
-            sidebar.classList.add('sidebar-hidden');
-        }
-    }
-});
-
-// Close sidebar when clicking outside on mobile
-document.addEventListener('click', function(event) {
-    if (window.innerWidth < 768 && isSidebarVisible) {
-        const sidebar = document.getElementById('sidebar');
-        const hamburgerBtn = document.getElementById('hamburger-btn');
-        const closeBtns = sidebar.querySelectorAll('button');
-        
-        // Check if click is outside sidebar and not on hamburger button
-        if (!sidebar.contains(event.target) && 
-            event.target !== hamburgerBtn && 
-            !hamburgerBtn.contains(event.target)) {
-            sidebar.classList.add('sidebar-hidden');
-            isSidebarVisible = false;
-        }
-    }
-});
 
 // Smooth scroll to top
 function scrollToTop() {

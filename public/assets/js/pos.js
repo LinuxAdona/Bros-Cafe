@@ -1,7 +1,6 @@
 // Global variables
 let cart = [];
 let currentProduct = null;
-let isSidebarVisible = true;
 let isCartVisible = true;
 
 // Initialize on page load
@@ -9,18 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const orderNumber = document.getElementById('order-number').textContent;
 });
 
-// Sidebar toggle with animation
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    
-    if (isSidebarVisible) {
-        sidebar.classList.add('sidebar-hidden');
-        isSidebarVisible = false;
-    } else {
-        sidebar.classList.remove('sidebar-hidden');
-        isSidebarVisible = true;
-    }
-}
+// Note: toggleSidebar() is handled by admin.js for consistency across all pages
 
 // Cart toggle with animation
 function toggleCart() {

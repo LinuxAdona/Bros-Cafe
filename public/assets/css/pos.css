@@ -20,50 +20,89 @@
     -webkit-backdrop-filter: blur(4px);
 }
 
-/* Sidebar Animations */
-@keyframes slideInLeft {
-    from {
-        transform: translateX(-100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOutLeft {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(-100%);
-        opacity: 0;
-    }
-}
-
+/* POS Sidebar Collapse - Override admin.css for POS specific behavior */
 #sidebar {
     flex-shrink: 0;
-    transform: translateX(0);
-    margin-left: 0;
-    opacity: 1;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-                opacity 0.4s ease-out,
-                margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 16rem; /* 256px */
 }
 
-#sidebar.sidebar-hidden {
-    transform: translateX(-100%);
-    margin-left: -256px;
-    opacity: 0;
-    pointer-events: none;
+#sidebar.sidebar-collapsed {
+    width: 5rem; /* 80px - enough for icons */
 }
 
-/* Hamburger button - always visible */
-#hamburger-btn {
+/* Add transition only after page load */
+#sidebar.sidebar-ready {
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#sidebar.sidebar-collapsed .sidebar-text,
+#sidebar.sidebar-collapsed .sidebar-logo-text {
+    display: none;
+}
+
+#sidebar .sidebar-text,
+#sidebar .sidebar-logo-text {
+    display: inline-block;
+}
+
+#sidebar.sidebar-collapsed .sidebar-logo {
+    justify-content: center;
+}
+
+#sidebar.sidebar-collapsed .logo-content {
+    display: none;
+}
+
+#sidebar.sidebar-collapsed .toggle-btn-collapsed {
+    display: flex;
+}
+
+#sidebar .toggle-btn-collapsed {
+    display: none;
+}
+
+#sidebar.sidebar-collapsed .toggle-btn-expanded {
+    display: none;
+}
+
+#sidebar .toggle-btn-expanded {
+    display: flex;
+}
+
+#sidebar.sidebar-collapsed nav ul li a {
+    justify-content: center;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+#sidebar.sidebar-collapsed .user-info {
+    justify-content: center;
+}
+
+#sidebar.sidebar-collapsed .user-info > div {
+    display: none;
+}
+
+/* Tooltip for collapsed state */
+#sidebar.sidebar-collapsed [data-tooltip] {
     position: relative;
-    z-index: 100;
+}
+
+#sidebar.sidebar-collapsed [data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background-color: #1f2937;
+    color: white;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 /* Cart Animations */
