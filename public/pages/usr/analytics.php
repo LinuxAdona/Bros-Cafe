@@ -171,7 +171,7 @@ $current_user = getCurrentUser();
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     <!-- Prevent sidebar jitter on page load -->
     <script>
         (function() {
@@ -180,50 +180,9 @@ $current_user = getCurrentUser();
             }
         })();
     </script>
-    <style>
-        /* Apply collapsed state immediately to prevent jitter */
-        .sidebar-collapsed-init #sidebar {
-            width: 5rem;
-        }
-
-        .sidebar-collapsed-init #sidebar .sidebar-text,
-        .sidebar-collapsed-init #sidebar .sidebar-logo-text {
-            display: none;
-        }
-
-        .sidebar-collapsed-init #sidebar .sidebar-logo {
-            justify-content: center;
-        }
-
-        .sidebar-collapsed-init #sidebar .logo-content {
-            display: none;
-        }
-
-        .sidebar-collapsed-init #sidebar .toggle-btn-collapsed {
-            display: flex;
-        }
-
-        .sidebar-collapsed-init #sidebar .toggle-btn-expanded {
-            display: none;
-        }
-
-        .sidebar-collapsed-init #sidebar nav ul li a {
-            justify-content: center;
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-        }
-
-        .sidebar-collapsed-init #sidebar .user-info {
-            justify-content: center;
-        }
-
-        .sidebar-collapsed-init #sidebar .user-info>div {
-            display: none;
-        }
-    </style>
 </head>
 
-<body class="bg-gray-100 font-['Montserrat']">
+<body clas="bg-gray-100 font-['Montserrat']">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
         <aside id="sidebar" class="flex flex-col text-white bg-gray-900">
@@ -433,8 +392,7 @@ $current_user = getCurrentUser();
                 <!-- Top Products -->
                 <div class="bg-white rounded-lg shadow-lg lg:col-span-2 mb-6">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-800">Top Selling Products
-                            (<?php echo $period_label; ?>)</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">Top Selling Products</h3>
                     </div>
                     <div class="p-4">
                         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
@@ -462,8 +420,7 @@ $current_user = getCurrentUser();
                     <!-- Sales Trend Chart -->
                     <div class="bg-white rounded-lg shadow-lg">
                         <div class="px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-800">Sales Trend (<?php echo $period_label; ?>)
-                            </h3>
+                            <h3 class="text-lg font-semibold text-gray-800">Sales Trend</h3>
                         </div>
                         <div class="p-4">
                             <div style="height: 250px;">
@@ -475,8 +432,7 @@ $current_user = getCurrentUser();
                     <!-- Category Sales Chart -->
                     <div class="bg-white rounded-lg shadow-lg">
                         <div class="px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-800">Sales by Category
-                                (<?php echo $period_label; ?>)</h3>
+                            <h3 class="text-lg font-semibold text-gray-800">Sales by Category</h3>
                         </div>
                         <div class="p-4">
                             <div style="height: 250px;">
@@ -491,8 +447,7 @@ $current_user = getCurrentUser();
                     <!-- Peak Hours Chart -->
                     <div class="bg-white rounded-lg shadow-lg">
                         <div class="px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-800">Peak Hours Analysis
-                                (<?php echo $period_label; ?>)</h3>
+                            <h3 class="text-lg font-semibold text-gray-800">Peak Hours Analysis</h3>
                         </div>
                         <div class="p-4">
                             <div style="height: 250px;">
@@ -504,8 +459,7 @@ $current_user = getCurrentUser();
                     <!-- Order Types -->
                     <div class="bg-white rounded-lg shadow-lg">
                         <div class="px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-800">Order Types (<?php echo $period_label; ?>)
-                            </h3>
+                            <h3 class="text-lg font-semibold text-gray-800">Order Types</h3>
                         </div>
                         <div class="p-4">
                             <div style="height: 250px;">
@@ -563,12 +517,18 @@ $current_user = getCurrentUser();
                     });
                 }) : ['No Data'],
                 datasets: [{
-                    label: 'Revenue',
+                    label: 'Revenue (₱)',
                     data: dailySalesData.length > 0 ? dailySalesData.map(d => parseFloat(d.revenue)) : [0],
                     borderColor: 'rgb(245, 158, 11)',
                     backgroundColor: 'rgba(245, 158, 11, 0.1)',
                     fill: true,
-                    tension: 0.4
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 5,
+                    pointBackgroundColor: 'rgb(245, 158, 11)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7
                 }]
             },
             options: {
@@ -576,7 +536,32 @@ $current_user = getCurrentUser();
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        display: false
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: {
+                                family: 'Montserrat',
+                                size: 12,
+                                weight: 'bold'
+                            },
+                            color: '#374151'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                return 'Revenue: ₱' + context.parsed.y.toFixed(2);
+                            }
+                        }
                     }
                 },
                 scales: {
@@ -585,7 +570,24 @@ $current_user = getCurrentUser();
                         ticks: {
                             callback: function(value) {
                                 return '₱' + value.toLocaleString();
+                            },
+                            font: {
+                                size: 11
                             }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 11,
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            display: false
                         }
                     }
                 }
@@ -599,14 +601,19 @@ $current_user = getCurrentUser();
             data: {
                 labels: categorySalesData.length > 0 ? categorySalesData.map(c => c.name) : ['No Data'],
                 datasets: [{
+                    label: 'Revenue',
                     data: categorySalesData.length > 0 ? categorySalesData.map(c => parseFloat(c.revenue)) : [1],
                     backgroundColor: [
                         'rgb(245, 158, 11)',
                         'rgb(59, 130, 246)',
                         'rgb(16, 185, 129)',
                         'rgb(239, 68, 68)',
-                        'rgb(139, 92, 246)'
-                    ]
+                        'rgb(168, 85, 247)',
+                        'rgb(236, 72, 153)'
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 3,
+                    hoverOffset: 10
                 }]
             },
             options: {
@@ -614,7 +621,37 @@ $current_user = getCurrentUser();
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                family: 'Montserrat',
+                                size: 11
+                            },
+                            color: '#374151',
+                            padding: 15,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return label + ': ₱' + value.toFixed(2) + ' (' + percentage + '%)';
+                            }
+                        }
                     }
                 }
             }
@@ -631,10 +668,10 @@ $current_user = getCurrentUser();
                     label: t.order_type.charAt(0).toUpperCase() + t.order_type.slice(1),
                     data: orderTypesData.map((item, i) => i === index ? parseInt(item.count) : 0),
                     backgroundColor: [
-                        'rgba(245, 158, 11, 0.8)', // Amber for first type
-                        'rgba(59, 130, 246, 0.8)', // Blue for second type
-                        'rgba(16, 185, 129, 0.8)', // Green for third type
-                        'rgba(139, 92, 246, 0.8)' // Purple for fourth type
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(139, 92, 246, 0.8)'
                     ][index],
                     borderColor: [
                         'rgb(245, 158, 11)',
@@ -642,7 +679,8 @@ $current_user = getCurrentUser();
                         'rgb(16, 185, 129)',
                         'rgb(139, 92, 246)'
                     ][index],
-                    borderWidth: 2
+                    borderWidth: 2,
+                    borderRadius: 5
                 })) : [{
                     label: 'No Data',
                     data: [0],
@@ -655,14 +693,49 @@ $current_user = getCurrentUser();
                 plugins: {
                     legend: {
                         display: true,
-                        position: 'bottom'
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                family: 'Montserrat',
+                                size: 11
+                            },
+                            color: '#374151',
+                            padding: 10
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        }
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            stepSize: 1
+                            stepSize: 1,
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
                         }
                     }
                 }
@@ -680,7 +753,8 @@ $current_user = getCurrentUser();
                     data: hourlySalesData.length > 0 ? hourlySalesData.map(h => parseInt(h.orders)) : [0],
                     backgroundColor: 'rgba(59, 130, 246, 0.8)',
                     borderColor: 'rgb(59, 130, 246)',
-                    borderWidth: 1
+                    borderWidth: 2,
+                    borderRadius: 5
                 }]
             },
             options: {
@@ -688,14 +762,51 @@ $current_user = getCurrentUser();
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        display: false
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: {
+                                family: 'Montserrat',
+                                size: 12,
+                                weight: 'bold'
+                            },
+                            color: '#374151'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        }
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            stepSize: 1
+                            stepSize: 1,
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 11,
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            display: false
                         }
                     }
                 }

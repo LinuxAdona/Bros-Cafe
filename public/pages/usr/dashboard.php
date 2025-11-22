@@ -24,7 +24,7 @@ $today_orders = $stmt->fetch()['count'];
 $stmt = $conn->query("SELECT COUNT(*) as count FROM inventory i WHERE i.quantity <= i.reorder_level");
 $low_stock_count = $stmt->fetch()['count'];
 
-// Recent orders
+// Recent orders with items
 $stmt = $conn->query("
     SELECT o.*, u.full_name as employee_name 
     FROM orders o 
@@ -33,6 +33,19 @@ $stmt = $conn->query("
     LIMIT 10
 ");
 $recent_orders = $stmt->fetchAll();
+
+// Get order items for each recent order
+foreach ($recent_orders as &$order) {
+    $stmt = $conn->prepare("
+        SELECT oi.*, p.name as product_name 
+        FROM order_items oi 
+        JOIN products p ON oi.product_id = p.id 
+        WHERE oi.order_id = :order_id
+    ");
+    $stmt->execute(['order_id' => $order['id']]);
+    $order['items'] = $stmt->fetchAll();
+}
+unset($order); // Break reference
 
 // Get pending orders count
 $stmt = $conn->query("SELECT COUNT(*) as count FROM orders WHERE status = 'pending'");
@@ -67,6 +80,52 @@ $top_products = $stmt->fetchAll();
 $stmt = $conn->query("SELECT COUNT(*) as count FROM users WHERE role = 'employee' AND status = 'active'");
 $active_employees = $stmt->fetch()['count'];
 
+// Get today's hourly sales for chart
+$stmt = $conn->query("
+    SELECT HOUR(created_at) as hour, 
+           COUNT(*) as order_count,
+           COALESCE(SUM(total_amount), 0) as revenue
+    FROM orders 
+    WHERE DATE(created_at) = CURDATE()
+    AND status != 'cancelled'
+    GROUP BY HOUR(created_at)
+    ORDER BY hour ASC
+");
+$hourly_sales = $stmt->fetchAll();
+
+// Fill in missing hours with zero sales (business hours: 8 AM to 10 PM)
+$sales_by_hour = [];
+foreach ($hourly_sales as $sale) {
+    $sales_by_hour[$sale['hour']] = $sale;
+}
+
+$chart_data = [];
+for ($hour = 8; $hour <= 22; $hour++) {
+    $hour_label = date('g A', strtotime($hour . ':00'));
+    $chart_data[] = [
+        'hour' => $hour,
+        'hour_label' => $hour_label,
+        'order_count' => isset($sales_by_hour[$hour]) ? $sales_by_hour[$hour]['order_count'] : 0,
+        'revenue' => isset($sales_by_hour[$hour]) ? $sales_by_hour[$hour]['revenue'] : 0
+    ];
+}
+
+// Get sales by category for pie chart (today only)
+$stmt = $conn->query("
+    SELECT c.name as category,
+           COUNT(DISTINCT o.id) as order_count,
+           COALESCE(SUM(oi.quantity * oi.price), 0) as revenue
+    FROM orders o
+    INNER JOIN order_items oi ON o.id = oi.order_id
+    INNER JOIN products p ON oi.product_id = p.id
+    INNER JOIN categories c ON p.category_id = c.id
+    WHERE DATE(o.created_at) = CURDATE()
+    AND o.status != 'cancelled'
+    GROUP BY c.id, c.name
+    ORDER BY revenue DESC
+");
+$category_sales = $stmt->fetchAll();
+
 $current_user = getCurrentUser();
 ?>
 <!DOCTYPE html>
@@ -96,47 +155,6 @@ $current_user = getCurrentUser();
             }
         })();
     </script>
-    <style>
-        /* Apply collapsed state immediately to prevent jitter */
-        .sidebar-collapsed-init #sidebar {
-            width: 5rem;
-        }
-
-        .sidebar-collapsed-init #sidebar .sidebar-text,
-        .sidebar-collapsed-init #sidebar .sidebar-logo-text {
-            display: none;
-        }
-
-        .sidebar-collapsed-init #sidebar .sidebar-logo {
-            justify-content: center;
-        }
-
-        .sidebar-collapsed-init #sidebar .logo-content {
-            display: none;
-        }
-
-        .sidebar-collapsed-init #sidebar .toggle-btn-collapsed {
-            display: flex;
-        }
-
-        .sidebar-collapsed-init #sidebar .toggle-btn-expanded {
-            display: none;
-        }
-
-        .sidebar-collapsed-init #sidebar nav ul li a {
-            justify-content: center;
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-        }
-
-        .sidebar-collapsed-init #sidebar .user-info {
-            justify-content: center;
-        }
-
-        .sidebar-collapsed-init #sidebar .user-info>div {
-            display: none;
-        }
-    </style>
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
@@ -348,7 +366,71 @@ $current_user = getCurrentUser();
                     </div>
                 </div>
 
-                <!-- Quick Actions & Alerts Grid -->
+                <!-- Bottom Grid: Sales Charts -->
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+                    <!-- Today's Hourly Sales Chart -->
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Today's Sales</h3>
+                        </div>
+                        <div class="p-6">
+                            <canvas id="hourlySalesChart" style="height: 300px;"></canvas>
+                        </div>
+                        <div class="px-6 pb-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="p-3 text-center rounded-lg bg-green-50">
+                                    <p class="text-xs text-gray-600">Orders Today</p>
+                                    <p class="text-2xl font-bold text-green-600">
+                                        <?php echo array_sum(array_column($chart_data, 'order_count')); ?>
+                                    </p>
+                                </div>
+                                <div class="p-3 text-center rounded-lg bg-amber-50">
+                                    <p class="text-xs text-gray-600">Revenue Today</p>
+                                    <p class="text-2xl font-bold text-amber-600">
+                                        <?php echo formatCurrency(array_sum(array_column($chart_data, 'revenue'))); ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sales by Category Chart -->
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Today's Sales by Category</h3>
+                        </div>
+                        <div class="p-6 flex items-center justify-center">
+                            <?php if (count($category_sales) > 0): ?>
+                                <canvas id="categorySalesChart" style="height: 300px; max-width: 350px;"></canvas>
+                            <?php else: ?>
+                                <div class="py-12 text-center">
+                                    <svg class="w-16 h-16 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                    </svg>
+                                    <p class="text-sm text-gray-500">No sales data for today</p>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <?php if (count($category_sales) > 0): ?>
+                            <div class="px-6 pb-6">
+                                <div class="space-y-2">
+                                    <?php foreach (array_slice($category_sales, 0, 3) as $cat): ?>
+                                        <div class="flex items-center justify-between p-2 rounded-lg bg-gray-50">
+                                            <span
+                                                class="text-sm font-medium text-gray-700"><?php echo $cat['category']; ?></span>
+                                            <span
+                                                class="text-sm font-bold text-amber-600"><?php echo formatCurrency($cat['revenue']); ?></span>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <!-- Quick Actions, Alerts, and Recent Orders Grid -->
                 <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-3">
                     <!-- Quick Actions -->
                     <div class="bg-white rounded-lg shadow-lg">
@@ -524,32 +606,45 @@ $current_user = getCurrentUser();
                     </div>
                 </div>
 
-                <!-- Recent Orders -->
-                <div class="bg-white rounded-lg shadow-lg">
-                    <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-800">Recent Orders</h3>
-                    </div>
-                    <div class="p-4" style="height: 250px; overflow-y: auto;">
-                        <div class="space-y-3">
-                            <?php foreach ($recent_orders as $order): ?>
-                                <div class="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-900">
-                                            <?php echo $order['order_number']; ?></p>
-                                        <p class="text-xs text-gray-500">
-                                            <?php echo date('M d, Y h:i A', strtotime($order['created_at'])); ?></p>
+                <div class="grid grid-cols-1">
+                    <!-- Recent Orders -->
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Recent Orders</h3>
+                        </div>
+                        <div class="p-4" style="max-height: 500px; overflow-y: auto;">
+                            <div class="space-y-3">
+                                <?php foreach ($recent_orders as $order): ?>
+                                    <div
+                                        class="flex items-center justify-between p-3 transition-all border border-gray-200 rounded-lg hover:shadow-md">
+                                        <div class="flex-1">
+                                            <p class="text-sm font-bold text-gray-900">
+                                                <?php echo $order['order_number']; ?>
+                                            </p>
+                                            <p class="text-xs text-gray-500">
+                                                <?php echo date('M d, Y h:i A', strtotime($order['created_at'])); ?>
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="text-right">
+                                                <p class="text-sm font-bold text-amber-600">
+                                                    <?php echo formatCurrency($order['total_amount']); ?>
+                                                </p>
+                                                <span
+                                                    class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full
+                                                <?php echo $order['status'] === 'completed' ? 'bg-green-100 text-green-800' : ($order['status'] === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'); ?>">
+                                                    <?php echo ucfirst($order['status']); ?>
+                                                </span>
+                                            </div>
+                                            <button
+                                                onclick="showOrderModal(<?php echo htmlspecialchars(json_encode($order)); ?>)"
+                                                class="px-3 py-1.5 text-xs font-semibold text-white transition-all rounded-lg bg-amber-600 hover:bg-amber-700">
+                                                View
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="text-right">
-                                        <p class="text-sm font-semibold text-amber-600">
-                                            <?php echo formatCurrency($order['total_amount']); ?></p>
-                                        <span
-                                            class="inline-block px-2 py-0.5 text-xs rounded-full
-                                            <?php echo $order['status'] === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'; ?>">
-                                            <?php echo ucfirst($order['status']); ?>
-                                        </span>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -557,21 +652,171 @@ $current_user = getCurrentUser();
         </div>
     </div>
 
+    <!-- Order Details Modal -->
+    <div id="orderModal" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+        <div
+            class="w-full max-w-md mx-4 overflow-hidden transition-all transform bg-white shadow-2xl rounded-2xl animate-modal">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-amber-500 to-amber-600">
+                <div class="flex items-center justify-between text-white">
+                    <div>
+                        <h3 class="text-xl font-bold" id="modalOrderNumber">Order Receipt</h3>
+                        <p class="text-sm opacity-90" id="modalDateTime"></p>
+                    </div>
+                    <button onclick="closeOrderModal()" class="text-white transition-colors hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-4" style="max-height: 500px; overflow-y: auto;">
+                <!-- Order Info -->
+                <div class="p-4 rounded-lg bg-gray-50">
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div>
+                            <p class="text-xs text-gray-500">Employee</p>
+                            <p class="font-semibold text-gray-800" id="modalEmployee"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Status</p>
+                            <span id="modalStatus"
+                                class="inline-block px-2 py-1 text-xs font-semibold rounded-full"></span>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Order Type</p>
+                            <p class="font-semibold text-gray-800" id="modalOrderType"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Payment Method</p>
+                            <p class="font-semibold text-gray-800" id="modalPayment"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Items -->
+                <div>
+                    <h4 class="mb-3 text-sm font-bold text-gray-700 uppercase">Order Items</h4>
+                    <div id="modalItems" class="space-y-2">
+                        <!-- Items will be inserted here by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Total -->
+                <div class="pt-4 border-t-2 border-gray-300">
+                    <div class="flex items-center justify-between">
+                        <span class="text-lg font-bold text-gray-800">Total Amount</span>
+                        <span id="modalTotal" class="text-2xl font-bold text-amber-600"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-gray-200 bg-gray-50">
+                <button onclick="closeOrderModal()"
+                    class="w-full py-2 font-semibold text-white transition-all rounded-lg bg-amber-600 hover:bg-amber-700">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="../../assets/js/admin.js"></script>
     <script>
-        // Sales Trend Chart
-        const salesCtx = document.getElementById('salesTrendChart').getContext('2d');
-        new Chart(salesCtx, {
+        // Show order modal
+        function showOrderModal(order) {
+            // Set order details
+            document.getElementById('modalOrderNumber').textContent = order.order_number;
+            document.getElementById('modalDateTime').textContent = new Date(order.created_at).toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+            document.getElementById('modalEmployee').textContent = order.employee_name || 'N/A';
+            document.getElementById('modalOrderType').textContent = order.order_type.charAt(0).toUpperCase() + order
+                .order_type.slice(1);
+            document.getElementById('modalPayment').textContent = order.payment_method.charAt(0).toUpperCase() + order
+                .payment_method.slice(1);
+
+            // Set status with color
+            const statusEl = document.getElementById('modalStatus');
+            statusEl.textContent = order.status.charAt(0).toUpperCase() + order.status.slice(1);
+            statusEl.className = 'inline-block px-2 py-1 text-xs font-semibold rounded-full ';
+            if (order.status === 'completed') {
+                statusEl.className += 'bg-green-100 text-green-800';
+            } else if (order.status === 'pending') {
+                statusEl.className += 'bg-yellow-100 text-yellow-800';
+            } else {
+                statusEl.className += 'bg-gray-100 text-gray-800';
+            }
+
+            // Set items
+            const itemsContainer = document.getElementById('modalItems');
+            itemsContainer.innerHTML = '';
+            order.items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'flex items-center justify-between p-3 rounded-lg bg-gray-50';
+                itemDiv.innerHTML = `
+                    <div class="flex items-center flex-1">
+                        <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-sm font-bold rounded-full bg-amber-100 text-amber-600">
+                            ${item.quantity}x
+                        </div>
+                        <div class="ml-3">
+                            <p class="font-semibold text-gray-800">${item.product_name}</p>
+                            <p class="text-xs text-gray-500">Size: <span class="font-medium">${item.size.charAt(0).toUpperCase() + item.size.slice(1)}</span></p>
+                        </div>
+                    </div>
+                    <p class="font-semibold text-gray-700">₱${parseFloat(item.subtotal).toFixed(2)}</p>
+                `;
+                itemsContainer.appendChild(itemDiv);
+            });
+
+            // Set total
+            document.getElementById('modalTotal').textContent = '₱' + parseFloat(order.total_amount).toFixed(2);
+
+            // Show modal
+            document.getElementById('orderModal').classList.remove('hidden');
+            document.getElementById('orderModal').classList.add('flex');
+        }
+
+        // Close order modal
+        function closeOrderModal() {
+            document.getElementById('orderModal').classList.add('hidden');
+            document.getElementById('orderModal').classList.remove('flex');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('orderModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeOrderModal();
+            }
+        });
+
+        // Today's Hourly Sales Chart
+        const hourlyCtx = document.getElementById('hourlySalesChart').getContext('2d');
+        new Chart(hourlyCtx, {
             type: 'line',
             data: {
-                labels: <?php echo json_encode(array_map(fn($d) => date('M d', strtotime($d['date'])), $daily_sales)); ?>,
+                labels: <?php echo json_encode(array_column($chart_data, 'hour_label')); ?>,
                 datasets: [{
-                    label: 'Revenue',
-                    data: <?php echo json_encode(array_map(fn($d) => $d['revenue'], $daily_sales)); ?>,
+                    label: 'Revenue (₱)',
+                    data: <?php echo json_encode(array_column($chart_data, 'revenue')); ?>,
                     borderColor: 'rgb(245, 158, 11)',
                     backgroundColor: 'rgba(245, 158, 11, 0.1)',
                     fill: true,
-                    tension: 0.4
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 5,
+                    pointBackgroundColor: 'rgb(245, 158, 11)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7
                 }]
             },
             options: {
@@ -579,7 +824,32 @@ $current_user = getCurrentUser();
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        display: false
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: {
+                                family: 'Montserrat',
+                                size: 12,
+                                weight: 'bold'
+                            },
+                            color: '#374151'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                return 'Revenue: ₱' + context.parsed.y.toFixed(2);
+                            }
+                        }
                     }
                 },
                 scales: {
@@ -588,73 +858,96 @@ $current_user = getCurrentUser();
                         ticks: {
                             callback: function(value) {
                                 return '₱' + value.toLocaleString();
+                            },
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 10,
+                                weight: 'bold'
+                            },
+                            maxRotation: 45,
+                            minRotation: 45
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Category Sales Pie Chart
+        <?php if (count($category_sales) > 0): ?>
+            const categoryCtx = document.getElementById('categorySalesChart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: <?php echo json_encode(array_column($category_sales, 'category')); ?>,
+                    datasets: [{
+                        label: 'Revenue',
+                        data: <?php echo json_encode(array_column($category_sales, 'revenue')); ?>,
+                        backgroundColor: [
+                            'rgb(245, 158, 11)', // Amber
+                            'rgb(59, 130, 246)', // Blue
+                            'rgb(16, 185, 129)', // Green
+                            'rgb(239, 68, 68)', // Red
+                            'rgb(168, 85, 247)', // Purple
+                            'rgb(236, 72, 153)', // Pink
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 3,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: 'Montserrat',
+                                    size: 11
+                                },
+                                color: '#374151',
+                                padding: 15,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 13
+                            },
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return label + ': ₱' + value.toFixed(2) + ' (' + percentage + '%)';
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
-
-        // Category Sales Chart
-        const categoryCtx = document.getElementById('categorySalesChart').getContext('2d');
-        new Chart(categoryCtx, {
-            type: 'doughnut',
-            data: {
-                labels: <?php echo json_encode(array_map(fn($c) => $c['name'], $category_sales)); ?>,
-                datasets: [{
-                    data: <?php echo json_encode(array_map(fn($c) => $c['revenue'], $category_sales)); ?>,
-                    backgroundColor: [
-                        'rgb(245, 158, 11)',
-                        'rgb(59, 130, 246)',
-                        'rgb(16, 185, 129)',
-                        'rgb(239, 68, 68)',
-                        'rgb(139, 92, 246)'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }
-        });
-
-        // Hourly Sales Chart
-        const hourlyCtx = document.getElementById('hourlyChart').getContext('2d');
-        new Chart(hourlyCtx, {
-            type: 'bar',
-            data: {
-                labels: <?php echo json_encode(array_map(fn($h) => $h['hour'] . ':00', $hourly_sales)); ?>,
-                datasets: [{
-                    label: 'Orders',
-                    data: <?php echo json_encode(array_map(fn($h) => $h['orders'], $hourly_sales)); ?>,
-                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                    borderColor: 'rgb(59, 130, 246)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                }
-            }
-        });
+            });
+        <?php endif; ?>
     </script>
 </body>
 

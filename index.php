@@ -1,3 +1,35 @@
+<?php
+require_once 'config/database.php';
+
+$db = new Database();
+$conn = $db->getConnection();
+
+// Get top selling products (all time)
+$stmt = $conn->prepare("
+    SELECT p.*, SUM(oi.quantity) as total_sold, SUM(oi.subtotal) as revenue
+    FROM order_items oi
+    JOIN products p ON oi.product_id = p.id
+    JOIN orders o ON oi.order_id = o.id
+    WHERE o.status != 'cancelled'
+    GROUP BY oi.product_id
+    ORDER BY total_sold DESC
+    LIMIT 6
+");
+$stmt->execute();
+$top_products = $stmt->fetchAll();
+
+// If no sales data yet, get 6 random available products
+if (count($top_products) == 0) {
+    $stmt = $conn->query("
+        SELECT * FROM products 
+        WHERE status = 'available' 
+        ORDER BY RAND() 
+        LIMIT 6
+    ");
+    $top_products = $stmt->fetchAll();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,7 +78,8 @@
                     <li class="transition ease-out hover:-translate-y-0.5"><a href="public/pages/about.php"
                             class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">About</a>
                     </li>
-                    <li class="transition ease-out hover:-translate-y-0.5"><a href="public/pages/contact.php"
+                    <li class="trI want you tansition ease-out hover:-translate-y-0.5"><a
+                            href="public/pages/contact.php"
                             class="px-4 py-2 transition-all bg-transparent rounded-lg hover:bg-white hover:shadow-md">Contact</a>
                     </li>
                 </ul>
@@ -165,147 +198,65 @@
             <div class="container px-4 mx-auto">
                 <!-- Section Header -->
                 <div class="mb-12 text-center">
-                    <h2 class="mb-4 text-3xl font-bold text-gray-800 md:text-4xl lg:text-5xl">Our Coffee Favorites</h2>
-                    <p class="text-lg text-gray-600 md:text-xl">Discover our signature coffee creations</p>
+                    <h2 class="mb-4 text-3xl font-bold text-gray-800 md:text-4xl lg:text-5xl">Top Selling Products</h2>
+                    <p class="text-lg text-gray-600 md:text-xl">Our customers' favorite picks</p>
                 </div>
 
                 <!-- Product Grid -->
                 <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                    <!-- Product Card 1: Sea Salt Latte -->
-                    <div
-                        class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105 hover:shadow-xl">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-amber-100 to-amber-200">
-                            <span class="text-6xl">☕</span>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="text-xl font-bold text-gray-800">Sea Salt Latte</h3>
-                                <span class="text-yellow-500">★</span>
-                            </div>
-                            <p class="mb-4 text-gray-600">Espresso and milk topped with sea salt cream</p>
-                            <div class="flex items-center justify-between">
-                                <div class="space-y-1">
-                                    <p class="text-sm text-gray-500">Dodici: <span
-                                            class="font-semibold text-amber-600">₱120</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span
-                                            class="font-semibold text-amber-600">₱150</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php
+                    $colors = [
+                        'from-amber-100 to-amber-200',
+                        'from-orange-100 to-orange-200',
+                        'from-pink-100 to-pink-200',
+                        'from-yellow-100 to-yellow-200',
+                        'from-green-100 to-green-200',
+                        'from-lime-100 to-lime-200'
+                    ];
 
-                    <!-- Product Card 2: Spanish Latte -->
-                    <div
-                        class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105 hover:shadow-xl">
+                    foreach ($top_products as $index => $product):
+                        $colorClass = $colors[$index % count($colors)];
+                    ?>
+                        <!-- Product Card: <?php echo htmlspecialchars($product['name']); ?> -->
                         <div
-                            class="flex items-center justify-center h-48 bg-linear-to-br from-orange-100 to-orange-200">
-                            <span class="text-6xl">☕</span>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="text-xl font-bold text-gray-800">Spanish Latte</h3>
-                                <span class="text-yellow-500">★</span>
+                            class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105 hover:shadow-xl">
+                            <div class="flex items-center justify-center h-48 bg-gradient-to-br <?php echo $colorClass; ?>">
+                                <?php if ($product['image']): ?>
+                                    <img src="public/pages/get_image.php?id=<?php echo $product['id']; ?>"
+                                        alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                        class="object-cover w-full h-full">
+                                <?php else: ?>
+                                    <span class="text-6xl">☕</span>
+                                <?php endif; ?>
                             </div>
-                            <p class="mb-4 text-gray-600">Sweet twist on a classic iced cafe latte</p>
-                            <div class="flex items-center justify-between">
-                                <div class="space-y-1">
-                                    <p class="text-sm text-gray-500">Dodici: <span
-                                            class="font-semibold text-amber-600">₱120</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span
-                                            class="font-semibold text-amber-600">₱140</span></p>
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-xl font-bold text-gray-800">
+                                        <?php echo htmlspecialchars($product['name']); ?></h3>
+                                    <span class="text-yellow-500">★</span>
+                                </div>
+                                <p class="mb-4 text-gray-600"><?php echo htmlspecialchars($product['description']); ?></p>
+                                <div class="flex items-center justify-between">
+                                    <div class="space-y-1">
+                                        <?php if ($product['price_dodici']): ?>
+                                            <p class="text-sm text-gray-500">Dodici: <span
+                                                    class="font-semibold text-amber-600">₱<?php echo number_format($product['price_dodici'], 2); ?></span>
+                                            </p>
+                                        <?php endif; ?>
+                                        <?php if ($product['price_sedici']): ?>
+                                            <p class="text-sm text-gray-500">Sedici: <span
+                                                    class="font-semibold text-amber-600">₱<?php echo number_format($product['price_sedici'], 2); ?></span>
+                                            </p>
+                                        <?php endif; ?>
+                                        <?php if (!$product['price_dodici'] && !$product['price_sedici']): ?>
+                                            <p class="text-sm text-gray-500">Price: <span
+                                                    class="font-semibold text-amber-600">Contact for pricing</span></p>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Product Card 3: White Chocolate Mocha -->
-                    <div
-                        class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105 hover:shadow-xl">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-pink-100 to-pink-200">
-                            <span class="text-6xl">☕</span>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="text-xl font-bold text-gray-800">White Chocolate Mocha</h3>
-                                <span class="text-yellow-500">★</span>
-                            </div>
-                            <p class="mb-4 text-gray-600">Espresso, white chocolate sauce, milk and ice</p>
-                            <div class="flex items-center justify-between">
-                                <div class="space-y-1">
-                                    <p class="text-sm text-gray-500">Dodici: <span
-                                            class="font-semibold text-amber-600">₱120</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span
-                                            class="font-semibold text-amber-600">₱140</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product Card 4: Caramel Macchiato -->
-                    <div
-                        class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105 hover:shadow-xl">
-                        <div
-                            class="flex items-center justify-center h-48 bg-linear-to-br from-yellow-100 to-yellow-200">
-                            <span class="text-6xl">☕</span>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="text-xl font-bold text-gray-800">Caramel Macchiato</h3>
-                                <span class="text-yellow-500">★</span>
-                            </div>
-                            <p class="mb-4 text-gray-600">Espresso shot with vanilla, caramel sauce, milk and ice</p>
-                            <div class="flex items-center justify-between">
-                                <div class="space-y-1">
-                                    <p class="text-sm text-gray-500">Dodici: <span
-                                            class="font-semibold text-amber-600">₱130</span></p>
-                                    <p class="text-sm text-gray-500">Sedici: <span
-                                            class="font-semibold text-amber-600">₱150</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product Card 5: Matcha Latte -->
-                    <div
-                        class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105 hover:shadow-xl">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-green-100 to-green-200">
-                            <span class="text-6xl">☕</span>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="text-xl font-bold text-gray-800">Matcha Latte</h3>
-                                <span class="text-yellow-500">★</span>
-                            </div>
-                            <p class="mb-4 text-gray-600">Creamy matcha with outside milk</p>
-                            <div class="flex items-center justify-between">
-                                <div class="space-y-1">
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱140</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product Card 6: Banana Pudding Matcha Latte -->
-                    <div
-                        class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105 hover:shadow-xl">
-                        <div class="flex items-center justify-center h-48 bg-linear-to-br from-lime-100 to-lime-200">
-                            <span class="text-6xl">☕</span>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="text-xl font-bold text-gray-800">Banana Pudding Matcha</h3>
-                                <span class="text-yellow-500">★</span>
-                            </div>
-                            <p class="mb-4 text-gray-600">Matcha latte topped with banana pudding</p>
-                            <div class="flex items-center justify-between">
-                                <div class="space-y-1">
-                                    <p class="text-sm text-gray-500">Price: <span
-                                            class="font-semibold text-amber-600">₱180</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
                 <!-- View Full Menu Button -->
                 <div class="mt-12 text-center">

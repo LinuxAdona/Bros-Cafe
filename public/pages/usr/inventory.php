@@ -81,8 +81,9 @@ $current_user = getCurrentUser();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../../assets/css/inventory.css">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     <!-- Prevent sidebar jitter on page load -->
     <script>
         (function() {
@@ -91,47 +92,6 @@ $current_user = getCurrentUser();
             }
         })();
     </script>
-    <style>
-        /* Apply collapsed state immediately to prevent jitter */
-        .sidebar-collapsed-init #sidebar {
-            width: 5rem;
-        }
-
-        .sidebar-collapsed-init #sidebar .sidebar-text,
-        .sidebar-collapsed-init #sidebar .sidebar-logo-text {
-            display: none;
-        }
-
-        .sidebar-collapsed-init #sidebar .sidebar-logo {
-            justify-content: center;
-        }
-
-        .sidebar-collapsed-init #sidebar .logo-content {
-            display: none;
-        }
-
-        .sidebar-collapsed-init #sidebar .toggle-btn-collapsed {
-            display: flex;
-        }
-
-        .sidebar-collapsed-init #sidebar .toggle-btn-expanded {
-            display: none;
-        }
-
-        .sidebar-collapsed-init #sidebar nav ul li a {
-            justify-content: center;
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-        }
-
-        .sidebar-collapsed-init #sidebar .user-info {
-            justify-content: center;
-        }
-
-        .sidebar-collapsed-init #sidebar .user-info>div {
-            display: none;
-        }
-    </style>
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
@@ -661,11 +621,13 @@ $current_user = getCurrentUser();
                             <?php echo $stock_distribution['out_of_stock']; ?>
                         ],
                         backgroundColor: [
-                            '#10B981', // Green
-                            '#F59E0B', // Amber
-                            '#EF4444' // Red
+                            'rgb(16, 185, 129)', // Green
+                            'rgb(245, 158, 11)', // Amber
+                            'rgb(239, 68, 68)' // Red
                         ],
-                        borderWidth: 1
+                        borderColor: '#fff',
+                        borderWidth: 3,
+                        hoverOffset: 10
                     }]
                 },
                 options: {
@@ -673,7 +635,37 @@ $current_user = getCurrentUser();
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: 'Montserrat',
+                                    size: 11
+                                },
+                                color: '#374151',
+                                padding: 15,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 13
+                            },
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return label + ': ' + value + ' items (' + percentage + '%)';
+                                }
+                            }
                         }
                     }
                 }
@@ -688,17 +680,62 @@ $current_user = getCurrentUser();
                     datasets: [{
                         label: 'Total Stock',
                         data: <?php echo json_encode(array_column($category_analytics, 'total_stock')); ?>,
-                        backgroundColor: '#3B82F6',
-                        borderColor: '#1D4ED8',
-                        borderWidth: 1
+                        backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                        borderColor: 'rgb(59, 130, 246)',
+                        borderWidth: 2,
+                        borderRadius: 5
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: 'Montserrat',
+                                    size: 12,
+                                    weight: 'bold'
+                                },
+                                color: '#374151'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 13
+                            }
+                        }
+                    },
                     scales: {
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            ticks: {
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    size: 11,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
                         }
                     }
                 }
