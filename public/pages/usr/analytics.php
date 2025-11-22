@@ -174,15 +174,15 @@ $current_user = getCurrentUser();
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     <!-- Prevent sidebar jitter on page load -->
     <script>
-        (function() {
-            if (localStorage.getItem('sidebarCollapsed') === 'true') {
-                document.documentElement.classList.add('sidebar-collapsed-init');
-            }
-        })();
+    (function() {
+        if (localStorage.getItem('sidebarCollapsed') === 'true') {
+            document.documentElement.classList.add('sidebar-collapsed-init');
+        }
+    })();
     </script>
 </head>
 
-<body clas="bg-gray-100 font-['Montserrat']">
+<body class="bg-gray-100 font-['Montserrat']">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
         <aside id="sidebar" class="flex flex-col text-white bg-gray-900">
@@ -397,19 +397,19 @@ $current_user = getCurrentUser();
                     <div class="p-4">
                         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
                             <?php foreach ($top_products as $index => $product): ?>
-                                <div class="flex items-center p-3 border border-gray-200 rounded-lg">
-                                    <div
-                                        class="flex items-center justify-center flex-shrink-0 w-10 h-10 mr-3 text-white rounded-full bg-gradient-to-br from-amber-400 to-amber-600">
-                                        <span class="font-bold"><?php echo $index + 1; ?></span>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-medium text-gray-900 truncate">
-                                            <?php echo $product['name']; ?></p>
-                                        <p class="text-xs text-gray-500"><?php echo $product['total_sold']; ?> sold</p>
-                                        <p class="text-sm font-semibold text-green-600">
-                                            <?php echo formatCurrency($product['revenue']); ?></p>
-                                    </div>
+                            <div class="flex items-center p-3 border border-gray-200 rounded-lg">
+                                <div
+                                    class="flex items-center justify-center flex-shrink-0 w-10 h-10 mr-3 text-white rounded-full bg-gradient-to-br from-amber-400 to-amber-600">
+                                    <span class="font-bold"><?php echo $index + 1; ?></span>
                                 </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 truncate">
+                                        <?php echo $product['name']; ?></p>
+                                    <p class="text-xs text-gray-500"><?php echo $product['total_sold']; ?> sold</p>
+                                    <p class="text-sm font-semibold text-green-600">
+                                        <?php echo formatCurrency($product['revenue']); ?></p>
+                                </div>
+                            </div>
                             <?php endforeach; ?>
                         </div>
                     </div>
@@ -477,17 +477,17 @@ $current_user = getCurrentUser();
                             (<?php echo $period_label; ?>)</h3>
                         <div class="space-y-4">
                             <?php foreach ($employee_performance as $employee): ?>
-                                <div class="p-4 border border-gray-200 rounded-lg">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <p class="font-medium text-gray-800"><?php echo $employee['full_name']; ?></p>
-                                        <p class="font-semibold text-gray-800">
-                                            ₱<?php echo number_format($employee['revenue_generated'], 2); ?></p>
-                                    </div>
-                                    <div class="flex items-center text-sm text-gray-600">
-                                        <i class="mr-2 fa-solid fa-receipt"></i>
-                                        <span><?php echo $employee['orders_processed']; ?> orders processed</span>
-                                    </div>
+                            <div class="p-4 border border-gray-200 rounded-lg">
+                                <div class="flex items-center justify-between mb-2">
+                                    <p class="font-medium text-gray-800"><?php echo $employee['full_name']; ?></p>
+                                    <p class="font-semibold text-gray-800">
+                                        ₱<?php echo number_format($employee['revenue_generated'], 2); ?></p>
                                 </div>
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="mr-2 fa-solid fa-receipt"></i>
+                                    <span><?php echo $employee['orders_processed']; ?> orders processed</span>
+                                </div>
+                            </div>
                             <?php endforeach; ?>
                         </div>
                     </div>
@@ -498,320 +498,321 @@ $current_user = getCurrentUser();
 
     <script src="../../assets/js/admin.js"></script>
     <script>
-        // Prepare data with fallbacks for empty datasets
-        const dailySalesData = <?php echo json_encode($daily_sales); ?>;
-        const categorySalesData = <?php echo json_encode($category_sales); ?>;
-        const hourlySalesData = <?php echo json_encode($hourly_sales); ?>;
-        const orderTypesData = <?php echo json_encode($order_types); ?>;
+    // Prepare data with fallbacks for empty datasets
+    const dailySalesData = <?php echo json_encode($daily_sales); ?>;
+    const categorySalesData = <?php echo json_encode($category_sales); ?>;
+    const hourlySalesData = <?php echo json_encode($hourly_sales); ?>;
+    const orderTypesData = <?php echo json_encode($order_types); ?>;
 
-        // Sales Trend Chart
-        const salesCtx = document.getElementById('salesTrendChart').getContext('2d');
-        new Chart(salesCtx, {
-            type: 'line',
-            data: {
-                labels: dailySalesData.length > 0 ? dailySalesData.map(d => {
-                    const date = new Date(d.date);
-                    return date.toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric'
-                    });
-                }) : ['No Data'],
-                datasets: [{
-                    label: 'Revenue (₱)',
-                    data: dailySalesData.length > 0 ? dailySalesData.map(d => parseFloat(d.revenue)) : [0],
-                    borderColor: 'rgb(245, 158, 11)',
-                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 3,
-                    pointRadius: 5,
-                    pointBackgroundColor: 'rgb(245, 158, 11)',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointHoverRadius: 7
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            font: {
-                                family: 'Montserrat',
-                                size: 12,
-                                weight: 'bold'
-                            },
-                            color: '#374151'
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        padding: 12,
-                        titleFont: {
-                            size: 14,
+    // Sales Trend Chart
+    const salesCtx = document.getElementById('salesTrendChart').getContext('2d');
+    new Chart(salesCtx, {
+        type: 'line',
+        data: {
+            labels: dailySalesData.length > 0 ? dailySalesData.map(d => {
+                const date = new Date(d.date);
+                return date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }) : ['No Data'],
+            datasets: [{
+                label: 'Revenue (₱)',
+                data: dailySalesData.length > 0 ? dailySalesData.map(d => parseFloat(d.revenue)) : [0],
+                borderColor: 'rgb(245, 158, 11)',
+                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: 'rgb(245, 158, 11)',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        font: {
+                            family: 'Montserrat',
+                            size: 12,
                             weight: 'bold'
                         },
-                        bodyFont: {
-                            size: 13
-                        },
-                        callbacks: {
-                            label: function(context) {
-                                return 'Revenue: ₱' + context.parsed.y.toFixed(2);
-                            }
-                        }
+                        color: '#374151'
                     }
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return '₱' + value.toLocaleString();
-                            },
-                            font: {
-                                size: 11
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                        }
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
                     },
-                    x: {
-                        ticks: {
-                            font: {
-                                size: 11,
-                                weight: 'bold'
-                            }
-                        },
-                        grid: {
-                            display: false
+                    bodyFont: {
+                        size: 13
+                    },
+                    callbacks: {
+                        label: function(context) {
+                            return 'Revenue: ₱' + context.parsed.y.toFixed(2);
                         }
                     }
                 }
-            }
-        });
-
-        // Category Sales Chart
-        const categoryCtx = document.getElementById('categorySalesChart').getContext('2d');
-        new Chart(categoryCtx, {
-            type: 'doughnut',
-            data: {
-                labels: categorySalesData.length > 0 ? categorySalesData.map(c => c.name) : ['No Data'],
-                datasets: [{
-                    label: 'Revenue',
-                    data: categorySalesData.length > 0 ? categorySalesData.map(c => parseFloat(c.revenue)) : [1],
-                    backgroundColor: [
-                        'rgb(245, 158, 11)',
-                        'rgb(59, 130, 246)',
-                        'rgb(16, 185, 129)',
-                        'rgb(239, 68, 68)',
-                        'rgb(168, 85, 247)',
-                        'rgb(236, 72, 153)'
-                    ],
-                    borderColor: '#fff',
-                    borderWidth: 3,
-                    hoverOffset: 10
-                }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: {
-                                family: 'Montserrat',
-                                size: 11
-                            },
-                            color: '#374151',
-                            padding: 15,
-                            usePointStyle: true,
-                            pointStyle: 'circle'
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '₱' + value.toLocaleString();
+                        },
+                        font: {
+                            size: 11
                         }
                     },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        padding: 12,
-                        titleFont: {
-                            size: 14,
-                            weight: 'bold'
-                        },
-                        bodyFont: {
-                            size: 13
-                        },
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.label || '';
-                                const value = context.parsed || 0;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((value / total) * 100).toFixed(1);
-                                return label + ': ₱' + value.toFixed(2) + ' (' + percentage + '%)';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Order Type Chart
-        const orderTypeCtx = document.getElementById('orderTypeChart').getContext('2d');
-        new Chart(orderTypeCtx, {
-            type: 'bar',
-            data: {
-                labels: orderTypesData.length > 0 ? orderTypesData.map(t => t.order_type.charAt(0).toUpperCase() + t
-                    .order_type.slice(1)) : ['No Data'],
-                datasets: orderTypesData.length > 0 ? orderTypesData.map((t, index) => ({
-                    label: t.order_type.charAt(0).toUpperCase() + t.order_type.slice(1),
-                    data: orderTypesData.map((item, i) => i === index ? parseInt(item.count) : 0),
-                    backgroundColor: [
-                        'rgba(245, 158, 11, 0.8)',
-                        'rgba(59, 130, 246, 0.8)',
-                        'rgba(16, 185, 129, 0.8)',
-                        'rgba(139, 92, 246, 0.8)'
-                    ][index],
-                    borderColor: [
-                        'rgb(245, 158, 11)',
-                        'rgb(59, 130, 246)',
-                        'rgb(16, 185, 129)',
-                        'rgb(139, 92, 246)'
-                    ][index],
-                    borderWidth: 2,
-                    borderRadius: 5
-                })) : [{
-                    label: 'No Data',
-                    data: [0],
-                    backgroundColor: 'rgba(209, 213, 219, 0.8)'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                        labels: {
-                            font: {
-                                family: 'Montserrat',
-                                size: 11
-                            },
-                            color: '#374151',
-                            padding: 10
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        padding: 12,
-                        titleFont: {
-                            size: 14,
-                            weight: 'bold'
-                        },
-                        bodyFont: {
-                            size: 13
-                        }
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
                     }
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1,
-                            font: {
-                                size: 11
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
+                x: {
+                    ticks: {
+                        font: {
+                            size: 11,
+                            weight: 'bold'
                         }
                     },
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            font: {
-                                size: 11
-                            }
-                        }
+                    grid: {
+                        display: false
                     }
                 }
             }
-        });
+        }
+    });
 
-        // Hourly Sales Chart
-        const hourlyCtx = document.getElementById('hourlyChart').getContext('2d');
-        new Chart(hourlyCtx, {
-            type: 'bar',
-            data: {
-                labels: hourlySalesData.length > 0 ? hourlySalesData.map(h => h.hour + ':00') : ['No Data'],
-                datasets: [{
-                    label: 'Orders',
-                    data: hourlySalesData.length > 0 ? hourlySalesData.map(h => parseInt(h.orders)) : [0],
-                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                    borderColor: 'rgb(59, 130, 246)',
-                    borderWidth: 2,
-                    borderRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            font: {
-                                family: 'Montserrat',
-                                size: 12,
-                                weight: 'bold'
-                            },
-                            color: '#374151'
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        padding: 12,
-                        titleFont: {
-                            size: 14,
-                            weight: 'bold'
+    // Category Sales Chart
+    const categoryCtx = document.getElementById('categorySalesChart').getContext('2d');
+    new Chart(categoryCtx, {
+        type: 'doughnut',
+        data: {
+            labels: categorySalesData.length > 0 ? categorySalesData.map(c => c.name) : ['No Data'],
+            datasets: [{
+                label: 'Revenue',
+                data: categorySalesData.length > 0 ? categorySalesData.map(c => parseFloat(c.revenue)) :
+                    [1],
+                backgroundColor: [
+                    'rgb(245, 158, 11)',
+                    'rgb(59, 130, 246)',
+                    'rgb(16, 185, 129)',
+                    'rgb(239, 68, 68)',
+                    'rgb(168, 85, 247)',
+                    'rgb(236, 72, 153)'
+                ],
+                borderColor: '#fff',
+                borderWidth: 3,
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            family: 'Montserrat',
+                            size: 11
                         },
-                        bodyFont: {
-                            size: 13
-                        }
+                        color: '#374151',
+                        padding: 15,
+                        usePointStyle: true,
+                        pointStyle: 'circle'
                     }
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1,
-                            font: {
-                                size: 11
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                        }
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
                     },
-                    x: {
-                        ticks: {
-                            font: {
-                                size: 11,
-                                weight: 'bold'
-                            }
-                        },
-                        grid: {
-                            display: false
+                    bodyFont: {
+                        size: 13
+                    },
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return label + ': ₱' + value.toFixed(2) + ' (' + percentage + '%)';
                         }
                     }
                 }
             }
-        });
+        }
+    });
+
+    // Order Type Chart
+    const orderTypeCtx = document.getElementById('orderTypeChart').getContext('2d');
+    new Chart(orderTypeCtx, {
+        type: 'bar',
+        data: {
+            labels: orderTypesData.length > 0 ? orderTypesData.map(t => t.order_type.charAt(0).toUpperCase() + t
+                .order_type.slice(1)) : ['No Data'],
+            datasets: orderTypesData.length > 0 ? orderTypesData.map((t, index) => ({
+                label: t.order_type.charAt(0).toUpperCase() + t.order_type.slice(1),
+                data: orderTypesData.map((item, i) => i === index ? parseInt(item.count) : 0),
+                backgroundColor: [
+                    'rgba(245, 158, 11, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(139, 92, 246, 0.8)'
+                ][index],
+                borderColor: [
+                    'rgb(245, 158, 11)',
+                    'rgb(59, 130, 246)',
+                    'rgb(16, 185, 129)',
+                    'rgb(139, 92, 246)'
+                ][index],
+                borderWidth: 2,
+                borderRadius: 5
+            })) : [{
+                label: 'No Data',
+                data: [0],
+                backgroundColor: 'rgba(209, 213, 219, 0.8)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            family: 'Montserrat',
+                            size: 11
+                        },
+                        color: '#374151',
+                        padding: 10
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 13
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        font: {
+                            size: 11
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Hourly Sales Chart
+    const hourlyCtx = document.getElementById('hourlyChart').getContext('2d');
+    new Chart(hourlyCtx, {
+        type: 'bar',
+        data: {
+            labels: hourlySalesData.length > 0 ? hourlySalesData.map(h => h.hour + ':00') : ['No Data'],
+            datasets: [{
+                label: 'Orders',
+                data: hourlySalesData.length > 0 ? hourlySalesData.map(h => parseInt(h.orders)) : [0],
+                backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                borderColor: 'rgb(59, 130, 246)',
+                borderWidth: 2,
+                borderRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        font: {
+                            family: 'Montserrat',
+                            size: 12,
+                            weight: 'bold'
+                        },
+                        color: '#374151'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 13
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        font: {
+                            size: 11
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    ticks: {
+                        font: {
+                            size: 11,
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
     </script>
 </body>
 

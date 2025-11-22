@@ -292,7 +292,7 @@ $current_user = getCurrentUser();
                                 onclick='addToCart(<?php echo json_encode($productData); ?>)'>
                                 <div class="p-4">
                                     <div
-                                        class="flex items-center justify-center w-full h-32 mb-3 overflow-hidden bg-gray-100 rounded-lg">
+                                        class="flex items-center justify-center w-full h-48 mb-3 overflow-hidden bg-gray-100 rounded-lg">
                                         <?php if ($product['image']): ?>
                                             <img src="../get_image.php?id=<?php echo $product['id']; ?>"
                                                 alt="<?php echo htmlspecialchars($product['name']); ?>"
@@ -358,7 +358,7 @@ $current_user = getCurrentUser();
 
                     <select id="payment-method" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                         <option value="cash">Cash</option>
-                        <option value="card">Card</option>
+                        <option value="gcash">GCash</option>
                     </select>
 
                     <select id="order-type" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
