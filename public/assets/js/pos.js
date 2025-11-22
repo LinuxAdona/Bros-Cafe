@@ -1,4 +1,4 @@
-// Global variables
+2// Global variables
 let cart = [];
 let currentProduct = null;
 let isCartVisible = true;
@@ -283,9 +283,9 @@ function processOrder() {
         showErrorPopup('No items selected. Please add items to your cart first.');
         return;
     }
-
-    const paymentMethod = document.getElementById('payment-method').value;
-    const orderType = document.getElementById('order-type').value;
+    const paymentMethod = (document.getElementById('payment-method').value || '').toLowerCase().trim();
+    const orderType = (document.getElementById('order-type').value || '').toLowerCase().trim();
+    console.debug('processOrder called', { paymentMethod, orderType, cartLength: cart.length });
     const total = parseFloat(document.getElementById('total').textContent.replace('₱', ''));
 
     // If GCash payment, show QR modal for payment verification
@@ -294,7 +294,7 @@ function processOrder() {
         return;
     }
 
-    // For cash payments, process immediately
+    // For cash payments, show confirmation modal first
     const orderNumber = document.getElementById('order-number').textContent;
 
     const orderData = {
@@ -305,7 +305,130 @@ function processOrder() {
         total: total
     };
 
+    if (paymentMethod === 'cash') {
+        console.debug('processOrder: detected cash payment, showing cash confirm modal');
+        showCashConfirmModal(orderData);
+        return;
+    }
+
+    // Non-cash direct submit
     submitOrder(orderData);
+}
+
+// Cash confirmation modal flow
+let cashPendingOrder = null;
+
+function showCashConfirmModal(orderData) {
+    // Defensive: only show this modal for cash payment orders
+    if (!orderData || (orderData.payment_method || '').toLowerCase().trim() !== 'cash') {
+        console.debug('showCashConfirmModal: guard prevented showing modal, payment_method:', (orderData && orderData.payment_method) || null);
+        return;
+    }
+
+    cashPendingOrder = orderData;
+    const modal = document.getElementById('cash-confirm-modal');
+    const detailsEl = document.getElementById('cash-confirm-details');
+    const amountInput = document.getElementById('cash-amount-received');
+
+    if (detailsEl) {
+        // Reuse buildOrderDetailsHtml but ensure total is present
+        detailsEl.innerHTML = buildOrderDetailsHtml(orderData);
+    }
+
+    if (amountInput) amountInput.value = '';
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    console.debug('showCashConfirmModal: modal opened for order', { order_number: orderData.order_number, total: orderData.total });
+}
+
+function closeCashConfirmModal() {
+    const modal = document.getElementById('cash-confirm-modal');
+    const amountInput = document.getElementById('cash-amount-received');
+    modal.classList.remove('flex');
+    modal.classList.add('hidden');
+    if (amountInput) amountInput.value = '';
+    cashPendingOrder = null;
+}
+
+function confirmCashPayment() {
+    if (!cashPendingOrder) {
+        showErrorPopup('No pending order to confirm.');
+        return;
+    }
+    console.debug('confirmCashPayment: confirming cash for', { order_number: cashPendingOrder.order_number, total: cashPendingOrder.total });
+
+    const total = parseFloat(cashPendingOrder.total) || 0;
+    const amountInput = document.getElementById('cash-amount-received');
+    let amountPaid = null;
+
+    if (amountInput && amountInput.value !== '') {
+        amountPaid = parseFloat(amountInput.value);
+        if (isNaN(amountPaid) || amountPaid < 0) {
+            showErrorPopup('Please enter a valid amount received.');
+            return;
+        }
+        if (amountPaid < total) {
+            showErrorPopup(`Insufficient payment. Total: ${formatPHP(total)}, Received: ${formatPHP(amountPaid)}. Please collect the remaining amount.`);
+            return;
+        }
+        
+        // If amount paid is more than total, show change modal
+        if (amountPaid > total) {
+            const change = amountPaid - total;
+            showChangeModal(total, amountPaid, change);
+            return; // Don't process yet, wait for change modal confirmation
+        }
+    }
+
+    // Close modal and submit order (include amount_paid if provided)
+    closeCashConfirmModal();
+
+    if (amountPaid !== null) {
+        cashPendingOrder.amount_paid = amountPaid;
+    }
+
+    // proceed to submit
+    submitOrder(cashPendingOrder);
+    cashPendingOrder = null;
+}
+
+// Show change modal
+function showChangeModal(total, amountReceived, change) {
+    const modal = document.getElementById('change-modal');
+    const totalEl = document.getElementById('change-modal-total');
+    const receivedEl = document.getElementById('change-modal-received');
+    const changeEl = document.getElementById('change-modal-change');
+    
+    if (totalEl) totalEl.textContent = formatPHP(total);
+    if (receivedEl) receivedEl.textContent = formatPHP(amountReceived);
+    if (changeEl) changeEl.textContent = formatPHP(change);
+    
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+// Close change modal and proceed with order
+function closeChangeModal() {
+    const modal = document.getElementById('change-modal');
+    modal.classList.remove('flex');
+    modal.classList.add('hidden');
+    
+    // Get the pending order and amount before closing/clearing
+    const orderToSubmit = cashPendingOrder;
+    const amountInput = document.getElementById('cash-amount-received');
+    const amountPaid = amountInput && amountInput.value !== '' ? parseFloat(amountInput.value) : null;
+    
+    // Close the cash confirm modal
+    closeCashConfirmModal();
+    
+    // Now submit the order with the saved reference
+    if (orderToSubmit) {
+        if (amountPaid !== null) {
+            orderToSubmit.amount_paid = amountPaid;
+        }
+        submitOrder(orderToSubmit);
+    }
 }
 
 // Show success popup
@@ -489,6 +612,8 @@ function showGCashPaymentModal(amount) {
     const amountDisplay = document.getElementById('gcash-amount');
     const amountInstruction = document.getElementById('gcash-amount-instruction');
     const paidAmountInput = document.getElementById('gcash-paid-amount');
+    const referenceInput = document.getElementById('gcash-reference-number');
+    const verifyBtn = document.getElementById('gcash-verify-btn');
     
     // Set the amount to pay
     amountDisplay.textContent = formatPHP(amount);
@@ -496,10 +621,31 @@ function showGCashPaymentModal(amount) {
     
     // Clear previous input
     paidAmountInput.value = '';
+    if (referenceInput) referenceInput.value = '';
+    if (verifyBtn) verifyBtn.disabled = true;
     
     // Show modal
     modal.classList.remove('hidden');
     modal.classList.add('flex');
+
+    // attach live validation listeners
+    if (paidAmountInput) paidAmountInput.addEventListener('input', updateGCashVerifyState);
+    if (referenceInput) referenceInput.addEventListener('input', updateGCashVerifyState);
+    console.debug('showGCashPaymentModal: opened GCash modal for amount', amount);
+}
+
+// Update the state of the GCash Verify button based on inputs
+function updateGCashVerifyState() {
+    const total = parseFloat(document.getElementById('total').textContent.replace('₱', '')) || 0;
+    const paidAmount = parseFloat(document.getElementById('gcash-paid-amount').value) || 0;
+    const referenceRaw = (document.getElementById('gcash-reference-number').value || '').trim();
+    const referenceDigits = referenceRaw.replace(/\D/g, '');
+    const verifyBtn = document.getElementById('gcash-verify-btn');
+
+    const enoughPaid = paidAmount >= total && paidAmount > 0;
+    const validRef = referenceDigits.length === 13;
+
+    if (verifyBtn) verifyBtn.disabled = !(enoughPaid && validRef);
 }
 
 // Close GCash payment modal
@@ -509,25 +655,43 @@ function closeGCashModal() {
     modal.classList.add('hidden');
     
     // Clear inputs
-    document.getElementById('gcash-paid-amount').value = '';
-    document.getElementById('gcash-reference-number').value = '';
+    const paidEl = document.getElementById('gcash-paid-amount');
+    const refEl = document.getElementById('gcash-reference-number');
+    const verifyBtn = document.getElementById('gcash-verify-btn');
+    if (paidEl) {
+        paidEl.value = '';
+        paidEl.removeEventListener('input', updateGCashVerifyState);
+    }
+    if (refEl) {
+        refEl.value = '';
+        refEl.removeEventListener('input', updateGCashVerifyState);
+    }
+    if (verifyBtn) verifyBtn.disabled = true;
 }
 
 // Verify GCash payment
 function verifyGCashPayment() {
     const total = parseFloat(document.getElementById('total').textContent.replace('₱', ''));
     const paidAmount = parseFloat(document.getElementById('gcash-paid-amount').value);
-    const referenceNumber = document.getElementById('gcash-reference-number').value.trim();
-    
+    const referenceRaw = document.getElementById('gcash-reference-number').value.trim();
+    // Normalize to digits only
+    const referenceDigits = referenceRaw.replace(/\D/g, '');
+
     // Validate amount input
     if (!paidAmount || paidAmount <= 0) {
         showErrorPopup('Please enter the amount paid by the customer.');
         return;
     }
-    
-    // Validate reference number
-    if (!referenceNumber) {
+
+    // Validate reference number presence
+    if (!referenceRaw) {
         showErrorPopup('Please enter the GCash reference number.');
+        return;
+    }
+
+    // Enforce exactly 13 digits
+    if (referenceDigits.length !== 13) {
+        showErrorPopup('GCash reference number must be exactly 13 digits. Please re-check the number.');
         return;
     }
     
@@ -540,8 +704,8 @@ function verifyGCashPayment() {
     // Payment verified, process the order
     closeGCashModal();
     
-    const paymentMethod = document.getElementById('payment-method').value;
-    const orderType = document.getElementById('order-type').value;
+    const paymentMethod = (document.getElementById('payment-method').value || '').toLowerCase().trim();
+    const orderType = (document.getElementById('order-type').value || '').toLowerCase().trim();
     const orderNumber = document.getElementById('order-number').textContent;
 
     const orderData = {
@@ -551,7 +715,7 @@ function verifyGCashPayment() {
         order_type: orderType,
         total: total,
         amount_paid: paidAmount,
-        reference_number: referenceNumber
+        reference_number: referenceDigits
     };
 
     submitOrder(orderData);

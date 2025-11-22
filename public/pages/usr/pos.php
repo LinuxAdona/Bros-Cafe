@@ -436,7 +436,7 @@ $current_user = getCurrentUser();
     </div>
 
     <!-- Error Modal -->
-    <div id="error-popup" class="fixed inset-0 z-100 items-center justify-center hidden modal-backdrop">
+    <div id="error-popup" class="fixed inset-0 z-150 items-center justify-center hidden modal-backdrop">
         <div class="w-full max-w-md mx-4 bg-white shadow-2xl rounded-2xl animate-modal">
             <div class="p-6 text-center border-b border-gray-200">
                 <div class="flex justify-center mb-4">
@@ -459,8 +459,102 @@ $current_user = getCurrentUser();
         </div>
     </div>
 
+    <!-- Cash Confirmation Modal -->
+    <div id="cash-confirm-modal" class="fixed inset-0 z-100 items-center justify-center hidden modal-backdrop">
+        <div class="w-full max-w-2xl mx-4 bg-white shadow-2xl rounded-2xl animate-modal max-h-[90vh] overflow-y-auto">
+            <div class="p-4 text-center border-b border-gray-200"
+                style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <div class="flex items-center justify-center w-10 h-10 bg-white rounded-full">
+                            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="10"
+                                    font-weight="bold" fill="currentColor">$</text>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-white">Confirm Cash Payment</h3>
+                            <p class="text-xs text-green-100">Review order details before completing the
+                                transaction</p>
+                        </div>
+                    </div>
+                    <button onclick="closeCashConfirmModal()" class="text-white hover:text-green-100 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <div id="cash-confirm-details" class="mb-4 p-4 bg-gray-50 rounded-lg"
+                    style="max-height:320px;overflow-y:auto"></div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Amount Received</label>
+                    <input type="number" id="cash-amount-received" step="0.01" min="0" placeholder="0.00"
+                        class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    <p class="text-xs text-gray-500 mt-2">Enter the amount received from customer to record
+                        amount paid (optional).</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 pt-4">
+                    <button onclick="closeCashConfirmModal()"
+                        class="py-3 px-4 font-semibold text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">
+                        Cancel
+                    </button>
+                    <button id="cash-confirm-btn" onclick="confirmCashPayment()"
+                        class="py-3 px-4 font-semibold text-white rounded-lg transition-colors shadow-md hover:shadow-lg"
+                        style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                        Confirm & Process
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Display Modal -->
+    <div id="change-modal" class="fixed inset-0 z-100 items-center justify-center hidden modal-backdrop">
+        <div class="w-full max-w-md mx-4 bg-white shadow-2xl rounded-2xl animate-modal">
+            <div class="p-6 text-center border-b border-gray-200"
+                style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+                <div class="flex justify-center mb-2">
+                    <div class="flex items-center justify-center w-16 h-16 bg-white rounded-full">
+                        <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-white">Customer Change</h3>
+            </div>
+            <div class="p-6 text-center">
+                <div class="mb-6 space-y-3">
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600 mb-1">Total Amount</p>
+                        <p class="text-2xl font-bold text-gray-800" id="change-modal-total">₱0.00</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <p class="text-sm text-gray-600 mb-1">Amount Received</p>
+                        <p class="text-2xl font-bold text-blue-600" id="change-modal-received">₱0.00</p>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg border-2 border-green-500">
+                        <p class="text-sm text-gray-600 mb-1">Change Due</p>
+                        <p class="text-4xl font-bold text-green-600" id="change-modal-change">₱0.00</p>
+                    </div>
+                </div>
+                <button onclick="closeChangeModal()"
+                    class="w-full py-3 font-semibold text-white transition-all rounded-lg"
+                    style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+                    OK, Process Order
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- GCash Payment Modal -->
-    <div id="gcash-payment-modal" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+    <div id="gcash-payment-modal" class="fixed inset-0 z-100 items-center justify-center hidden modal-backdrop">
         <div class="w-full max-w-4xl mx-4 bg-white shadow-2xl rounded-2xl animate-modal max-h-[90vh] overflow-y-auto">
             <div class="p-4 text-center border-b border-gray-200"
                 style="background: linear-gradient(135deg, #007DFF 0%, #0062CC 100%);">
@@ -567,7 +661,8 @@ $current_user = getCurrentUser();
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
                                 GCash Reference Number
                             </label>
-                            <input type="text" id="gcash-reference-number" placeholder="Enter reference number"
+                            <input type="text" id="gcash-reference-number" placeholder="Enter 13-digit reference number"
+                                maxlength="13" inputmode="numeric" pattern="\d{13}"
                                 class="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono">
                         </div>
 
@@ -577,8 +672,8 @@ $current_user = getCurrentUser();
                                 class="py-3 px-4 font-semibold text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">
                                 Cancel
                             </button>
-                            <button onclick="verifyGCashPayment()"
-                                class="py-3 px-4 font-semibold text-white rounded-lg transition-colors shadow-md hover:shadow-lg"
+                            <button id="gcash-verify-btn" onclick="verifyGCashPayment()" disabled
+                                class="py-3 px-4 font-semibold text-white rounded-lg transition-colors shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                 style="background: linear-gradient(135deg, #007DFF 0%, #0062CC 100%);">
                                 Verify Payment
                             </button>
