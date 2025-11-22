@@ -416,10 +416,21 @@ $current_user = getCurrentUser();
             <div class="p-6 text-center">
                 <p id="popup-message" class="mb-2 text-gray-600">Your order has been processed successfully.</p>
                 <p id="popup-order-number" class="mb-6 text-xl font-bold text-amber-600"></p>
-                <button onclick="closeOrderPopup()"
-                    class="w-full py-3 font-semibold text-white transition-all rounded-lg bg-amber-600 hover:bg-amber-700">
-                    OK
-                </button>
+                <div class="space-y-3">
+                    <div class="flex gap-2">
+                        <button id="popup-print-btn" onclick="printReceipt()"
+                            class="flex-1 py-3 font-semibold text-white transition-all rounded-lg bg-amber-600 hover:bg-amber-700">Print
+                            Receipt</button>
+                    </div>
+
+                    <div id="popup-order-details" class="p-4 text-left bg-gray-50 rounded-lg"
+                        style="max-height:300px;overflow-y:auto"></div>
+
+                    <button onclick="closeOrderPopup()" id="popup-close-btn"
+                        class="w-full py-3 font-semibold text-white transition-all rounded-lg bg-amber-600 hover:bg-amber-700">
+                        Close
+                    </button>
+                </div>
             </div>
         </div>
     </div>

@@ -631,24 +631,88 @@ $current_user = getCurrentUser();
     </div>
 
     <!-- Order Details Modal -->
-    <div id="orderModal" class="fixed inset-0 z-100 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog"
-        aria-modal="true">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"
-                onclick="closeModal()"></div>
-            <div
-                class="relative inline-block overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:max-w-2xl sm:w-full z-10">
-                <div class="px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">Order Details</h3>
-                        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500">
-                            <i class="fa-solid fa-times"></i>
-                        </button>
+    <div id="orderModal" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+        <div
+            class="w-full max-w-md mx-4 overflow-hidden transition-all transform bg-white shadow-2xl rounded-2xl animate-modal">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-amber-500 to-amber-600">
+                <div class="flex items-center justify-between text-white">
+                    <div>
+                        <h3 class="text-xl font-bold" id="modalOrderNumber">Order Receipt</h3>
+                        <p class="text-sm opacity-90" id="modalDateTime"></p>
                     </div>
-                    <div id="orderDetailsContent">
-                        <!-- Content loaded via AJAX -->
+                    <button onclick="closeModal()" class="text-white transition-colors hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-4" style="max-height: 500px; overflow-y: auto;">
+                <div id="orderDetailsContent">
+                    <!-- Content loaded via AJAX -->
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-gray-200 bg-gray-50">
+                <button onclick="closeModal()"
+                    class="w-full py-2 font-semibold text-white transition-all rounded-lg bg-amber-600 hover:bg-amber-700">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Update Status Modal -->
+    <div id="updateStatusModal" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+        <div
+            class="w-full max-w-md mx-4 overflow-hidden transition-all transform bg-white shadow-2xl rounded-2xl animate-modal">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-amber-500 to-amber-600">
+                <div class="flex items-center justify-between text-white">
+                    <div>
+                        <h3 class="text-xl font-bold" id="updateModalTitle">Update Order Status</h3>
+                        <p class="text-sm opacity-90" id="updateModalSubtitle"></p>
+                    </div>
+                    <button onclick="closeUpdateStatusModal()" class="text-white transition-colors hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-4">
+                <div id="updateStatusContent">
+                    <p class="text-gray-700">Are you sure you want to change the order status?</p>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500">Current Status</p>
+                                <p id="currentStatusLabel" class="font-semibold text-gray-800">Pending</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">New Status</p>
+                                <p id="nextStatusLabel" class="font-semibold text-amber-600">Preparing</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-gray-200 bg-gray-50 flex gap-2">
+                <button onclick="closeUpdateStatusModal()"
+                    class="flex-1 py-2 font-semibold text-gray-700 transition-all rounded-lg bg-white border border-gray-300 hover:bg-gray-100">Cancel</button>
+                <button id="confirmUpdateBtn"
+                    class="flex-1 py-2 font-semibold text-white transition-all rounded-lg bg-amber-600 hover:bg-amber-700">Confirm</button>
             </div>
         </div>
     </div>

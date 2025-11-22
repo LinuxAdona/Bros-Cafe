@@ -309,15 +309,152 @@ function processOrder() {
 }
 
 // Show success popup
-function showSuccessPopup(orderNumber) {
+// Store last order for popup/printing
+let lastOrderForPopup = null;
+
+// Show success popup (accepts orderNumber string, orderData object, and optional orderId from server)
+function showSuccessPopup(orderNumber, orderData = null, orderId = null) {
     const popup = document.getElementById('order-popup');
     const message = document.getElementById('popup-message');
-    
+    const orderNumberEl = document.getElementById('popup-order-number');
+    const detailsEl = document.getElementById('popup-order-details');
+    const viewBtn = document.getElementById('popup-view-details-btn');
+
     message.textContent = `Your order has been processed successfully.`;
-    document.getElementById('popup-order-number').textContent = orderNumber;
-    
+    orderNumberEl.textContent = orderNumber;
+
+    // store for printing
+    lastOrderForPopup = {
+        orderNumber: orderNumber,
+        orderData: orderData,
+        orderId: orderId
+    };
+
+    // populate details area (shown by default)
+    if (detailsEl) {
+        if (orderData) {
+            detailsEl.innerHTML = buildOrderDetailsHtml(orderData);
+        } else {
+            detailsEl.innerHTML = '<p class="text-sm text-gray-500">Order details unavailable.</p>';
+        }
+    }
+    // (details are visible by default)
+
+    // attach print button handler defensively (in case inline handler doesn't work)
+    const printBtn = document.getElementById('popup-print-btn');
+    if (printBtn) {
+        printBtn.onclick = printReceipt;
+    }
+
     popup.classList.remove('hidden');
     popup.classList.add('flex');
+}
+
+function buildOrderDetailsHtml(orderData) {
+    if (!orderData) return '<p class="text-sm text-gray-500">No details</p>';
+
+    const items = orderData.items || [];
+    let html = '<div class="space-y-3">';
+    html += '<div class="text-sm text-gray-700">';
+    html += '<strong>Payment:</strong> ' + (orderData.payment_method ? orderData.payment_method.toUpperCase() : 'N/A') + '<br/>';
+    if (orderData.amount_paid) html += '<strong>Amount Paid:</strong> ' + formatPHP(orderData.amount_paid) + '<br/>';
+    if (orderData.reference_number) html += '<strong>Reference #:</strong> ' + orderData.reference_number + '<br/>';
+    html += '</div>';
+
+    html += '<div class="pt-2">';
+    html += '<h4 class="mb-2 text-sm font-bold text-gray-700 uppercase">Order Items</h4>';
+    items.forEach(item => {
+        html += `<div class="flex items-center justify-between p-2 bg-white rounded mb-2 border border-gray-200">
+            <div>
+                <p class="font-semibold text-gray-800">${escapeHtml(item.name)}</p>
+                <p class="text-xs text-gray-500">Size: ${escapeHtml(item.size.charAt(0).toUpperCase() + item.size.slice(1))} • Qty: ${item.quantity}</p>
+            </div>
+            <div class="font-semibold text-gray-700">${formatPHP(item.price * item.quantity)}</div>
+        </div>`;
+    });
+    html += '</div>';
+
+    html += '<div class="pt-3 border-t border-gray-200">';
+    html += `<div class="flex items-center justify-between"><span class="font-bold">Total</span><span class="font-bold text-amber-600">${formatPHP(orderData.total)}</span></div>`;
+    html += '</div>';
+    html += '</div>';
+    return html;
+}
+
+function escapeHtml(text) {
+    if (!text && text !== 0) return '';
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+// Toggle details area in popup
+function togglePopupDetails() {
+    const detailsEl = document.getElementById('popup-order-details');
+    const viewBtn = document.getElementById('popup-view-details-btn');
+    if (!detailsEl) return;
+
+    if (detailsEl.classList.contains('hidden')) {
+        detailsEl.classList.remove('hidden');
+        if (viewBtn) viewBtn.textContent = 'Hide Details';
+    } else {
+        detailsEl.classList.add('hidden');
+        if (viewBtn) viewBtn.textContent = 'View Details';
+    }
+}
+
+// Print the last order (opens a new window with printable HTML)
+function printReceipt() {
+    if (!lastOrderForPopup) {
+        alert('No order data available to print.');
+        return;
+    }
+
+    const orderNumber = lastOrderForPopup.orderNumber || ('Order');
+    const orderData = lastOrderForPopup.orderData || {};
+    const businessName = document.querySelector('.logo-content h1') ? document.querySelector('.logo-content h1').textContent : 'Bro\'s Cafe';
+
+    let printHtml = `<!doctype html><html><head><meta charset="utf-8"><title>Receipt - ${escapeHtml(orderNumber)}</title>`;
+    printHtml += `<style>body{font-family: Arial, sans-serif;padding:20px;color:#111} .header{text-align:center;margin-bottom:10px} .items{width:100%;border-collapse:collapse} .items td, .items th{padding:8px;border-bottom:1px solid #eee} .total{font-weight:bold;text-align:right;margin-top:10px}</style>`;
+    printHtml += `</head><body>`;
+    printHtml += `<div class="header"><h2>${escapeHtml(businessName)}</h2><div>${escapeHtml(orderNumber)}</div><div>${new Date().toLocaleString()}</div></div>`;
+
+    // Items
+    printHtml += `<table class="items"><thead><tr><th style="text-align:left">Item</th><th style="text-align:center">Qty</th><th style="text-align:right">Price</th></tr></thead><tbody>`;
+    const items = orderData.items || [];
+    items.forEach(item => {
+        const name = escapeHtml(item.name || '');
+        const qty = item.quantity || 0;
+        const price = (item.price * item.quantity) ? formatPHP(item.price * item.quantity) : formatPHP(item.price || 0);
+        printHtml += `<tr><td>${name} <div style="font-size:11px;color:#666">${escapeHtml(item.size || '')}</div></td><td style="text-align:center">${qty}</td><td style="text-align:right">${price}</td></tr>`;
+    });
+    printHtml += `</tbody></table>`;
+
+    printHtml += `<div class="total">Total: ${formatPHP(orderData.total || 0)}</div>`;
+
+    if (orderData.payment_method) printHtml += `<div style="margin-top:10px">Payment: ${escapeHtml(orderData.payment_method)}</div>`;
+    if (orderData.amount_paid) printHtml += `<div>Amount Paid: ${formatPHP(orderData.amount_paid)}</div>`;
+    if (orderData.reference_number) printHtml += `<div>Reference #: ${escapeHtml(orderData.reference_number)}</div>`;
+
+    printHtml += `<div style="margin-top:20px;font-size:12px;color:#666;">Thank you for your purchase!</div>`;
+    printHtml += `</body></html>`;
+
+    const w = window.open('', '_blank', 'width=600,height=800');
+    if (!w) {
+        alert('Please allow popups to print the receipt.');
+        return;
+    }
+    w.document.write(printHtml);
+    w.document.close();
+    w.focus();
+    setTimeout(() => {
+        w.print();
+        // Optionally close after printing
+        // w.close();
+    }, 500);
 }
 
 // Show error popup
@@ -435,9 +572,9 @@ function submitOrder(orderData) {
                 // Clear cart first
                 cart = [];
                 updateCart();
-                
-                // Show success popup
-                showSuccessPopup('Order #' + orderData.order_number);
+
+                // Show success popup with order data and server order id
+                showSuccessPopup('Order #' + orderData.order_number, orderData, data.order_id || null);
             } else {
                 showErrorPopup(data.message || 'Failed to process order');
             }
