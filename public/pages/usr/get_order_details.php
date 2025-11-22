@@ -129,6 +129,12 @@ $items = $stmt->fetchAll();
             <span class="text-gray-600">Payment Method:</span>
             <span class="font-medium text-gray-900"><?php echo strtoupper($order['payment_method']); ?></span>
         </div>
+        <?php if ($order['payment_method'] === 'gcash' && !empty($order['reference_number'])): ?>
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-gray-600">Reference Number:</span>
+                <span class="font-mono text-sm font-medium text-purple-700"><?php echo htmlspecialchars($order['reference_number']); ?></span>
+            </div>
+        <?php endif; ?>
         <div class="flex items-center justify-between pt-2 border-t border-gray-300">
             <span class="text-lg font-semibold text-gray-900">Total Amount:</span>
             <span

@@ -425,7 +425,7 @@ $current_user = getCurrentUser();
     </div>
 
     <!-- Error Modal -->
-    <div id="error-popup" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+    <div id="error-popup" class="fixed inset-0 z-100 items-center justify-center hidden modal-backdrop">
         <div class="w-full max-w-md mx-4 bg-white shadow-2xl rounded-2xl animate-modal">
             <div class="p-6 text-center border-b border-gray-200">
                 <div class="flex justify-center mb-4">
@@ -444,6 +444,94 @@ $current_user = getCurrentUser();
                     class="w-full py-3 font-semibold text-white transition-all rounded-lg bg-red-600 hover:bg-red-700">
                     OK
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GCash Payment Modal -->
+    <div id="gcash-payment-modal" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+        <div class="w-full max-w-md mx-4 bg-white shadow-2xl rounded-2xl animate-modal max-h-[90vh] overflow-y-auto">
+            <div class="p-4 text-center border-b border-gray-200"
+                style="background: linear-gradient(135deg, #007DFF 0%, #0062CC 100%);">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <div class="flex items-center justify-center w-10 h-10 bg-white rounded-full">
+                            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="10"
+                                    font-weight="bold" fill="currentColor">G</text>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-white">GCash Payment</h3>
+                            <p class="text-xs text-blue-100">Scan QR to pay</p>
+                        </div>
+                    </div>
+                    <button onclick="closeGCashModal()" class="text-white hover:text-blue-100 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="p-5 text-center">
+                <!-- Amount Display -->
+                <div class="mb-4 p-3 bg-blue-50 rounded-lg">
+                    <p class="text-xs text-gray-600 mb-1">Amount to Pay</p>
+                    <p class="text-3xl font-bold text-blue-600" id="gcash-amount">₱0.00</p>
+                </div>
+
+                <!-- QR Code Display -->
+                <div class="mb-4 flex justify-center">
+                    <div class="p-3 bg-white border-4 border-blue-500 rounded-xl shadow-lg">
+                        <img src="../../assets/images/QR-Pay.jpg" alt="GCash QR Code" class="w-48 h-48 object-contain">
+                    </div>
+                </div>
+
+                <!-- Instructions -->
+                <div class="mb-4 text-left bg-gray-50 p-3 rounded-lg">
+                    <p class="font-semibold text-gray-800 mb-1 text-sm">Instructions:</p>
+                    <ol class="text-xs text-gray-600 space-y-0.5 list-decimal list-inside">
+                        <li>Open your GCash app</li>
+                        <li>Tap "Scan QR" or "Pay QR"</li>
+                        <li>Scan the QR code above</li>
+                        <li>Enter the exact amount: <span class="font-bold text-blue-600"
+                                id="gcash-amount-instruction">₱0.00</span></li>
+                        <li>Complete the payment</li>
+                        <li>Click "Verify Payment" below after paying</li>
+                    </ol>
+                </div>
+
+                <!-- Payment Verification Input -->
+                <div class="mb-3">
+                    <label class="block text-left text-xs font-semibold text-gray-700 mb-1">
+                        Enter Amount Paid by Customer
+                    </label>
+                    <input type="number" id="gcash-paid-amount" step="0.01" min="0" placeholder="0.00"
+                        class="w-full px-3 py-2 text-base border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+
+                <!-- Reference Number Input -->
+                <div class="mb-4">
+                    <label class="block text-left text-xs font-semibold text-gray-700 mb-1">
+                        GCash Reference Number
+                    </label>
+                    <input type="text" id="gcash-reference-number" placeholder="Enter reference number"
+                        class="w-full px-3 py-2 text-base border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="closeGCashModal()"
+                        class="py-2 px-3 text-sm font-semibold text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">
+                        Cancel
+                    </button>
+                    <button onclick="verifyGCashPayment()"
+                        class="py-2 px-3 text-sm font-semibold text-white rounded-lg transition-colors"
+                        style="background: linear-gradient(135deg, #007DFF 0%, #0062CC 100%);">
+                        Verify Payment
+                    </button>
+                </div>
             </div>
         </div>
     </div>

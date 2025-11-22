@@ -286,6 +286,15 @@ function processOrder() {
 
     const paymentMethod = document.getElementById('payment-method').value;
     const orderType = document.getElementById('order-type').value;
+    const total = parseFloat(document.getElementById('total').textContent.replace('₱', ''));
+
+    // If GCash payment, show QR modal for payment verification
+    if (paymentMethod === 'gcash') {
+        showGCashPaymentModal(total);
+        return;
+    }
+
+    // For cash payments, process immediately
     const orderNumber = document.getElementById('order-number').textContent;
 
     const orderData = {
@@ -293,33 +302,10 @@ function processOrder() {
         items: cart,
         payment_method: paymentMethod,
         order_type: orderType,
-        total: parseFloat(document.getElementById('total').textContent.replace('₱', ''))
+        total: total
     };
 
-    fetch('process_order.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(orderData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Clear cart first
-                cart = [];
-                updateCart();
-                
-                // Show success popup
-                showSuccessPopup('Order #' + orderNumber);
-            } else {
-                showErrorPopup(data.message || 'Failed to process order');
-            }
-        })
-        .catch(error => {
-            showErrorPopup('Error processing order. Please try again.');
-            console.error(error);
-        });
+    submitOrder(orderData);
 }
 
 // Show success popup
@@ -358,4 +344,106 @@ function closeErrorPopup() {
     const popup = document.getElementById('error-popup');
     popup.classList.remove('flex');
     popup.classList.add('hidden');
+}
+
+// Show GCash payment modal
+function showGCashPaymentModal(amount) {
+    const modal = document.getElementById('gcash-payment-modal');
+    const amountDisplay = document.getElementById('gcash-amount');
+    const amountInstruction = document.getElementById('gcash-amount-instruction');
+    const paidAmountInput = document.getElementById('gcash-paid-amount');
+    
+    // Set the amount to pay
+    amountDisplay.textContent = formatPHP(amount);
+    amountInstruction.textContent = formatPHP(amount);
+    
+    // Clear previous input
+    paidAmountInput.value = '';
+    
+    // Show modal
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+// Close GCash payment modal
+function closeGCashModal() {
+    const modal = document.getElementById('gcash-payment-modal');
+    modal.classList.remove('flex');
+    modal.classList.add('hidden');
+    
+    // Clear inputs
+    document.getElementById('gcash-paid-amount').value = '';
+    document.getElementById('gcash-reference-number').value = '';
+}
+
+// Verify GCash payment
+function verifyGCashPayment() {
+    const total = parseFloat(document.getElementById('total').textContent.replace('₱', ''));
+    const paidAmount = parseFloat(document.getElementById('gcash-paid-amount').value);
+    const referenceNumber = document.getElementById('gcash-reference-number').value.trim();
+    
+    // Validate amount input
+    if (!paidAmount || paidAmount <= 0) {
+        showErrorPopup('Please enter the amount paid by the customer.');
+        return;
+    }
+    
+    // Validate reference number
+    if (!referenceNumber) {
+        showErrorPopup('Please enter the GCash reference number.');
+        return;
+    }
+    
+    // Check if payment is sufficient
+    if (paidAmount < total) {
+        showErrorPopup(`Insufficient payment. Required: ${formatPHP(total)}, Received: ${formatPHP(paidAmount)}`);
+        return;
+    }
+    
+    // Payment verified, process the order
+    closeGCashModal();
+    
+    const paymentMethod = document.getElementById('payment-method').value;
+    const orderType = document.getElementById('order-type').value;
+    const orderNumber = document.getElementById('order-number').textContent;
+
+    const orderData = {
+        order_number: orderNumber,
+        items: cart,
+        payment_method: paymentMethod,
+        order_type: orderType,
+        total: total,
+        amount_paid: paidAmount,
+        reference_number: referenceNumber
+    };
+
+    submitOrder(orderData);
+}
+
+// Submit order to backend
+function submitOrder(orderData) {
+    fetch('process_order.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Clear cart first
+                cart = [];
+                updateCart();
+                
+                // Show success popup
+                showSuccessPopup('Order #' + orderData.order_number);
+            } else {
+                showErrorPopup(data.message || 'Failed to process order');
+            }
+        })
+        .catch(error => {
+            showErrorPopup('Error processing order. Please try again.');
+            console.error(error);
+        });
 }

@@ -181,3 +181,28 @@
         transform: scale(1);
     }
 }
+
+/* GCash Payment Modal Styles */
+#gcash-payment-modal input[type="number"]::-webkit-inner-spin-button,
+#gcash-payment-modal input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#gcash-payment-modal input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* QR Code scanning animation */
+@keyframes qrScan {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 125, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(0, 125, 255, 0.6);
+    }
+}
+
+#gcash-payment-modal .border-blue-500 {
+    animation: qrScan 2s ease-in-out infinite;
+}

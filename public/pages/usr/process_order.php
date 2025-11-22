@@ -19,10 +19,16 @@ $conn = $db->getConnection();
 try {
     $conn->beginTransaction();
 
+    // Get amount paid (for GCash payments)
+    $amount_paid = isset($input['amount_paid']) ? $input['amount_paid'] : $input['total'];
+
+    // Get reference number (for GCash/online payments)
+    $reference_number = isset($input['reference_number']) ? $input['reference_number'] : null;
+
     // Insert order
     $stmt = $conn->prepare("
-        INSERT INTO orders (order_number, employee_id, total_amount, payment_method, order_type, status) 
-        VALUES (:order_number, :employee_id, :total_amount, :payment_method, :order_type, 'pending')
+        INSERT INTO orders (order_number, employee_id, total_amount, payment_method, reference_number, order_type, status) 
+        VALUES (:order_number, :employee_id, :total_amount, :payment_method, :reference_number, :order_type, 'pending')
     ");
 
     $stmt->execute([
@@ -30,6 +36,7 @@ try {
         'employee_id' => $_SESSION['user_id'],
         'total_amount' => $input['total'],
         'payment_method' => $input['payment_method'],
+        'reference_number' => $reference_number,
         'order_type' => $input['order_type']
     ]);
 
