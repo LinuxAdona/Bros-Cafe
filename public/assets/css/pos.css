@@ -1,0 +1,208 @@
+/* Modal Animations */
+@keyframes modal-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.animate-modal {
+    animation: modal-appear 0.3s ease-out;
+}
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+/* POS Sidebar Collapse - Override admin.css for POS specific behavior */
+#sidebar {
+    flex-shrink: 0;
+    width: 16rem; /* 256px */
+}
+
+#sidebar.sidebar-collapsed {
+    width: 5rem; /* 80px - enough for icons */
+}
+
+/* Add transition only after page load */
+#sidebar.sidebar-ready {
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#sidebar.sidebar-collapsed .sidebar-text,
+#sidebar.sidebar-collapsed .sidebar-logo-text {
+    display: none;
+}
+
+#sidebar .sidebar-text,
+#sidebar .sidebar-logo-text {
+    display: inline-block;
+}
+
+#sidebar.sidebar-collapsed .sidebar-logo {
+    justify-content: center;
+}
+
+#sidebar.sidebar-collapsed .logo-content {
+    display: none;
+}
+
+#sidebar.sidebar-collapsed .toggle-btn-collapsed {
+    display: flex;
+}
+
+#sidebar .toggle-btn-collapsed {
+    display: none;
+}
+
+#sidebar.sidebar-collapsed .toggle-btn-expanded {
+    display: none;
+}
+
+#sidebar .toggle-btn-expanded {
+    display: flex;
+}
+
+#sidebar.sidebar-collapsed nav ul li a {
+    justify-content: center;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+#sidebar.sidebar-collapsed .user-info {
+    justify-content: center;
+}
+
+#sidebar.sidebar-collapsed .user-info > div {
+    display: none;
+}
+
+/* Tooltip for collapsed state */
+#sidebar.sidebar-collapsed [data-tooltip] {
+    position: relative;
+}
+
+#sidebar.sidebar-collapsed [data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background-color: #1f2937;
+    color: white;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Cart Animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+#cart-section {
+    flex-shrink: 0;
+    transform: translateX(0);
+    margin-right: 0;
+    opacity: 1;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.4s ease-out,
+                margin-right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#cart-section.cart-hidden {
+    transform: translateX(100%);
+    margin-right: -384px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Cart button in header - always visible */
+.header-cart-btn {
+    position: relative;
+    z-index: 100;
+}
+
+/* Fade animations for smooth transitions */
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Badge pulse animation */
+#cart-badge {
+    animation: badgePulse 0.5s ease-out;
+}
+
+@keyframes badgePulse {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* GCash Payment Modal Styles */
+#gcash-payment-modal input[type="number"]::-webkit-inner-spin-button,
+#gcash-payment-modal input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#gcash-payment-modal input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* QR Code scanning animation */
+@keyframes qrScan {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 125, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(0, 125, 255, 0.6);
+    }
+}
+
+#gcash-payment-modal .border-blue-500 {
+    animation: qrScan 2s ease-in-out infinite;
+}

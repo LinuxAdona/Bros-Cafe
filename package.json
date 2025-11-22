@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "dev": "browser-sync start --proxy 'localhost/Bros-Cafe/index.php' --files '/opt/lampp/htdocs/Bros-Cafe/**/**'"
+  }
+}
