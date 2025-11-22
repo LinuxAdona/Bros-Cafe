@@ -260,15 +260,34 @@ function removeFromCart(index) {
 
 // Clear cart
 function clearCart() {
+    // Show modal confirmation instead of native confirm()
     if (cart.length === 0) {
         showErrorPopup('Cart is already empty!');
         return;
     }
-    
-    if (confirm('Clear all items from cart?')) {
-        cart = [];
-        updateCart();
-    }
+    showClearCartModal();
+}
+
+// Show the clear-cart modal
+function showClearCartModal() {
+    const modal = document.getElementById('clear-cart-modal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeClearCartModal() {
+    const modal = document.getElementById('clear-cart-modal');
+    if (!modal) return;
+    modal.classList.remove('flex');
+    modal.classList.add('hidden');
+}
+
+function confirmClearCart() {
+    // Perform the clear action
+    cart = [];
+    updateCart();
+    closeClearCartModal();
 }
 
 // Format currency

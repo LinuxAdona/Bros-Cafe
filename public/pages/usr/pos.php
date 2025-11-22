@@ -459,6 +459,35 @@ $current_user = getCurrentUser();
         </div>
     </div>
 
+    <!-- Clear Cart Confirmation Modal -->
+    <div id="clear-cart-modal" class="fixed inset-0 z-150 items-center justify-center hidden modal-backdrop">
+        <div class="w-full max-w-md mx-4 bg-white shadow-2xl rounded-2xl animate-modal">
+            <div class="p-6 text-center border-b border-gray-200"
+                style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">
+                <div class="flex justify-center mb-2">
+                    <div class="flex items-center justify-center w-16 h-16 bg-white rounded-full">
+                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V4a1 1 0 011-1h6a1 1 0 011 1v3" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-white">Clear Cart</h3>
+            </div>
+            <div class="p-6 text-center">
+                <p class="mb-4 text-gray-700">Are you sure you want to remove all items from the cart? This action
+                    cannot be undone.</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="closeClearCartModal()"
+                        class="py-3 px-4 font-semibold text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">Cancel</button>
+                    <button id="confirm-clear-cart-btn" onclick="confirmClearCart()"
+                        class="py-3 px-4 font-semibold text-white rounded-lg"
+                        style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">Clear Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Cash Confirmation Modal -->
     <div id="cash-confirm-modal" class="fixed inset-0 z-100 items-center justify-center hidden modal-backdrop">
         <div class="w-full max-w-2xl mx-4 bg-white shadow-2xl rounded-2xl animate-modal max-h-[90vh] overflow-y-auto">
