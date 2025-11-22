@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 21, 2025 at 06:52 AM
+-- Generation Time: Nov 22, 2025 at 09:54 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -66,17 +66,17 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`id`, `product_id`, `quantity`, `unit`, `reorder_level`, `last_restocked`, `updated_at`) VALUES
-(1, 1, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(2, 2, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
+(1, 1, 98, 'servings', 20, NULL, '2025-11-22 06:40:42'),
+(2, 2, 99, 'servings', 20, NULL, '2025-11-22 06:40:42'),
 (3, 3, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(4, 4, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(5, 5, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(6, 6, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
+(4, 4, 99, 'servings', 20, NULL, '2025-11-22 05:06:23'),
+(5, 5, 98, 'servings', 20, NULL, '2025-11-22 06:48:18'),
+(6, 6, 96, 'servings', 20, NULL, '2025-11-22 06:58:08'),
 (7, 7, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
 (8, 8, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
 (9, 9, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(10, 10, 100, 'servings', 20, NULL, '2025-11-21 05:47:15'),
-(16, 11, 100, 'servings', 20, NULL, '2025-11-20 12:26:24'),
+(10, 10, 98, 'servings', 20, NULL, '2025-11-22 07:25:55'),
+(16, 11, 99, 'servings', 20, NULL, '2025-11-22 02:20:38'),
 (17, 12, 100, 'servings', 20, NULL, '2025-11-20 12:26:24'),
 (18, 13, 100, 'servings', 20, NULL, '2025-11-20 12:26:24');
 
@@ -132,7 +132,20 @@ INSERT INTO `inventory_transactions` (`id`, `product_id`, `transaction_type`, `q
 (94, 10, 'sale', -29, 1, NULL, '2025-11-16 03:08:35'),
 (95, 10, 'sale', -42, 1, NULL, '2025-11-16 03:09:00'),
 (96, 10, 'restock', 30, 1, '', '2025-11-16 03:10:09'),
-(97, 10, 'restock', 10, 1, '', '2025-11-16 03:10:35');
+(97, 10, 'restock', 10, 1, '', '2025-11-16 03:10:35'),
+(98, 6, 'sale', -1, 1, NULL, '2025-11-21 06:16:56'),
+(99, 6, 'sale', -1, 1, NULL, '2025-11-22 02:20:25'),
+(100, 11, 'sale', -1, 1, NULL, '2025-11-22 02:20:38'),
+(101, 1, 'sale', -1, 1, NULL, '2025-11-22 02:20:38'),
+(102, 4, 'sale', -1, 1, NULL, '2025-11-22 05:06:23'),
+(103, 10, 'sale', -1, 1, NULL, '2025-11-22 06:37:54'),
+(104, 5, 'sale', -1, 1, NULL, '2025-11-22 06:37:54'),
+(105, 2, 'sale', -1, 1, NULL, '2025-11-22 06:40:42'),
+(106, 1, 'sale', -1, 1, NULL, '2025-11-22 06:40:42'),
+(107, 6, 'sale', -1, 1, NULL, '2025-11-22 06:43:25'),
+(108, 5, 'sale', -1, 1, NULL, '2025-11-22 06:48:18'),
+(109, 6, 'sale', -1, 1, NULL, '2025-11-22 06:58:08'),
+(110, 10, 'sale', -1, 1, NULL, '2025-11-22 07:25:55');
 
 -- --------------------------------------------------------
 
@@ -147,6 +160,7 @@ CREATE TABLE `orders` (
   `employee_id` int(11) DEFAULT NULL,
   `total_amount` decimal(10,2) NOT NULL,
   `payment_method` enum('cash','card','gcash','other') DEFAULT 'cash',
+  `reference_number` varchar(100) DEFAULT NULL,
   `status` enum('pending','preparing','ready','completed','cancelled') DEFAULT 'pending',
   `order_type` enum('dine-in','takeout','delivery') DEFAULT 'dine-in',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -157,26 +171,35 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `order_number`, `customer_id`, `employee_id`, `total_amount`, `payment_method`, `status`, `order_type`, `created_at`, `updated_at`) VALUES
-(1, 'ORD-20251121-33E1CC', NULL, 1, 150.00, 'cash', 'pending', 'dine-in', '2025-11-21 05:40:08', '2025-11-21 05:40:08'),
-(2, 'ORD-20251112-E4BAFF', NULL, 1, 300.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:24:05', '2025-11-12 01:24:05'),
-(3, 'ORD-20251112-DA2C4E', NULL, 1, 390.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:24:38', '2025-11-12 01:24:38'),
-(4, 'ORD-20251112-8D570D', NULL, 1, 340.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:24:52', '2025-11-12 01:24:52'),
-(5, 'ORD-20251112-6253B8', NULL, 1, 200.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:24:59', '2025-11-12 01:24:59'),
-(6, 'ORD-20251112-09E8F3', NULL, 1, 550.00, 'cash', 'pending', 'takeout', '2025-11-12 01:25:49', '2025-11-12 01:25:49'),
-(7, 'ORD-20251112-7C8D5D', NULL, 1, 290.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:39:07', '2025-11-12 01:39:07'),
-(8, 'ORD-20251112-70218A', NULL, 1, 100.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:45:43', '2025-11-12 01:45:43'),
-(9, 'ORD-20251112-8C6675', NULL, 1, 550.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:46:01', '2025-11-12 01:46:01'),
-(10, 'ORD-20251112-BBC41B', NULL, 1, 1220.00, 'cash', 'pending', 'dine-in', '2025-11-12 01:46:30', '2025-11-12 01:46:30'),
-(11, 'ORD-20251113-B33D36', NULL, 1, 370.00, 'cash', 'pending', 'dine-in', '2025-11-12 23:53:39', '2025-11-12 23:53:39'),
-(12, 'ORD-20251116-94FFD2', NULL, 1, 150.00, 'cash', 'completed', 'dine-in', '2025-11-16 02:30:37', '2025-11-16 02:47:13'),
-(13, 'ORD-20251116-D9BB7B', NULL, 1, 180.00, 'cash', 'completed', 'dine-in', '2025-11-16 02:34:24', '2025-11-16 02:47:08'),
-(14, 'ORD-20251116-E2BCCF', NULL, 1, 3150.00, 'cash', 'completed', 'dine-in', '2025-11-16 02:43:55', '2025-11-16 02:46:38'),
-(15, 'ORD-20251116-5B62BD', NULL, 1, 100.00, 'cash', 'completed', 'dine-in', '2025-11-16 02:52:32', '2025-11-16 03:01:56'),
-(16, 'ORD-20251116-237AC7', NULL, 1, 100.00, 'cash', 'completed', 'dine-in', '2025-11-16 02:52:40', '2025-11-16 03:01:44'),
-(17, 'ORD-20251116-60A095', NULL, 1, 3000.00, 'cash', 'completed', 'dine-in', '2025-11-16 03:07:10', '2025-11-16 03:07:27'),
-(18, 'ORD-20251116-E28F83', NULL, 1, 4350.00, 'cash', 'pending', 'dine-in', '2025-11-16 03:08:35', '2025-11-16 03:08:35'),
-(19, 'ORD-20251116-E681F0', NULL, 1, 6300.00, 'cash', 'pending', 'dine-in', '2025-11-16 03:09:00', '2025-11-16 03:09:00');
+INSERT INTO `orders` (`id`, `order_number`, `customer_id`, `employee_id`, `total_amount`, `payment_method`, `reference_number`, `status`, `order_type`, `created_at`, `updated_at`) VALUES
+(1, 'ORD-20251121-33E1CC', NULL, 1, 150.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-21 05:40:08', '2025-11-21 05:40:08'),
+(2, 'ORD-20251112-E4BAFF', NULL, 1, 300.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-12 01:24:05', '2025-11-12 01:24:05'),
+(3, 'ORD-20251112-DA2C4E', NULL, 1, 390.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-12 01:24:38', '2025-11-12 01:24:38'),
+(4, 'ORD-20251112-8D570D', NULL, 1, 340.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-12 01:24:52', '2025-11-12 01:24:52'),
+(5, 'ORD-20251112-6253B8', NULL, 1, 200.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-12 01:24:59', '2025-11-12 01:24:59'),
+(6, 'ORD-20251112-09E8F3', NULL, 1, 550.00, 'cash', NULL, 'pending', 'takeout', '2025-11-12 01:25:49', '2025-11-12 01:25:49'),
+(7, 'ORD-20251112-7C8D5D', NULL, 1, 290.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-12 01:39:07', '2025-11-12 01:39:07'),
+(8, 'ORD-20251112-70218A', NULL, 1, 100.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-12 01:45:43', '2025-11-12 01:45:43'),
+(9, 'ORD-20251112-8C6675', NULL, 1, 550.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-12 01:46:01', '2025-11-12 01:46:01'),
+(10, 'ORD-20251112-BBC41B', NULL, 1, 1220.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-12 01:46:30', '2025-11-12 01:46:30'),
+(11, 'ORD-20251113-B33D36', NULL, 1, 370.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-12 23:53:39', '2025-11-12 23:53:39'),
+(12, 'ORD-20251116-94FFD2', NULL, 1, 150.00, 'cash', NULL, 'completed', 'dine-in', '2025-11-16 02:30:37', '2025-11-16 02:47:13'),
+(13, 'ORD-20251116-D9BB7B', NULL, 1, 180.00, 'cash', NULL, 'completed', 'dine-in', '2025-11-16 02:34:24', '2025-11-16 02:47:08'),
+(14, 'ORD-20251116-E2BCCF', NULL, 1, 3150.00, 'cash', NULL, 'completed', 'dine-in', '2025-11-16 02:43:55', '2025-11-16 02:46:38'),
+(15, 'ORD-20251116-5B62BD', NULL, 1, 100.00, 'cash', NULL, 'completed', 'dine-in', '2025-11-16 02:52:32', '2025-11-16 03:01:56'),
+(16, 'ORD-20251116-237AC7', NULL, 1, 100.00, 'cash', NULL, 'completed', 'dine-in', '2025-11-16 02:52:40', '2025-11-16 03:01:44'),
+(17, 'ORD-20251116-60A095', NULL, 1, 3000.00, 'cash', NULL, 'completed', 'dine-in', '2025-11-16 03:07:10', '2025-11-16 03:07:27'),
+(18, 'ORD-20251116-E28F83', NULL, 1, 4350.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-16 03:08:35', '2025-11-16 03:08:35'),
+(19, 'ORD-20251116-E681F0', NULL, 1, 6300.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-16 03:09:00', '2025-11-16 03:09:00'),
+(20, 'ORD-20251121-3B502E', NULL, 1, 120.00, 'cash', NULL, 'pending', 'takeout', '2025-11-21 06:16:56', '2025-11-21 06:16:56'),
+(21, 'ORD-20251122-25937D', NULL, 1, 100.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-22 02:20:25', '2025-11-22 02:20:25'),
+(22, 'ORD-20251122-D3FB77', NULL, 1, 250.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-22 02:20:38', '2025-11-22 02:20:38'),
+(23, 'ORD-20251122-712530', NULL, 1, 130.00, 'cash', NULL, 'completed', 'dine-in', '2025-11-22 05:06:23', '2025-11-22 06:32:29'),
+(24, 'ORD-20251122-A5E4DF', NULL, 1, 230.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-22 06:37:54', '2025-11-22 06:37:54'),
+(25, 'ORD-20251122-5E7125', NULL, 1, 260.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-22 06:40:42', '2025-11-22 06:40:42'),
+(26, 'ORD-20251122-0E4F78', NULL, 1, 100.00, 'gcash', '7034629323329', 'pending', 'dine-in', '2025-11-22 06:43:25', '2025-11-22 06:43:25'),
+(28, 'ORD-20251122-EE0233', NULL, 1, 100.00, 'gcash', '1234567891011', 'pending', 'dine-in', '2025-11-22 06:58:08', '2025-11-22 06:58:08'),
+(29, 'ORD-20251122-BCCBC7', NULL, 1, 150.00, 'cash', NULL, 'pending', 'dine-in', '2025-11-22 07:25:55', '2025-11-22 07:25:55');
 
 -- --------------------------------------------------------
 
@@ -230,7 +253,19 @@ INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `size`, `quantity`, `
 (29, 15, 9, 'dodici', 1, 100.00, 100.00),
 (30, 16, 4, 'sedici', 20, 150.00, 3000.00),
 (31, 17, 10, 'dodici', 29, 150.00, 4350.00),
-(32, 18, 10, 'dodici', 42, 150.00, 6300.00);
+(32, 18, 10, 'dodici', 42, 150.00, 6300.00),
+(33, 20, 6, 'sedici', 1, 120.00, 120.00),
+(34, 21, 6, 'dodici', 1, 100.00, 100.00),
+(35, 22, 11, 'dodici', 1, 130.00, 130.00),
+(36, 22, 1, 'dodici', 1, 120.00, 120.00),
+(37, 23, 4, 'dodici', 1, 130.00, 130.00),
+(38, 24, 10, 'dodici', 1, 150.00, 150.00),
+(39, 24, 5, 'dodici', 1, 80.00, 80.00),
+(40, 25, 2, 'sedici', 1, 140.00, 140.00),
+(41, 25, 1, 'dodici', 1, 120.00, 120.00),
+(42, 26, 6, 'dodici', 1, 100.00, 100.00),
+(44, 28, 6, 'dodici', 1, 100.00, 100.00),
+(45, 29, 10, 'dodici', 1, 150.00, 150.00);
 
 -- --------------------------------------------------------
 
@@ -301,10 +336,11 @@ CREATE TABLE `sales_summary` (
 --
 
 INSERT INTO `sales_summary` (`id`, `date`, `total_orders`, `total_revenue`, `total_items_sold`, `created_at`) VALUES
-(1, '2025-11-21', 1, 150.00, 1, '2025-11-21 05:40:08'),
+(1, '2025-11-21', 2, 270.00, 2, '2025-11-21 05:40:08'),
 (2, '2025-11-12', 9, 3940.00, 30, '2025-11-12 01:24:05'),
 (3, '2025-11-13', 1, 370.00, 3, '2025-11-12 23:53:40'),
-(4, '2025-11-16', 8, 17330.00, 116, '2025-11-16 02:30:37');
+(4, '2025-11-16', 8, 17330.00, 116, '2025-11-16 02:30:37'),
+(5, '2025-11-22', 9, 1400.00, 12, '2025-11-22 02:20:25');
 
 -- --------------------------------------------------------
 
@@ -440,19 +476,19 @@ ALTER TABLE `inventory`
 -- AUTO_INCREMENT for table `inventory_transactions`
 --
 ALTER TABLE `inventory_transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -464,7 +500,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `sales_summary`
 --
 ALTER TABLE `sales_summary`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `shifts`
