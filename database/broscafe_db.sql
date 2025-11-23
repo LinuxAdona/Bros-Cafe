@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 22, 2025 at 09:54 AM
+-- Generation Time: Nov 23, 2025 at 06:05 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -48,12 +48,28 @@ INSERT INTO `categories` (`id`, `name`, `description`, `created_at`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ingredients`
+--
+
+CREATE TABLE `ingredients` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `inventory`
 --
 
 CREATE TABLE `inventory` (
   `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
+  `ingredient_id` int(11) DEFAULT NULL,
   `quantity` int(11) NOT NULL DEFAULT 0,
   `unit` varchar(20) DEFAULT NULL,
   `reorder_level` int(11) DEFAULT 10,
@@ -65,20 +81,20 @@ CREATE TABLE `inventory` (
 -- Dumping data for table `inventory`
 --
 
-INSERT INTO `inventory` (`id`, `product_id`, `quantity`, `unit`, `reorder_level`, `last_restocked`, `updated_at`) VALUES
-(1, 1, 98, 'servings', 20, NULL, '2025-11-22 06:40:42'),
-(2, 2, 99, 'servings', 20, NULL, '2025-11-22 06:40:42'),
-(3, 3, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(4, 4, 99, 'servings', 20, NULL, '2025-11-22 05:06:23'),
-(5, 5, 98, 'servings', 20, NULL, '2025-11-22 06:48:18'),
-(6, 6, 96, 'servings', 20, NULL, '2025-11-22 06:58:08'),
-(7, 7, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(8, 8, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(9, 9, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(10, 10, 98, 'servings', 20, NULL, '2025-11-22 07:25:55'),
-(16, 11, 99, 'servings', 20, NULL, '2025-11-22 02:20:38'),
-(17, 12, 100, 'servings', 20, NULL, '2025-11-20 12:26:24'),
-(18, 13, 100, 'servings', 20, NULL, '2025-11-20 12:26:24');
+INSERT INTO `inventory` (`id`, `product_id`, `ingredient_id`, `quantity`, `unit`, `reorder_level`, `last_restocked`, `updated_at`) VALUES
+(1, 1, NULL, 98, 'servings', 20, NULL, '2025-11-22 06:40:42'),
+(2, 2, NULL, 99, 'servings', 20, NULL, '2025-11-22 06:40:42'),
+(3, 3, NULL, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
+(4, 4, NULL, 99, 'servings', 20, NULL, '2025-11-22 05:06:23'),
+(5, 5, NULL, 98, 'servings', 20, NULL, '2025-11-22 06:48:18'),
+(6, 6, NULL, 96, 'servings', 20, NULL, '2025-11-22 06:58:08'),
+(7, 7, NULL, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
+(8, 8, NULL, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
+(9, 9, NULL, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
+(10, 10, NULL, 98, 'servings', 20, NULL, '2025-11-22 07:25:55'),
+(16, 11, NULL, 99, 'servings', 20, NULL, '2025-11-22 02:20:38'),
+(17, 12, NULL, 100, 'servings', 20, NULL, '2025-11-20 12:26:24'),
+(18, 13, NULL, 100, 'servings', 20, NULL, '2025-11-20 12:26:24');
 
 -- --------------------------------------------------------
 
@@ -319,6 +335,18 @@ INSERT INTO `products` (`id`, `category_id`, `name`, `description`, `price_dodic
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product_ingredients`
+--
+
+CREATE TABLE `product_ingredients` (
+  `product_id` int(11) NOT NULL,
+  `ingredient_id` int(11) NOT NULL,
+  `quantity` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sales_summary`
 --
 
@@ -341,22 +369,6 @@ INSERT INTO `sales_summary` (`id`, `date`, `total_orders`, `total_revenue`, `tot
 (3, '2025-11-13', 1, 370.00, 3, '2025-11-12 23:53:40'),
 (4, '2025-11-16', 8, 17330.00, 116, '2025-11-16 02:30:37'),
 (5, '2025-11-22', 9, 1400.00, 12, '2025-11-22 02:20:25');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `shifts`
---
-
-CREATE TABLE `shifts` (
-  `id` int(11) NOT NULL,
-  `employee_id` int(11) NOT NULL,
-  `shift_date` date NOT NULL,
-  `clock_in` timestamp NULL DEFAULT NULL,
-  `clock_out` timestamp NULL DEFAULT NULL,
-  `total_hours` decimal(5,2) DEFAULT NULL,
-  `status` enum('scheduled','ongoing','completed') DEFAULT 'scheduled'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -393,6 +405,12 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `full_name`, `role`,
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ingredients`
+--
+ALTER TABLE `ingredients`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -435,18 +453,18 @@ ALTER TABLE `products`
   ADD KEY `category_id` (`category_id`);
 
 --
+-- Indexes for table `product_ingredients`
+--
+ALTER TABLE `product_ingredients`
+  ADD PRIMARY KEY (`product_id`,`ingredient_id`),
+  ADD KEY `ingredient_id` (`ingredient_id`);
+
+--
 -- Indexes for table `sales_summary`
 --
 ALTER TABLE `sales_summary`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `date` (`date`);
-
---
--- Indexes for table `shifts`
---
-ALTER TABLE `shifts`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `employee_id` (`employee_id`);
 
 --
 -- Indexes for table `users`
@@ -465,6 +483,12 @@ ALTER TABLE `users`
 --
 ALTER TABLE `categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `ingredients`
+--
+ALTER TABLE `ingredients`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `inventory`
@@ -501,12 +525,6 @@ ALTER TABLE `products`
 --
 ALTER TABLE `sales_summary`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `shifts`
---
-ALTER TABLE `shifts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -552,10 +570,11 @@ ALTER TABLE `products`
   ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL;
 
 --
--- Constraints for table `shifts`
+-- Constraints for table `product_ingredients`
 --
-ALTER TABLE `shifts`
-  ADD CONSTRAINT `shifts_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+ALTER TABLE `product_ingredients`
+  ADD CONSTRAINT `product_ingredients_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
+  ADD CONSTRAINT `product_ingredients_ibfk_2` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredients` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
