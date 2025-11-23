@@ -43,14 +43,19 @@ function searchProducts() {
 // Cart toggle with animation
 function toggleCart() {
     const cartSection = document.getElementById('cart-section');
+    const cartToggleBtn = document.getElementById('cart-toggle-btn');
     
     if (isCartVisible) {
         cartSection.classList.add('cart-hidden');
         isCartVisible = false;
+        // Move button to right when cart is closed
+        cartToggleBtn.style.right = '2rem'; // 32px
         updateCartBadge();
     } else {
         cartSection.classList.remove('cart-hidden');
         isCartVisible = true;
+        // Move button to left of cart when cart is open (416px = 384px cart width + 32px spacing)
+        cartToggleBtn.style.right = '416px';
         updateCartBadge();
     }
 }
