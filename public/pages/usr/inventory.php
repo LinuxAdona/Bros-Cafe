@@ -9,7 +9,7 @@ $conn = $db->getConnection();
 
 // Get all ingredients with inventory
 $stmt = $conn->query("
-    SELECT pi.*, c.name as category_name, i.quantity, i.reorder_level, i.last_restocked, i.unit
+    SELECT DISTINCT pi.*, i.quantity, i.reorder_level, i.last_restocked, i.unit
     FROM ingredients pi
     LEFT JOIN product_ingredients pii ON pi.id = pii.ingredient_id 
     LEFT JOIN products p ON pii.product_id = p.id 
@@ -445,7 +445,7 @@ $current_user = getCurrentUser();
                     </div>
                 <?php endif; ?>
 
-                <!-- Products Table -->
+                <!-- Inventory Table -->
                 <div class="overflow-hidden bg-white rounded-lg shadow">
                     <div class="px-6 py-4 border-b border-gray-200">
                         <div class="flex items-center justify-between">
@@ -471,9 +471,6 @@ $current_user = getCurrentUser();
                                         Product</th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                        Category</th>
-                                    <th
-                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Stock</th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
@@ -495,9 +492,6 @@ $current_user = getCurrentUser();
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-medium text-gray-900"><?php echo $product['name']; ?>
                                             </div>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                                            <?php echo $product['category_name']; ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">
