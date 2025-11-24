@@ -14,3 +14,4 @@ node_modules/
 
 # Formatter Configs
 .php-cs-fixer.php
+.php-cs-fixer.cache
