@@ -11,3 +11,6 @@ node_modules/
 # Environment files
 .env
 .env.local
+
+# Formatter Configs
+.php-cs-fixer.php
