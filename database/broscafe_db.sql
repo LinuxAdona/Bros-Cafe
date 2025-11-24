@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 23, 2025 at 06:05 PM
+-- Generation Time: Nov 24, 2025 at 07:50 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -60,6 +60,30 @@ CREATE TABLE `ingredients` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `ingredients`
+--
+
+INSERT INTO `ingredients` (`id`, `name`, `description`, `price`, `created_at`, `updated_at`) VALUES
+(1, 'Espresso Shot', 'Strong concentrated coffee', 25.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(2, 'Milk', 'Fresh whole milk', 15.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(3, 'Sea Salt Cream', 'Cream mixed with sea salt', 20.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(4, 'Water', 'Filtered water', 0.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(5, 'Banana Syrup', 'Banana flavored syrup', 18.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(6, 'Matcha Powder', 'Premium green tea powder', 22.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(7, 'Blueberry Syrup', 'Sweet blueberry syrup', 18.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(8, 'Lemon Juice', 'Fresh lemon juice', 10.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(9, 'Caramel Syrup', 'Rich caramel sauce', 20.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(10, 'Hibiscus Tea Base', 'Brewed hibiscus tea', 12.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(11, 'Chocolate Chips', 'Java chip chocolate bits', 20.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(12, 'Chocolate Sauce', 'Sweet chocolate syrup', 20.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(13, 'Mango Puree', 'Fresh mango blended puree', 25.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(14, 'Sugar Syrup', 'Simple sugar syrup', 5.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(15, 'Taro Powder', 'Purple taro flavor powder', 18.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(16, 'White Chocolate Syrup', 'Sweet white chocolate sauce', 22.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(17, 'Coffee Base', 'Brewed coffee for lattes', 15.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07'),
+(18, 'Cream', 'Cream for toppings', 15.00, '2025-11-24 05:44:07', '2025-11-24 05:44:07');
+
 -- --------------------------------------------------------
 
 --
@@ -68,7 +92,6 @@ CREATE TABLE `ingredients` (
 
 CREATE TABLE `inventory` (
   `id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
   `ingredient_id` int(11) DEFAULT NULL,
   `quantity` int(11) NOT NULL DEFAULT 0,
   `unit` varchar(20) DEFAULT NULL,
@@ -81,20 +104,25 @@ CREATE TABLE `inventory` (
 -- Dumping data for table `inventory`
 --
 
-INSERT INTO `inventory` (`id`, `product_id`, `ingredient_id`, `quantity`, `unit`, `reorder_level`, `last_restocked`, `updated_at`) VALUES
-(1, 1, NULL, 98, 'servings', 20, NULL, '2025-11-22 06:40:42'),
-(2, 2, NULL, 99, 'servings', 20, NULL, '2025-11-22 06:40:42'),
-(3, 3, NULL, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(4, 4, NULL, 99, 'servings', 20, NULL, '2025-11-22 05:06:23'),
-(5, 5, NULL, 98, 'servings', 20, NULL, '2025-11-22 06:48:18'),
-(6, 6, NULL, 96, 'servings', 20, NULL, '2025-11-22 06:58:08'),
-(7, 7, NULL, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(8, 8, NULL, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(9, 9, NULL, 100, 'servings', 20, NULL, '2025-11-05 05:51:32'),
-(10, 10, NULL, 98, 'servings', 20, NULL, '2025-11-22 07:25:55'),
-(16, 11, NULL, 99, 'servings', 20, NULL, '2025-11-22 02:20:38'),
-(17, 12, NULL, 100, 'servings', 20, NULL, '2025-11-20 12:26:24'),
-(18, 13, NULL, 100, 'servings', 20, NULL, '2025-11-20 12:26:24');
+INSERT INTO `inventory` (`id`, `ingredient_id`, `quantity`, `unit`, `reorder_level`, `last_restocked`, `updated_at`) VALUES
+(1, 1, 5000, 'ml', 500, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(2, 2, 10000, 'ml', 1000, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(3, 3, 2000, 'g', 200, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(4, 4, 5000, 'ml', 500, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(5, 5, 1500, 'g', 150, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(6, 6, 800, 'g', 100, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(7, 7, 1200, 'g', 100, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(8, 8, 500, 'ml', 50, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(9, 9, 1000, 'g', 100, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(10, 10, 2000, 'ml', 200, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(11, 11, 500, 'g', 50, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(12, 12, 1000, 'g', 100, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(13, 13, 1500, 'g', 150, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(14, 14, 2000, 'g', 200, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(15, 15, 800, 'g', 100, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(16, 16, 500, 'g', 50, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(17, 17, 2000, 'ml', 200, '2025-11-24 06:01:25', '2025-11-24 06:01:25'),
+(18, 18, 1000, 'ml', 100, '2025-11-24 06:01:25', '2025-11-24 06:01:25');
 
 -- --------------------------------------------------------
 
@@ -104,7 +132,7 @@ INSERT INTO `inventory` (`id`, `product_id`, `ingredient_id`, `quantity`, `unit`
 
 CREATE TABLE `inventory_transactions` (
   `id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
+  `ingredient_id` int(11) NOT NULL,
   `transaction_type` enum('restock','sale','adjustment','waste') NOT NULL,
   `quantity` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
@@ -116,52 +144,23 @@ CREATE TABLE `inventory_transactions` (
 -- Dumping data for table `inventory_transactions`
 --
 
-INSERT INTO `inventory_transactions` (`id`, `product_id`, `transaction_type`, `quantity`, `user_id`, `notes`, `created_at`) VALUES
-(1, 10, 'sale', -1, 1, NULL, '2025-11-21 05:40:08'),
-(67, 6, 'sale', -1, 1, NULL, '2025-11-12 01:24:38'),
-(68, 1, 'sale', -1, 1, NULL, '2025-11-12 01:24:38'),
-(69, 9, 'sale', -1, 1, NULL, '2025-11-12 01:24:52'),
-(70, 3, 'sale', -2, 1, NULL, '2025-11-12 01:24:52'),
-(71, 9, 'sale', -2, 1, NULL, '2025-11-12 01:24:59'),
-(72, 9, 'sale', -1, 1, NULL, '2025-11-12 01:25:49'),
-(73, 4, 'sale', -1, 1, NULL, '2025-11-12 01:25:49'),
-(74, 8, 'sale', -1, 1, NULL, '2025-11-12 01:25:49'),
-(75, 2, 'sale', -1, 1, NULL, '2025-11-12 01:25:49'),
-(76, 10, 'sale', -1, 1, NULL, '2025-11-12 01:39:07'),
-(77, 3, 'sale', -1, 1, NULL, '2025-11-12 01:39:07'),
-(78, 9, 'sale', -1, 1, NULL, '2025-11-12 01:45:43'),
-(79, 5, 'sale', -1, 1, NULL, '2025-11-12 01:46:01'),
-(80, 1, 'sale', -1, 1, NULL, '2025-11-12 01:46:01'),
-(81, 7, 'sale', -1, 1, NULL, '2025-11-12 01:46:01'),
-(82, 8, 'sale', -1, 1, NULL, '2025-11-12 01:46:01'),
-(83, 9, 'sale', -1, 1, NULL, '2025-11-12 01:46:30'),
-(84, 7, 'sale', -8, 1, NULL, '2025-11-12 01:46:30'),
-(85, 6, 'sale', -1, 1, NULL, '2025-11-12 23:53:39'),
-(86, 4, 'sale', -1, 1, NULL, '2025-11-12 23:53:39'),
-(87, 3, 'sale', -1, 1, NULL, '2025-11-12 23:53:40'),
-(88, 4, 'sale', -1, 1, NULL, '2025-11-16 02:30:37'),
-(89, 8, 'sale', -1, 1, NULL, '2025-11-16 02:34:24'),
-(90, 10, 'sale', -21, 1, NULL, '2025-11-16 02:43:55'),
-(91, 5, 'sale', -1, 1, NULL, '2025-11-16 02:52:32'),
-(92, 9, 'sale', -1, 1, NULL, '2025-11-16 02:52:40'),
-(93, 4, 'sale', -20, 1, NULL, '2025-11-16 03:07:10'),
-(94, 10, 'sale', -29, 1, NULL, '2025-11-16 03:08:35'),
-(95, 10, 'sale', -42, 1, NULL, '2025-11-16 03:09:00'),
-(96, 10, 'restock', 30, 1, '', '2025-11-16 03:10:09'),
-(97, 10, 'restock', 10, 1, '', '2025-11-16 03:10:35'),
-(98, 6, 'sale', -1, 1, NULL, '2025-11-21 06:16:56'),
-(99, 6, 'sale', -1, 1, NULL, '2025-11-22 02:20:25'),
-(100, 11, 'sale', -1, 1, NULL, '2025-11-22 02:20:38'),
-(101, 1, 'sale', -1, 1, NULL, '2025-11-22 02:20:38'),
-(102, 4, 'sale', -1, 1, NULL, '2025-11-22 05:06:23'),
-(103, 10, 'sale', -1, 1, NULL, '2025-11-22 06:37:54'),
-(104, 5, 'sale', -1, 1, NULL, '2025-11-22 06:37:54'),
-(105, 2, 'sale', -1, 1, NULL, '2025-11-22 06:40:42'),
-(106, 1, 'sale', -1, 1, NULL, '2025-11-22 06:40:42'),
-(107, 6, 'sale', -1, 1, NULL, '2025-11-22 06:43:25'),
-(108, 5, 'sale', -1, 1, NULL, '2025-11-22 06:48:18'),
-(109, 6, 'sale', -1, 1, NULL, '2025-11-22 06:58:08'),
-(110, 10, 'sale', -1, 1, NULL, '2025-11-22 07:25:55');
+INSERT INTO `inventory_transactions` (`id`, `ingredient_id`, `transaction_type`, `quantity`, `user_id`, `notes`, `created_at`) VALUES
+(17, 1, 'restock', 2000, 2, 'Weekly espresso restock', '2025-11-24 06:02:24'),
+(18, 2, 'restock', 5000, 2, 'Weekly milk restock', '2025-11-24 06:02:24'),
+(19, 5, 'restock', 500, 2, 'Banana syrup restock', '2025-11-24 06:02:24'),
+(20, 6, 'restock', 300, 2, 'Matcha powder restock', '2025-11-24 06:02:24'),
+(21, 1, 'sale', 30, 2, 'Sea Salt Latte', '2025-11-24 06:02:24'),
+(22, 2, 'sale', 150, 2, 'Sea Salt Latte', '2025-11-24 06:02:24'),
+(23, 3, 'sale', 20, 2, 'Sea Salt Latte', '2025-11-24 06:02:24'),
+(24, 1, 'sale', 60, 2, 'Americano', '2025-11-24 06:02:24'),
+(25, 4, 'sale', 200, 2, 'Americano', '2025-11-24 06:02:24'),
+(26, 6, 'sale', 10, 2, 'Banana Pudding Matcha Latte', '2025-11-24 06:02:24'),
+(27, 5, 'sale', 25, 2, 'Banana Pudding Matcha Latte', '2025-11-24 06:02:24'),
+(28, 2, 'sale', 150, 2, 'Banana Pudding Matcha Latte', '2025-11-24 06:02:24'),
+(29, 14, 'adjustment', 50, 2, 'Sugar syrup measured adjustment', '2025-11-24 06:02:24'),
+(30, 11, 'adjustment', -20, 2, 'Chocolate chips wastage', '2025-11-24 06:02:24'),
+(31, 3, 'waste', 10, 2, 'Spoiled sea salt cream', '2025-11-24 06:02:24'),
+(32, 10, 'waste', 50, 2, 'Expired hibiscus tea base', '2025-11-24 06:02:24');
 
 -- --------------------------------------------------------
 
@@ -341,8 +340,51 @@ INSERT INTO `products` (`id`, `category_id`, `name`, `description`, `price_dodic
 CREATE TABLE `product_ingredients` (
   `product_id` int(11) NOT NULL,
   `ingredient_id` int(11) NOT NULL,
-  `quantity` decimal(10,2) NOT NULL
+  `quantity` decimal(10,2) NOT NULL,
+  `unit` varchar(20) NOT NULL DEFAULT 'g'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `product_ingredients`
+--
+
+INSERT INTO `product_ingredients` (`product_id`, `ingredient_id`, `quantity`, `unit`) VALUES
+(1, 1, 30.00, 'ml'),
+(1, 2, 150.00, 'ml'),
+(1, 3, 20.00, 'g'),
+(2, 1, 60.00, 'ml'),
+(2, 4, 200.00, 'ml'),
+(3, 2, 150.00, 'ml'),
+(3, 5, 25.00, 'g'),
+(3, 6, 10.00, 'g'),
+(4, 4, 200.00, 'ml'),
+(4, 7, 25.00, 'g'),
+(4, 8, 20.00, 'ml'),
+(5, 1, 30.00, 'ml'),
+(5, 2, 180.00, 'ml'),
+(6, 1, 30.00, 'ml'),
+(6, 2, 170.00, 'ml'),
+(6, 9, 20.00, 'g'),
+(7, 10, 250.00, 'ml'),
+(7, 14, 15.00, 'g'),
+(8, 1, 30.00, 'ml'),
+(8, 2, 150.00, 'ml'),
+(8, 11, 15.00, 'g'),
+(8, 12, 20.00, 'g'),
+(9, 2, 80.00, 'ml'),
+(9, 13, 120.00, 'g'),
+(9, 14, 20.00, 'g'),
+(10, 2, 180.00, 'ml'),
+(10, 6, 10.00, 'g'),
+(11, 1, 30.00, 'ml'),
+(11, 2, 150.00, 'ml'),
+(11, 14, 25.00, 'g'),
+(12, 2, 200.00, 'ml'),
+(12, 14, 20.00, 'g'),
+(12, 15, 25.00, 'g'),
+(13, 1, 30.00, 'ml'),
+(13, 2, 160.00, 'ml'),
+(13, 16, 25.00, 'g');
 
 -- --------------------------------------------------------
 
@@ -395,7 +437,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `full_name`, `role`, `phone`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'admin', 'admin@broscafe.com', '$2y$10$AeIH0lU6rDYjEI5T3EWgauUk7oFvVCvxV5ZlBWeoMvVgEE17z8R8q', 'Admin User', 'admin', '+63 123 456 7890', 'active', '2025-11-05 05:51:32', '2025-11-05 05:55:22'),
-(2, 'employee', 'employee@broscafe.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Employee User', 'employee', '+63 987 654 3210', 'active', '2025-11-05 05:51:32', '2025-11-05 05:51:32');
+(2, 'employee', 'employee@broscafe.com', '$2y$10$FoY41Jx.ReVSJ4AzCmnz7uEi1jhMfnQAjyyfvrVBaxS72fbqwS.gu', 'Employee User', 'employee', '+63 987 654 3210', 'active', '2025-11-05 05:51:32', '2025-11-24 06:06:35');
 
 --
 -- Indexes for dumped tables
@@ -417,16 +459,15 @@ ALTER TABLE `ingredients`
 -- Indexes for table `inventory`
 --
 ALTER TABLE `inventory`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `product_id` (`product_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `inventory_transactions`
 --
 ALTER TABLE `inventory_transactions`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `product_id` (`product_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `inventory_transactions_ibfk_1` (`ingredient_id`);
 
 --
 -- Indexes for table `orders`
@@ -488,7 +529,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `ingredients`
 --
 ALTER TABLE `ingredients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `inventory`
@@ -500,7 +541,7 @@ ALTER TABLE `inventory`
 -- AUTO_INCREMENT for table `inventory_transactions`
 --
 ALTER TABLE `inventory_transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -530,23 +571,17 @@ ALTER TABLE `sales_summary`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `inventory`
---
-ALTER TABLE `inventory`
-  ADD CONSTRAINT `inventory_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-
---
 -- Constraints for table `inventory_transactions`
 --
 ALTER TABLE `inventory_transactions`
-  ADD CONSTRAINT `inventory_transactions_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `inventory_transactions_ibfk_1` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredients` (`id`),
   ADD CONSTRAINT `inventory_transactions_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --

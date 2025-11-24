@@ -7,21 +7,23 @@ requireEmployee();
 $db = new Database();
 $conn = $db->getConnection();
 
-// Get all products with inventory
+// Get all ingredients with inventory
 $stmt = $conn->query("
-    SELECT p.*, c.name as category_name, i.quantity, i.reorder_level, i.last_restocked, i.unit
-    FROM products p
+    SELECT pi.*, c.name as category_name, i.quantity, i.reorder_level, i.last_restocked, i.unit
+    FROM ingredients pi
+    LEFT JOIN product_ingredients pii ON pi.id = pii.ingredient_id 
+    LEFT JOIN products p ON pii.product_id = p.id 
     LEFT JOIN categories c ON p.category_id = c.id
-    LEFT JOIN inventory i ON p.id = i.product_id
-    ORDER BY p.name
+    LEFT JOIN inventory i ON pi.id = i.ingredient_id
+    ORDER BY pi.name
 ");
 $products = $stmt->fetchAll();
 
 // Get low stock items
 $stmt = $conn->query("
-    SELECT p.name, i.quantity, i.reorder_level
-    FROM products p
-    JOIN inventory i ON p.id = i.product_id
+    SELECT pi.name, i.quantity, i.reorder_level
+    FROM ingredients pi
+    JOIN inventory i ON pi.id = i.ingredient_id
     WHERE i.quantity <= i.reorder_level
 ");
 $low_stock = $stmt->fetchAll();
@@ -29,15 +31,17 @@ $low_stock = $stmt->fetchAll();
 // Get inventory analytics data
 $stmt = $conn->query("
     SELECT 
-        c.name as category,
-        COUNT(p.id) as product_count,
-        SUM(i.quantity) as total_stock,
-        AVG(i.quantity) as avg_stock,
-        SUM(CASE WHEN i.quantity <= i.reorder_level THEN 1 ELSE 0 END) as low_stock_count
+        c.name AS product_category,
+        COUNT(DISTINCT pi.ingredient_id) AS total_ingredients_used,
+        SUM(i.quantity) AS total_ingredient_stock,
+        AVG(i.quantity) AS avg_ingredient_quantity,
+        COUNT(DISTINCT pi.product_id) AS num_products_in_category
     FROM categories c
-    LEFT JOIN products p ON c.id = p.category_id
-    LEFT JOIN inventory i ON p.id = i.product_id
-    GROUP BY c.id, c.name
+    JOIN products p ON c.id = p.category_id
+    JOIN product_ingredients pi ON p.id = pi.product_id
+    JOIN inventory i ON pi.ingredient_id = i.id
+    GROUP BY c.name
+    ORDER BY c.name;
 ");
 $category_analytics = $stmt->fetchAll();
 
@@ -53,14 +57,26 @@ $stock_distribution = $stmt->fetch();
 
 // Get recent restocks
 $stmt = $conn->query("
-    SELECT p.name, i.last_restocked, i.quantity
+    SELECT ig.name, i.last_restocked, i.quantity, i.unit
     FROM inventory i
-    JOIN products p ON i.product_id = p.id
+    JOIN ingredients ig ON i.ingredient_id = ig.id
     WHERE i.last_restocked IS NOT NULL
     ORDER BY i.last_restocked DESC
     LIMIT 5
 ");
 $recent_restocks = $stmt->fetchAll();
+
+function convertUnit($stock, $unit)
+{
+    // Only convert if unit is 'ml' or 'g'
+    if (($unit === 'ml' || $unit === 'g') && $stock >= 1000) {
+        $converted = $stock / 1000;
+        $newUnit = ($unit === 'ml') ? 'L' : 'kg';
+        return [$converted, $newUnit];
+    }
+    // Otherwise, return original value and unit
+    return [$stock, $unit];
+}
 
 $current_user = getCurrentUser();
 ?>
@@ -301,7 +317,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Available Items</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($products, fn($p) => $p['quantity'] > $p['reorder_level'])); ?>
+                                    <?php echo count(array_filter($products, fn ($p) => $p['quantity'] > $p['reorder_level'])); ?>
                                 </p>
                             </div>
                         </div>
@@ -318,7 +334,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Out of Stock</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($products, fn($p) => $p['quantity'] == 0)); ?>
+                                    <?php echo count(array_filter($products, fn ($p) => $p['quantity'] == 0)); ?>
                                 </p>
                             </div>
                         </div>
@@ -374,7 +390,11 @@ $current_user = getCurrentUser();
                                                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
                                                         <?php echo date('M d, Y', strtotime($restock['last_restocked'])); ?></td>
                                                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                                        <?php echo $restock['quantity']; ?></td>
+                                                        <?php
+                                                            list($convertedQty, $convertedUnit) = convertUnit($restock['quantity'], $restock['unit']);
+                                                echo $convertedQty . ' ' . $convertedUnit;
+                                                ?>
+                                                    </td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         <?php else: ?>
@@ -395,31 +415,27 @@ $current_user = getCurrentUser();
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
-                                            <th
-                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                                Category</th>
-                                            <th
-                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                                Products</th>
-                                            <th
-                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                                Low Stock</th>
-                                            <th
-                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                                Avg Stock</th>
+                                            <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Category</th>
+                                            <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Products</th>
+                                            <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Avg Stock</th>
+                                            <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Total Stock</th>
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
                                         <?php foreach ($category_analytics as $category): ?>
                                             <tr>
                                                 <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap">
-                                                    <?php echo $category['category']; ?></td>
+                                                    <?php echo $category['product_category']; ?>
+                                                </td>
                                                 <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                                    <?php echo $category['product_count']; ?></td>
+                                                    <?php echo $category['num_products_in_category']; ?>
+                                                </td>
                                                 <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                                    <?php echo $category['low_stock_count']; ?></td>
+                                                    <?php echo round($category['avg_ingredient_quantity'], 1); ?>
+                                                </td>
                                                 <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                                    <?php echo round($category['avg_stock'], 1); ?></td>
+                                                    <?php echo $category['total_ingredient_stock'] ?? 0; ?>
+                                                </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -484,11 +500,17 @@ $current_user = getCurrentUser();
                                             <?php echo $product['category_name']; ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo $product['quantity']; ?>
-                                                <?php echo $product['unit'] ?? 'servings'; ?></div>
+                                            <div class="text-sm text-gray-900">
+                                                <?php
+                                                    list($convertedQty, $convertedUnit) = convertUnit($product['quantity'], $product['unit']);
+                                    echo $convertedQty . ' ' . $convertedUnit;
+                                    ?></div>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                                            <?php echo $product['reorder_level']; ?>
+                                            <?php
+                                                list($convertedReorderQty, $convertedReorderUnit) = convertUnit($product['reorder_level'], $product['unit']);
+                                    echo $convertedReorderQty . ' ' . $convertedReorderUnit;
+                                    ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <?php if ($product['quantity'] == 0): ?>
@@ -673,13 +695,18 @@ $current_user = getCurrentUser();
 
             // Category Stock Chart
             const categoryStockCtx = document.getElementById('categoryStockChart').getContext('2d');
+            const categoryLabels = <?php echo json_encode(array_column($category_analytics, 'product_category')); ?>;
+            const categoryStockData = <?php echo json_encode(array_map(fn ($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
+            const avgStockData = <?php echo json_encode(array_map(fn ($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
+            const numProductsData = <?php echo json_encode(array_map(fn ($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
+
             const categoryStockChart = new Chart(categoryStockCtx, {
                 type: 'bar',
                 data: {
-                    labels: <?php echo json_encode(array_column($category_analytics, 'category')); ?>,
+                    labels: categoryLabels,
                     datasets: [{
                         label: 'Total Stock',
-                        data: <?php echo json_encode(array_column($category_analytics, 'total_stock')); ?>,
+                        data: categoryStockData,
                         backgroundColor: 'rgba(59, 130, 246, 0.8)',
                         borderColor: 'rgb(59, 130, 246)',
                         borderWidth: 2,
@@ -711,6 +738,19 @@ $current_user = getCurrentUser();
                             },
                             bodyFont: {
                                 size: 13
+                            },
+                            callbacks: {
+                                label: function(context) {
+                                    const idx = context.dataIndex;
+                                    const stock = categoryStockData[idx];
+                                    const avg = avgStockData[idx];
+                                    const products = numProductsData[idx];
+                                    return [
+                                        'Total Stock: ' + stock,
+                                        'Avg Stock: ' + avg,
+                                        'Products: ' + products
+                                    ];
+                                }
                             }
                         }
                     },
@@ -740,6 +780,45 @@ $current_user = getCurrentUser();
                     }
                 }
             });
+        });
+
+        // Low Stock Products by Category Chart
+        const lowStockCategoryCtx = document.getElementById('lowStockCategoryChart').getContext('2d');
+        const lowStockLabels = <?php echo json_encode(array_map(fn ($c) => $c['category'] ?? '', $category_analytics)); ?>;
+        const lowStockData = <?php echo json_encode(array_map(fn ($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
+
+        const lowStockCategoryChart = new Chart(lowStockCategoryCtx, {
+            type: 'bar',
+            data: {
+                labels: lowStockLabels,
+                datasets: [{
+                    label: 'Low Stock Products',
+                    data: lowStockData,
+                    backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                    borderColor: 'rgb(239, 68, 68)',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Low Stock Products: ' + context.parsed.x;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { beginAtZero: true },
+                    y: { ticks: { font: { size: 11, weight: 'bold' } } }
+                }
+            }
         });
 
         // Export inventory function

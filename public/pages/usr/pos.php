@@ -16,7 +16,7 @@ $stmt = $conn->query("
     SELECT p.*, c.name as category_name, i.quantity as stock 
     FROM products p 
     LEFT JOIN categories c ON p.category_id = c.id 
-    LEFT JOIN inventory i ON p.id = i.product_id 
+    LEFT JOIN inventory i ON p.id = i.ingredient_id 
     WHERE p.status = 'available'
     ORDER BY c.name, p.name
 ");

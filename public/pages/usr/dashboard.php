@@ -51,11 +51,11 @@ unset($order); // Break reference
 $stmt = $conn->query("SELECT COUNT(*) as count FROM orders WHERE status = 'pending'");
 $pending_orders = $stmt->fetch()['count'];
 
-// Get low stock products
+// Get low stock ingredients
 $stmt = $conn->query("
-    SELECT p.name, i.quantity, i.reorder_level 
+    SELECT pi.name, i.quantity, i.reorder_level 
     FROM inventory i 
-    JOIN products p ON i.product_id = p.id 
+    JOIN ingredients pi ON i.ingredient_id = pi.id 
     WHERE i.quantity <= i.reorder_level 
     ORDER BY i.quantity ASC 
     LIMIT 5
