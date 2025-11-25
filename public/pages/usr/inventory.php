@@ -146,11 +146,11 @@ $current_user = getCurrentUser();
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     <!-- Prevent sidebar jitter on page load -->
     <script>
-    (function() {
-        if (localStorage.getItem('sidebarCollapsed') === 'true') {
-            document.documentElement.classList.add('sidebar-collapsed-init');
-        }
-    })();
+        (function() {
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                document.documentElement.classList.add('sidebar-collapsed-init');
+            }
+        })();
     </script>
 </head>
 
@@ -192,16 +192,16 @@ $current_user = getCurrentUser();
             <nav class="flex-1 p-4 overflow-y-auto">
                 <ul class="space-y-2">
                     <?php if (isAdmin()): ?>
-                    <li>
-                        <a href="dashboard.php" data-tooltip="Dashboard"
-                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                            </svg>
-                            <span class="ml-3 sidebar-text">Dashboard</span>
-                        </a>
-                    </li>
+                        <li>
+                            <a href="dashboard.php" data-tooltip="Dashboard"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                </svg>
+                                <span class="ml-3 sidebar-text">Dashboard</span>
+                            </a>
+                        </li>
                     <?php endif; ?>
                     <li>
                         <a href="pos.php" data-tooltip="POS"
@@ -234,13 +234,13 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <?php if (isAdmin()): ?>
-                    <li>
-                        <a href="analytics.php" data-tooltip="Analytics"
-                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <i class="flex-shrink-0 w-5 h-5 fa-solid fa-chart-simple"></i>
-                            <span class="ml-3 sidebar-text">Analytics</span>
-                        </a>
-                    </li>
+                        <li>
+                            <a href="analytics.php" data-tooltip="Analytics"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <i class="flex-shrink-0 w-5 h-5 fa-solid fa-chart-simple"></i>
+                                <span class="ml-3 sidebar-text">Analytics</span>
+                            </a>
+                        </li>
                     <?php endif; ?>
                     <li>
                         <a href="products.php" data-tooltip="Products"
@@ -253,16 +253,16 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <?php if (isAdmin()): ?>
-                    <li>
-                        <a href="users.php" data-tooltip="Employees"
-                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                            <span class="ml-3 sidebar-text">Employees</span>
-                        </a>
-                    </li>
+                        <li>
+                            <a href="users.php" data-tooltip="Employees"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span class="ml-3 sidebar-text">Employees</span>
+                            </a>
+                        </li>
                     <?php endif; ?>
                 </ul>
             </nav>
@@ -294,28 +294,28 @@ $current_user = getCurrentUser();
             <div class="p-6">
                 <!-- Low Stock Alert -->
                 <?php if (count($low_stock) > 0): ?>
-                <div class="p-4 mb-6 border-l-4 border-red-500 bg-red-50">
-                    <div class="flex">
-                        <div class="shrink-0">
-                            <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <div class="ml-3">
-                            <h3 class="text-sm font-medium text-red-800">Low Stock Alert</h3>
-                            <div class="mt-2 text-sm text-red-700">
-                                <ul class="pl-5 space-y-1 list-disc">
-                                    <?php foreach ($low_stock as $item): ?>
-                                    <li><?php echo $item['name']; ?>: <?php echo $item['quantity']; ?> remaining
-                                        (reorder at <?php echo $item['reorder_level']; ?>)</li>
-                                    <?php endforeach; ?>
-                                </ul>
+                    <div class="p-4 mb-6 border-l-4 border-red-500 bg-red-50">
+                        <div class="flex">
+                            <div class="shrink-0">
+                                <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-red-800">Low Stock Alert</h3>
+                                <div class="mt-2 text-sm text-red-700">
+                                    <ul class="pl-5 space-y-1 list-disc">
+                                        <?php foreach ($low_stock as $item): ?>
+                                            <li><?php echo $item['name']; ?>: <?php echo $item['quantity']; ?> remaining
+                                                (reorder at <?php echo $item['reorder_level']; ?>)</li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 <?php endif; ?>
 
                 <!-- Stats Cards -->
@@ -386,115 +386,115 @@ $current_user = getCurrentUser();
                 </div>
 
                 <?php if (isAdmin()): ?>
-                <!-- Analytics Section -->
-                <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
-                    <!-- Stock Status Chart -->
-                    <div class="p-6 bg-white rounded-lg shadow">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Stock Status Distribution</h3>
-                        <div class="h-64">
-                            <canvas id="stockStatusChart"></canvas>
+                    <!-- Analytics Section -->
+                    <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+                        <!-- Stock Status Chart -->
+                        <div class="p-6 bg-white rounded-lg shadow">
+                            <h3 class="mb-4 text-lg font-semibold text-gray-800">Stock Status Distribution</h3>
+                            <div class="h-64">
+                                <canvas id="stockStatusChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Category Stock Chart -->
+                        <div class="p-6 bg-white rounded-lg shadow">
+                            <h3 class="mb-4 text-lg font-semibold text-gray-800">Stock by Category</h3>
+                            <div class="h-64">
+                                <canvas id="categoryStockChart"></canvas>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Category Stock Chart -->
-                    <div class="p-6 bg-white rounded-lg shadow">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Stock by Category</h3>
-                        <div class="h-64">
-                            <canvas id="categoryStockChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Restocks and Category Analytics -->
-                <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
-                    <!-- Recent Restocks -->
-                    <div class="p-6 bg-white rounded-lg shadow">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Recent Restocks</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th
-                                            class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                            Product</th>
-                                        <th
-                                            class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                            Date</th>
-                                        <th
-                                            class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                            Stock</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <?php if (count($recent_restocks) > 0): ?>
-                                    <?php foreach ($recent_restocks as $restock): ?>
-                                    <tr>
-                                        <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap">
-                                            <?php echo $restock['name']; ?></td>
-                                        <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                            <?php echo date('M d, Y', strtotime($restock['last_restocked'])); ?></td>
-                                        <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                            <?php
+                    <!-- Recent Restocks and Category Analytics -->
+                    <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+                        <!-- Recent Restocks -->
+                        <div class="p-6 bg-white rounded-lg shadow">
+                            <h3 class="mb-4 text-lg font-semibold text-gray-800">Recent Restocks</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Product</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Date</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Stock</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <?php if (count($recent_restocks) > 0): ?>
+                                            <?php foreach ($recent_restocks as $restock): ?>
+                                                <tr>
+                                                    <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap">
+                                                        <?php echo $restock['name']; ?></td>
+                                                    <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                        <?php echo date('M d, Y', strtotime($restock['last_restocked'])); ?></td>
+                                                    <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                        <?php
                                                         list($convertedQty, $convertedUnit) = convertUnit($restock['quantity'], $restock['unit']);
                                                         echo $convertedQty . ' ' . $convertedUnit;
                                                         ?>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                    <?php else: ?>
-                                    <tr>
-                                        <td colspan="3" class="px-4 py-3 text-sm text-center text-gray-500">No recent
-                                            restocks</td>
-                                    </tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <tr>
+                                                <td colspan="3" class="px-4 py-3 text-sm text-center text-gray-500">No recent
+                                                    restocks</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Category Analytics -->
-                    <div class="p-6 bg-white rounded-lg shadow">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Category Analytics</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th
-                                            class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                            Category</th>
-                                        <th
-                                            class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                            Products</th>
-                                        <th
-                                            class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                            Avg Stock</th>
-                                        <th
-                                            class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                            Total Stock</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <?php foreach ($category_analytics as $category): ?>
-                                    <tr>
-                                        <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap">
-                                            <?php echo $category['product_category']; ?>
-                                        </td>
-                                        <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                            <?php echo $category['num_products_in_category']; ?>
-                                        </td>
-                                        <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                            <?php echo round($category['avg_ingredient_quantity'], 1); ?>
-                                        </td>
-                                        <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                            <?php echo $category['total_ingredient_stock'] ?? 0; ?>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
+                        <!-- Category Analytics -->
+                        <div class="p-6 bg-white rounded-lg shadow">
+                            <h3 class="mb-4 text-lg font-semibold text-gray-800">Category Analytics</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Category</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Products</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Avg Stock</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Total Stock</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <?php foreach ($category_analytics as $category): ?>
+                                            <tr>
+                                                <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap">
+                                                    <?php echo $category['product_category']; ?>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                    <?php echo $category['num_products_in_category']; ?>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                    <?php echo round($category['avg_ingredient_quantity'], 1); ?>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                    <?php echo $category['total_ingredient_stock'] ?? 0; ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
                 <?php endif; ?>
 
                 <!-- Filters -->
@@ -568,51 +568,51 @@ $current_user = getCurrentUser();
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 <?php foreach ($items as $product): ?>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900"><?php echo $product['name']; ?>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">
-                                            <?php
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900"><?php echo $product['name']; ?>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">
+                                                <?php
                                                 list($convertedQty, $convertedUnit) = convertUnit($product['quantity'], $product['unit']);
                                                 echo $convertedQty . ' ' . $convertedUnit;
                                                 ?></div>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                                        <?php
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                                            <?php
                                             list($convertedReorderQty, $convertedReorderUnit) = convertUnit($product['reorder_level'], $product['unit']);
                                             echo $convertedReorderQty . ' ' . $convertedReorderUnit;
                                             ?>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <?php if ($product['quantity'] == 0): ?>
-                                        <span
-                                            class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">Out
-                                            of Stock</span>
-                                        <?php elseif ($product['quantity'] <= $product['reorder_level']): ?>
-                                        <span
-                                            class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">Low
-                                            Stock</span>
-                                        <?php else: ?>
-                                        <span
-                                            class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">In
-                                            Stock</span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                                        <?php echo $product['last_restocked'] ? date('M d, Y', strtotime($product['last_restocked'])) : 'Never'; ?>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
-                                        <button
-                                            onclick="openRestockModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>, '<?php echo addslashes($product['unit']); ?>')"
-                                            class="mr-3 text-amber-600 hover:text-amber-900">Restock</button>
-                                        <button
-                                            onclick="openAdjustModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>, '<?php echo addslashes($product['unit']); ?>')"
-                                            class="text-blue-600 hover:text-blue-900">Adjust</button>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <?php if ($product['quantity'] == 0): ?>
+                                                <span
+                                                    class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">Out
+                                                    of Stock</span>
+                                            <?php elseif ($product['quantity'] <= $product['reorder_level']): ?>
+                                                <span
+                                                    class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">Low
+                                                    Stock</span>
+                                            <?php else: ?>
+                                                <span
+                                                    class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">In
+                                                    Stock</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                                            <?php echo $product['last_restocked'] ? date('M d, Y', strtotime($product['last_restocked'])) : 'Never'; ?>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
+                                            <button
+                                                onclick="openRestockModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>, '<?php echo addslashes($product['unit']); ?>')"
+                                                class="mr-3 text-amber-600 hover:text-amber-900">Restock</button>
+                                            <button
+                                                onclick="openAdjustModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>, '<?php echo addslashes($product['unit']); ?>')"
+                                                class="text-blue-600 hover:text-blue-900">Adjust</button>
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
@@ -620,83 +620,83 @@ $current_user = getCurrentUser();
 
                     <!-- Pagination -->
                     <?php if ($total_pages > 1): ?>
-                    <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200">
-                        <div class="flex items-center text-sm text-gray-700">
-                            <span>Showing <span class="font-semibold"><?php echo $offset + 1; ?></span> to
-                                <span
-                                    class="font-semibold"><?php echo min($offset + $per_page, $total_ingredients); ?></span>
-                                of
-                                <span class="font-semibold"><?php echo $total_ingredients; ?></span> orders</span>
-                        </div>
+                        <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+                            <div class="flex items-center text-sm text-gray-700">
+                                <span>Showing <span class="font-semibold"><?php echo $offset + 1; ?></span> to
+                                    <span
+                                        class="font-semibold"><?php echo min($offset + $per_page, $total_ingredients); ?></span>
+                                    of
+                                    <span class="font-semibold"><?php echo $total_ingredients; ?></span> orders</span>
+                            </div>
 
-                        <div class="flex gap-2">
-                            <!-- Previous Button -->
-                            <?php if ($page > 1): ?>
-                            <a href="?page=<?php echo $page - 1; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                                <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
-                            </a>
-                            <?php else: ?>
-                            <span
-                                class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
-                                <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
-                            </span>
-                            <?php endif; ?>
+                            <div class="flex gap-2">
+                                <!-- Previous Button -->
+                                <?php if ($page > 1): ?>
+                                    <a href="?page=<?php echo $page - 1; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
+                                    </a>
+                                <?php else: ?>
+                                    <span
+                                        class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
+                                    </span>
+                                <?php endif; ?>
 
-                            <!-- Page Numbers -->
-                            <div class="flex gap-1">
-                                <?php
+                                <!-- Page Numbers -->
+                                <div class="flex gap-1">
+                                    <?php
                                     $start_page = max(1, $page - 2);
                                     $end_page = min($total_pages, $page + 2);
 
                                     if ($start_page > 1): ?>
-                                <a href="?page=1&&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                    class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                                    1
-                                </a>
-                                <?php if ($start_page > 2): ?>
-                                <span class="px-3 py-2 text-sm text-gray-500">...</span>
-                                <?php endif; ?>
-                                <?php endif; ?>
+                                        <a href="?page=1&&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                            1
+                                        </a>
+                                        <?php if ($start_page > 2): ?>
+                                            <span class="px-3 py-2 text-sm text-gray-500">...</span>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
 
-                                <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
-                                <?php if ($i == $page): ?>
-                                <span class="px-3 py-2 text-sm font-medium text-white rounded-lg bg-amber-600">
-                                    <?php echo $i; ?>
-                                </span>
+                                    <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
+                                        <?php if ($i == $page): ?>
+                                            <span class="px-3 py-2 text-sm font-medium text-white rounded-lg bg-amber-600">
+                                                <?php echo $i; ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <a href="?page=<?php echo $i; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                                class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                                <?php echo $i; ?>
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php endfor; ?>
+
+                                    <?php if ($end_page < $total_pages): ?>
+                                        <?php if ($end_page < $total_pages - 1): ?>
+                                            <span class="px-3 py-2 text-sm text-gray-500">...</span>
+                                        <?php endif; ?>
+                                        <a href="?page=<?php echo $total_pages; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                            <?php echo $total_pages; ?>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+
+                                <!-- Next Button -->
+                                <?php if ($page < $total_pages): ?>
+                                    <a href="?page=<?php echo $page + 1; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        Next <i class="ml-1 fa-solid fa-chevron-right"></i>
+                                    </a>
                                 <?php else: ?>
-                                <a href="?page=<?php echo $i; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                    class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                                    <?php echo $i; ?>
-                                </a>
-                                <?php endif; ?>
-                                <?php endfor; ?>
-
-                                <?php if ($end_page < $total_pages): ?>
-                                <?php if ($end_page < $total_pages - 1): ?>
-                                <span class="px-3 py-2 text-sm text-gray-500">...</span>
-                                <?php endif; ?>
-                                <a href="?page=<?php echo $total_pages; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                    class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                                    <?php echo $total_pages; ?>
-                                </a>
+                                    <span
+                                        class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+                                        Next <i class="ml-1 fa-solid fa-chevron-right"></i>
+                                    </span>
                                 <?php endif; ?>
                             </div>
-
-                            <!-- Next Button -->
-                            <?php if ($page < $total_pages): ?>
-                            <a href="?page=<?php echo $page + 1; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                                Next <i class="ml-1 fa-solid fa-chevron-right"></i>
-                            </a>
-                            <?php else: ?>
-                            <span
-                                class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
-                                Next <i class="ml-1 fa-solid fa-chevron-right"></i>
-                            </span>
-                            <?php endif; ?>
                         </div>
-                    </div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -898,40 +898,94 @@ $current_user = getCurrentUser();
 
     <!-- Bulk Restock Modal -->
     <div id="bulkRestockModal"
-        class="fixed inset-0 z-50 hidden w-full h-full overflow-y-auto bg-gray-600 bg-opacity-50">
-        <div class="relative p-5 mx-auto bg-white border rounded-md shadow-lg top-20 w-96">
-            <div class="mt-3">
-                <h3 class="mb-4 text-lg font-medium text-gray-900">Bulk Restock</h3>
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-30 backdrop-blur modal-backdrop">
+        <div
+            class="w-full max-w-md mx-4 overflow-hidden transition-all transform bg-white shadow-2xl rounded-2xl animate-modal border border-amber-200">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-amber-500 to-amber-600">
+                <div class="flex items-center justify-between text-white">
+                    <div>
+                        <h3 class="text-xl font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group mr-2"></i> Bulk Restock
+                        </h3>
+                        <p class="text-sm text-amber-100 mt-1">Restock multiple items at once</p>
+                    </div>
+                    <button onclick="closeBulkRestockModal()" class="text-white transition-colors hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-4" style="max-height: 500px; overflow-y: auto;">
                 <form id="bulkRestockForm" onsubmit="submitBulkRestock(event)">
+                    <!-- Category Selection -->
                     <div class="mb-4">
-                        <label for="bulk_category" class="block mb-2 text-sm font-medium text-gray-700">Category</label>
+                        <label for="bulk_category" class="block mb-2 text-sm font-medium text-gray-700">
+                            <i class="fa-solid fa-filter mr-1"></i> Category Filter
+                        </label>
                         <select id="bulk_category"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500">
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
                             <option value="">All Categories</option>
                             <?php foreach ($category_analytics as $category): ?>
-                            <option value="<?php echo $category['category']; ?>"><?php echo $category['category']; ?>
-                            </option>
+                                <option value="<?php echo $category['product_category']; ?>">
+                                    <?php echo $category['product_category']; ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
+                        <p class="mt-1 text-xs text-gray-500">Select a category or leave empty to restock all items</p>
                     </div>
+
+                    <!-- Quantity Input -->
                     <div class="mb-4">
-                        <label for="bulk_quantity" class="block mb-2 text-sm font-medium text-gray-700">Add
-                            Quantity</label>
-                        <input type="number" id="bulk_quantity" min="1" required
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500">
+                        <label for="bulk_quantity" class="block mb-2 text-sm font-medium text-gray-700">
+                            Add Quantity to Each Item
+                        </label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="bulk_quantity" step="0.01" min="0.01" required placeholder="0.00"
+                                class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                            <span class="px-3 py-2 text-gray-600 bg-gray-100 border border-gray-300 rounded-md">
+                                Base Units
+                            </span>
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">
+                            This quantity will be added to each item in their base unit (ml, g, etc.)
+                        </p>
                     </div>
+
+                    <!-- Preview Section -->
+                    <div class="p-4 mb-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <div class="flex items-start gap-2">
+                            <i class="fa-solid fa-info-circle text-blue-600 mt-1"></i>
+                            <div>
+                                <p class="text-sm font-medium text-blue-900">Preview</p>
+                                <p class="text-xs text-blue-700 mt-1">
+                                    Each selected item will have the specified quantity added to its current stock.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
                     <div class="mb-4">
-                        <label for="bulk_notes" class="block mb-2 text-sm font-medium text-gray-700">Notes
-                            (Optional)</label>
-                        <textarea id="bulk_notes" rows="2"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500"></textarea>
+                        <label for="bulk_notes" class="block mb-2 text-sm font-medium text-gray-700">
+                            Notes (Optional)
+                        </label>
+                        <textarea id="bulk_notes" rows="3" placeholder="Add notes about this bulk restock operation..."
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"></textarea>
                     </div>
-                    <div class="flex justify-end space-x-3">
-                        <button type="button" onclick="closeBulkRestockModal()"
-                            class="px-4 py-2 text-gray-700 bg-gray-300 rounded-md hover:bg-gray-400">Cancel</button>
-                        <button type="submit"
-                            class="px-4 py-2 text-white rounded-md bg-amber-600 hover:bg-amber-700">Restock All</button>
-                    </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-gray-200 bg-gray-50 flex justify-end space-x-3">
+                <button type="button" onclick="closeBulkRestockModal()"
+                    class="px-4 py-2 text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
+                <button type="submit" class="px-4 py-2 text-white rounded-lg bg-amber-600 hover:bg-amber-700">
+                    <i class="fa-solid fa-check mr-1"></i> Restock All
+                </button>
                 </form>
             </div>
         </div>
@@ -988,257 +1042,352 @@ $current_user = getCurrentUser();
         </div>
     </div>
 
+    <!-- Confirmation Modal -->
+    <div id="confirmModal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-30 backdrop-blur modal-backdrop">
+        <div
+            class="w-full max-w-sm mx-4 overflow-hidden transition-all transform bg-white shadow-2xl rounded-2xl animate-modal">
+            <div class="p-6 bg-gradient-to-r from-amber-500 to-amber-600">
+                <div class="flex items-center justify-center w-16 h-16 mx-auto bg-white rounded-full">
+                    <svg class="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+            <div class="p-6 text-center">
+                <h3 class="mb-2 text-xl font-bold text-gray-900">Confirm Bulk Restock</h3>
+                <p id="confirmMessage" class="text-gray-600"></p>
+            </div>
+            <div class="p-4 border-t border-gray-200 bg-gray-50 flex justify-end space-x-3">
+                <button onclick="closeConfirmModal()"
+                    class="px-4 py-2 text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
+                <button onclick="confirmBulkRestock()"
+                    class="px-4 py-2 text-white rounded-lg bg-amber-600 hover:bg-amber-700">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-    // Modal functions
-    function showSuccessModal(message) {
-        document.getElementById('successMessage').textContent = message;
-        document.getElementById('successModal').classList.remove('hidden');
-    }
+        // Modal functions
+        function showSuccessModal(message) {
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
 
-    function closeSuccessModal() {
-        document.getElementById('successModal').classList.add('hidden');
-        location.reload();
-    }
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            location.reload();
+        }
 
-    function showErrorModal(message) {
-        document.getElementById('errorMessage').textContent = message;
-        document.getElementById('errorModal').classList.remove('hidden');
-    }
+        function showErrorModal(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorModal').classList.remove('hidden');
+        }
 
-    function closeErrorModal() {
-        document.getElementById('errorModal').classList.add('hidden');
-    }
+        function closeErrorModal() {
+            document.getElementById('errorModal').classList.add('hidden');
+        }
 
-    // Initialize charts when the page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        // Stock Status Chart
-        const stockStatusCtx = document.getElementById('stockStatusChart').getContext('2d');
-        const stockStatusChart = new Chart(stockStatusCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['In Stock', 'Low Stock', 'Out of Stock'],
-                datasets: [{
-                    data: [
-                        <?php echo $stock_distribution['in_stock']; ?>,
-                        <?php echo $stock_distribution['low_stock']; ?>,
-                        <?php echo $stock_distribution['out_of_stock']; ?>
-                    ],
-                    backgroundColor: [
-                        'rgb(16, 185, 129)', // Green
-                        'rgb(245, 158, 11)', // Amber
-                        'rgb(239, 68, 68)' // Red
-                    ],
-                    borderColor: '#fff',
-                    borderWidth: 3,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: {
-                                family: 'Montserrat',
-                                size: 11
-                            },
-                            color: '#374151',
-                            padding: 15,
-                            usePointStyle: true,
-                            pointStyle: 'circle'
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        padding: 12,
-                        titleFont: {
-                            size: 14,
-                            weight: 'bold'
-                        },
-                        bodyFont: {
-                            size: 13
-                        },
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.label || '';
-                                const value = context.parsed || 0;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((value / total) * 100).toFixed(1);
-                                return label + ': ' + value + ' items (' + percentage + '%)';
-                            }
-                        }
-                    }
-                }
-            }
-        });
+        // Confirmation modal functions
+        let bulkRestockData = null;
 
-        // Category Stock Chart
-        const categoryStockCtx = document.getElementById('categoryStockChart').getContext('2d');
-        const categoryLabels =
-            <?php echo json_encode(array_column($category_analytics, 'product_category')); ?>;
-        const categoryStockData =
-            <?php echo json_encode(array_map(fn($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
-        const avgStockData =
-            <?php echo json_encode(array_map(fn($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
-        const numProductsData =
-            <?php echo json_encode(array_map(fn($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
+        function showConfirmModal(message) {
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
 
-        const categoryStockChart = new Chart(categoryStockCtx, {
-            type: 'bar',
-            data: {
-                labels: categoryLabels,
-                datasets: [{
-                    label: 'Total Stock',
-                    data: categoryStockData,
-                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                    borderColor: 'rgb(59, 130, 246)',
-                    borderWidth: 2,
-                    borderRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            font: {
-                                family: 'Montserrat',
-                                size: 12,
-                                weight: 'bold'
-                            },
-                            color: '#374151'
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        padding: 12,
-                        titleFont: {
-                            size: 14,
-                            weight: 'bold'
-                        },
-                        bodyFont: {
-                            size: 13
-                        },
-                        callbacks: {
-                            label: function(context) {
-                                const idx = context.dataIndex;
-                                const stock = categoryStockData[idx];
-                                const avg = avgStockData[idx];
-                                const products = numProductsData[idx];
-                                return [
-                                    'Total Stock: ' + stock,
-                                    'Avg Stock: ' + avg,
-                                    'Products: ' + products
-                                ];
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            font: {
-                                size: 11
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            font: {
-                                size: 11,
-                                weight: 'bold'
-                            }
-                        },
-                        grid: {
-                            display: false
-                        }
-                    }
-                }
-            }
-        });
-    });
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+            bulkRestockData = null;
+        }
 
-    // Low Stock Products by Category Chart
-    const lowStockCategoryCtx = document.getElementById('lowStockCategoryChart').getContext('2d');
-    const lowStockLabels = <?php echo json_encode(array_map(fn($c) => $c['category'] ?? '', $category_analytics)); ?>;
-    const lowStockData =
-        <?php echo json_encode(array_map(fn($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
-
-    const lowStockCategoryChart = new Chart(lowStockCategoryCtx, {
-        type: 'bar',
-        data: {
-            labels: lowStockLabels,
-            datasets: [{
-                label: 'Low Stock Products',
-                data: lowStockData,
-                backgroundColor: 'rgba(239, 68, 68, 0.8)',
-                borderColor: 'rgb(239, 68, 68)',
-                borderWidth: 2,
-                borderRadius: 5
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return 'Low Stock Products: ' + context.parsed.x;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    beginAtZero: true
-                },
-                y: {
-                    ticks: {
-                        font: {
-                            size: 11,
-                            weight: 'bold'
-                        }
-                    }
-                }
+        function confirmBulkRestock() {
+            const dataToSend = bulkRestockData;
+            closeConfirmModal();
+            if (dataToSend) {
+                executeBulkRestock(dataToSend);
             }
         }
-    });
 
-    // Export inventory function
-    function exportInventory() {
-        // In a real implementation, this would generate a CSV or PDF
-        alert('Export functionality would be implemented here');
-    }
+        // Initialize charts when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Only initialize charts if they exist (admin view)
+            const stockStatusCtx = document.getElementById('stockStatusChart');
+            if (stockStatusCtx) {
+                const stockStatusChart = new Chart(stockStatusCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['In Stock', 'Low Stock', 'Out of Stock'],
+                        datasets: [{
+                            data: [
+                                <?php echo $stock_distribution['in_stock']; ?>,
+                                <?php echo $stock_distribution['low_stock']; ?>,
+                                <?php echo $stock_distribution['out_of_stock']; ?>
+                            ],
+                            backgroundColor: [
+                                'rgb(16, 185, 129)', // Green
+                                'rgb(245, 158, 11)', // Amber
+                                'rgb(239, 68, 68)' // Red
+                            ],
+                            borderColor: '#fff',
+                            borderWidth: 3,
+                            hoverOffset: 10
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: {
+                                        family: 'Montserrat',
+                                        size: 11
+                                    },
+                                    color: '#374151',
+                                    padding: 15,
+                                    usePointStyle: true,
+                                    pointStyle: 'circle'
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                padding: 12,
+                                titleFont: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                bodyFont: {
+                                    size: 13
+                                },
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed || 0;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        return label + ': ' + value + ' items (' + percentage + '%)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
 
-    // Bulk restock modal functions
-    function openBulkRestockModal() {
-        document.getElementById('bulkRestockModal').classList.remove('hidden');
-    }
+            // Category Stock Chart
+            const categoryStockCtx = document.getElementById('categoryStockChart');
+            if (categoryStockCtx) {
+                const categoryLabels =
+                    <?php echo json_encode(array_column($category_analytics, 'product_category')); ?>;
+                const categoryStockData =
+                    <?php echo json_encode(array_map(fn($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
+                const avgStockData =
+                    <?php echo json_encode(array_map(fn($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
+                const numProductsData =
+                    <?php echo json_encode(array_map(fn($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
 
-    function closeBulkRestockModal() {
-        document.getElementById('bulkRestockModal').classList.add('hidden');
-    }
+                const categoryStockChart = new Chart(categoryStockCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: categoryLabels,
+                        datasets: [{
+                            label: 'Total Stock',
+                            data: categoryStockData,
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgb(59, 130, 246)',
+                            borderWidth: 2,
+                            borderRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    font: {
+                                        family: 'Montserrat',
+                                        size: 12,
+                                        weight: 'bold'
+                                    },
+                                    color: '#374151'
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                padding: 12,
+                                titleFont: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                bodyFont: {
+                                    size: 13
+                                },
+                                callbacks: {
+                                    label: function(context) {
+                                        const idx = context.dataIndex;
+                                        const stock = categoryStockData[idx];
+                                        const avg = avgStockData[idx];
+                                        const products = numProductsData[idx];
+                                        return [
+                                            'Total Stock: ' + stock,
+                                            'Avg Stock: ' + avg,
+                                            'Products: ' + products
+                                        ];
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    font: {
+                                        size: 11
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 11,
+                                        weight: 'bold'
+                                    }
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
 
-    function submitBulkRestock(event) {
-        event.preventDefault();
-        // In a real implementation, this would submit the bulk restock form
-        alert('Bulk restock functionality would be implemented here');
-        closeBulkRestockModal();
-    }
+        // Low Stock Products by Category Chart
+        const lowStockCategoryCtx = document.getElementById('lowStockCategoryChart');
+        if (lowStockCategoryCtx) {
+            const lowStockLabels =
+                <?php echo json_encode(array_map(fn($c) => $c['category'] ?? '', $category_analytics)); ?>;
+            const lowStockData =
+                <?php echo json_encode(array_map(fn($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
+
+            const lowStockCategoryChart = new Chart(lowStockCategoryCtx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: lowStockLabels,
+                    datasets: [{
+                        label: 'Low Stock Products',
+                        data: lowStockData,
+                        backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                        borderColor: 'rgb(239, 68, 68)',
+                        borderWidth: 2,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Low Stock Products: ' + context.parsed.x;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            ticks: {
+                                font: {
+                                    size: 11,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Export inventory function
+        function exportInventory() {
+            // In a real implementation, this would generate a CSV or PDF
+            alert('Export functionality would be implemented here');
+        }
+
+        // Bulk restock modal functions
+        function openBulkRestockModal() {
+            document.getElementById('bulkRestockModal').classList.remove('hidden');
+        }
+
+        function closeBulkRestockModal() {
+            document.getElementById('bulkRestockModal').classList.add('hidden');
+        }
+
+        function submitBulkRestock(event) {
+            event.preventDefault();
+
+            const quantity = parseFloat(document.getElementById('bulk_quantity').value);
+            const category = document.getElementById('bulk_category').value;
+            const notes = document.getElementById('bulk_notes').value;
+
+            // Store data for confirmation
+            bulkRestockData = {
+                quantity: quantity,
+                category: category,
+                notes: notes
+            };
+
+            // Show confirmation modal
+            const categoryText = category ? `in category "${category}"` : 'in all categories';
+            showConfirmModal(`Are you sure you want to add ${quantity} units to all items ${categoryText}?`);
+        }
+
+        function executeBulkRestock(data) {
+            console.log('Executing bulk restock with data:', data);
+            fetch('bulk_restock.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then((response) => {
+                    console.log('Response status:', response.status);
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log('Response data:', data);
+                    if (data.success) {
+                        closeBulkRestockModal();
+                        showSuccessModal(data.message);
+                    } else {
+                        showErrorModal(data.message || 'Failed to bulk restock');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Fetch error:', error);
+                    showErrorModal('An error occurred: ' + error.message);
+                });
+        }
     </script>
     <script src="../../assets/js/inventory.js"></script>
     <script src="../../assets/js/admin.js"></script>
