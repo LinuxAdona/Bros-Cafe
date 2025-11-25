@@ -26,7 +26,7 @@ if ($date_filter && $date_filter !== '') {
 }
 
 if ($search) {
-    $where[] = "(i.name LIKE :search)";
+    $where[] = "(pi.name LIKE :search)";
     $params['search'] = "%$search%";
 }
 
@@ -521,7 +521,7 @@ $current_user = getCurrentUser();
                 <div class="overflow-hidden bg-white rounded-lg shadow-md">
                     <div class="px-6 py-4 border-b border-gray-200">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-lg font-semibold text-gray-800">Product Inventory</h3>
+                            <h3 class="text-lg font-semibold text-gray-800">Inventory</h3>
                             <div class="flex space-x-2">
                                 <button onclick="exportInventory()"
                                     class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">

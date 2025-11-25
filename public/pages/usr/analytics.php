@@ -739,7 +739,8 @@ $current_user = getCurrentUser();
                         }
                     }
                 }
-            }
+            },
+            indexAxis: 'y'
         }
     });
 
