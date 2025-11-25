@@ -272,7 +272,7 @@ $current_user = getCurrentUser();
                                 'price_sedici' => $product['price_sedici'],
                                 'category_id' => $product['category_id']
                             ];
-                        ?>
+                            ?>
                         <div class="transition-shadow bg-white rounded-lg shadow cursor-pointer product-card hover:shadow-lg"
                             data-category="<?php echo $product['category_id']; ?>"
                             onclick="addToCart(<?php echo htmlspecialchars(json_encode($productData), ENT_QUOTES, 'UTF-8'); ?>)">

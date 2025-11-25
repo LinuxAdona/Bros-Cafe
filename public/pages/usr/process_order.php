@@ -1,4 +1,5 @@
 <?php
+
 require_once '../../../config/database.php';
 require_once '../../../src/services/functions.php';
 
@@ -61,29 +62,70 @@ try {
             'subtotal' => $subtotal
         ]);
 
-        // Update inventory
+        // Take all the ingredients for the product
         $stmt = $conn->prepare("
-            UPDATE inventory 
-            SET quantity = quantity - :quantity 
-            WHERE ingredient_id = :ingredient_id
+            SELECT i.id as ingredient_id, i.name as ingredient_name, pi.quantity, pi.unit
+            FROM product_ingredients pi
+            JOIN ingredients i ON pi.ingredient_id = i.id
+            WHERE pi.product_id = :product_id
         ");
 
-        $stmt->execute([
-            'quantity' => $item['quantity'],
-            'ingredient_id' => $item['id']
-        ]);
+        $stmt->execute(['product_id' => $item['id']]);
+        $p_ingredients = $stmt->fetchAll();
 
-        // Log inventory transaction
-        $stmt = $conn->prepare("
-            INSERT INTO inventory_transactions (ingredient_id, transaction_type, quantity, user_id) 
-            VALUES (:ingredient_id, 'sale', :quantity, :user_id)
-        ");
+        if ($p_ingredients === false) {
+            throw new Exception('Failed to fetch product ingredients for product ID: ' . $item['id']);
+        }
 
-        $stmt->execute([
-            'ingredient_id' => $item['id'],
-            'quantity' => -$item['quantity'],
-            'user_id' => $_SESSION['user_id']
-        ]);
+        // For each ingredient, update inventory
+        foreach ($p_ingredients as $ingredient) {
+            $stmt = $conn->prepare("
+                UPDATE inventory SET quantity = quantity - (:ingredient_quantity * :product_quantity)
+                WHERE ingredient_id = :ingredient_id
+            ");
+
+            $stmt->execute([
+                'ingredient_quantity' => $ingredient['quantity'],
+                'product_quantity' => $item['quantity'],
+                'ingredient_id' => $ingredient['ingredient_id']
+            ]);
+
+            // Log inventory transaction
+            $stmt = $conn->prepare("
+                INSERT INTO inventory_transactions (ingredient_id, transaction_type, quantity, user_id)
+                VALUES (:ingredient_id, 'sale', :quantity, :user_id)
+            ");
+
+            $stmt->execute([
+                'ingredient_id' => $ingredient['ingredient_id'],
+                'quantity' => - ($ingredient['quantity'] * $item['quantity']),
+                'user_id' => $_SESSION['user_id']
+            ]);
+        }
+
+        // // Update inventory
+        // $stmt = $conn->prepare("
+        //     UPDATE inventory
+        //     SET quantity = quantity - :quantity
+        //     WHERE ingredient_id = :ingredient_id
+        // ");
+        //
+        // $stmt->execute([
+        //     'quantity' => $item['quantity'],
+        //     'ingredient_id' => $item['id']
+        // ]);
+        //
+        // // Log inventory transaction
+        // $stmt = $conn->prepare("
+        //     INSERT INTO inventory_transactions (ingredient_id, transaction_type, quantity, user_id)
+        //     VALUES (:ingredient_id, 'sale', :quantity, :user_id)
+        // ");
+        //
+        // $stmt->execute([
+        //     'ingredient_id' => $item['id'],
+        //     'quantity' => -$item['quantity'],
+        //     'user_id' => $_SESSION['user_id']
+        // ]);
     }
 
     // Update sales summary for today

@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between">
+                <!-- <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <input id="remember" name="remember" type="checkbox"
                             class="w-4 h-4 border-gray-300 rounded text-amber-600 focus:ring-amber-500">
@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="text-sm">
                         <a href="#" class="font-medium text-amber-600 hover:text-amber-500">Forgot password?</a>
                     </div>
-                </div>
+                </div> -->
 
                 <button type="submit"
                     class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white transition-colors border border-transparent rounded-lg shadow-sm cursor-pointer bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
