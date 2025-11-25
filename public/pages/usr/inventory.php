@@ -531,10 +531,25 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <h3 class="text-lg font-semibold text-gray-800">Inventory</h3>
                             <div class="flex space-x-2">
-                                <button onclick="exportInventory()"
-                                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">
-                                    Export
-                                </button>
+                                <div class="relative inline-block text-left">
+                                    <button onclick="toggleExportDropdown()" type="button"
+                                        class="inline-flex justify-between items-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">
+                                        Export
+                                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </button>
+                                    <div id="exportDropdown" class="hidden absolute right-0 z-10 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                        <div class="py-1" role="menu">
+                                            <button onclick="exportInventory('csv')" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                                Export as CSV
+                                            </button>
+                                            <button onclick="exportInventory('pdf')" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                                Export as PDF
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                                 <button onclick="openBulkRestockModal()"
                                     class="px-4 py-2 text-sm font-medium text-white rounded-md bg-amber-600 hover:bg-amber-700">
                                     Bulk Restock
@@ -1328,10 +1343,26 @@ $current_user = getCurrentUser();
         }
 
         // Export inventory function
-        function exportInventory() {
-            // In a real implementation, this would generate a CSV or PDF
-            alert('Export functionality would be implemented here');
+        function exportInventory(format) {
+            window.location.href = 'export_inventory.php?format=' + format;
+            toggleExportDropdown(); // Close dropdown after selection
         }
+
+        // Toggle export dropdown
+        function toggleExportDropdown() {
+            const dropdown = document.getElementById('exportDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('exportDropdown');
+            const button = event.target.closest('button[onclick="toggleExportDropdown()"]');
+            
+            if (!button && dropdown && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
 
         // Bulk restock modal functions
         function openBulkRestockModal() {

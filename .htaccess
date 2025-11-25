@@ -5,6 +5,27 @@ ErrorDocument 403 /403.shtml
 ErrorDocument 404 /404.shtml
 ErrorDocument 500 /500.shtml
 
+# Set default index
+DirectoryIndex index.php index.html
+
+# Prevent directory browsing
+Options -Indexes
+
+# Enable rewrite engine
+RewriteEngine On
+
+# Force HTTPS (uncomment in production)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
 # Deny access to .cpanel.yml file
 <Files .cpanel.yml>
     Order allow,deny
@@ -17,8 +38,8 @@ ErrorDocument 500 /500.shtml
     Deny from all
 </FilesMatch>
 
-# Deny access to configuration files
-<FilesMatch "\.(yml|yaml|json|md)$">
+# Deny access to configuration and documentation files
+<FilesMatch "\.(yml|yaml|md)$">
     Order allow,deny
     Deny from all
 </FilesMatch>
@@ -29,8 +50,21 @@ ErrorDocument 500 /500.shtml
     Deny from all
 </FilesMatch>
 
+# Protect SQL files
+<FilesMatch "\.sql$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
 # Set default charset
 AddDefaultCharset UTF-8
+
+# Set max upload file size for product images
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
+
+# Set session timeout (30 minutes)
+php_value session.gc_maxlifetime 1800
 
 # Enable GZIP compression
 <IfModule mod_deflate.c>
@@ -44,6 +78,8 @@ AddDefaultCharset UTF-8
     ExpiresByType image/jpeg "access plus 1 year"
     ExpiresByType image/gif "access plus 1 year"
     ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
     ExpiresByType text/css "access plus 1 month"
     ExpiresByType application/pdf "access plus 1 month"
     ExpiresByType text/javascript "access plus 1 month"
