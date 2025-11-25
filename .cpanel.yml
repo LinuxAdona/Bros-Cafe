@@ -47,7 +47,7 @@ deployment:
     - chmod 777 $DEPLOYPATH/public/assets/images/products
     - chmod 644 $DEPLOYPATH/config/database.php
     - chmod 644 $DEPLOYPATH/index.php
-    
+
     # Set permissions for writable directories (for image uploads, logs, etc.)
     - find $DEPLOYPATH/public/assets/images/products -type d -exec chmod 777 {} \;
     - find $DEPLOYPATH/public/assets/images/products -type f -exec chmod 666 {} \;

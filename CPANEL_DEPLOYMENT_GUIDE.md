@@ -1,9 +1,11 @@
 # cPanel Git Deployment Guide for Bros Cafe
 
 ## Overview
+
 This guide will help you set up automatic deployment from GitHub to your cPanel hosting using Git Version Control.
 
 ## Prerequisites
+
 - cPanel account with Git Version Control feature
 - GitHub repository (LinuxAdona/Bros-Cafe)
 - Database credentials from your hosting provider
@@ -20,6 +22,7 @@ This guide will help you set up automatic deployment from GitHub to your cPanel 
 
 1. Click **Create** button
 2. Fill in the following details:
+
    - **Clone URL**: `https://github.com/LinuxAdona/Bros-Cafe.git`
    - **Repository Path**: `/home2/broscafe/repositories/Bros-Cafe`
    - **Repository Name**: `Bros-Cafe`
@@ -57,7 +60,7 @@ class Database {
     private $username = "broscafe_dbuser";  // Your cPanel database username
     private $password = "your_secure_password";  // Your database password
     private $conn;
-    
+
     // ... rest of the file
 }
 ```
@@ -73,12 +76,14 @@ class Database {
 ### 6. Verify Permissions
 
 The `.cpanel.yml` file automatically sets these permissions:
+
 - `/public/assets/images/products/` → 777 (for product image uploads)
 - `/config/database.php` → 644 (secure config)
 - All other directories → 755
 - All other files → 644
 
 If needed, verify in cPanel **File Manager**:
+
 1. Navigate to `/home2/broscafe/public_html/public/assets/images/products/`
 2. Right-click → **Permissions**
 3. Ensure it's set to `777` (rwxrwxrwx)
@@ -135,6 +140,7 @@ RewriteEngine On
 To deploy new changes:
 
 1. **Push changes to GitHub** from your local machine:
+
    ```bash
    git add .
    git commit -m "Your commit message"
@@ -170,21 +176,26 @@ If you have SSH access, you can set up a webhook:
 ## Troubleshooting
 
 ### Issue: Files not deploying
+
 - **Solution**: Check `.cpanel.yml` syntax, ensure paths are correct
 
 ### Issue: Database connection failed
+
 - **Solution**: Verify database credentials in `config/database.php`
 - Check database user has proper privileges
 
 ### Issue: Images not uploading
+
 - **Solution**: Check `/public/assets/images/products/` has 777 permissions
 
 ### Issue: 500 Internal Server Error
+
 - **Solution**: Check PHP version compatibility (requires PHP 7.4+)
 - Enable error reporting temporarily to see specific errors
 - Check file permissions
 
 ### Issue: Styles/Scripts not loading
+
 - **Solution**: Clear browser cache
 - Verify all asset files were copied
 - Check file paths are correct
@@ -227,6 +238,7 @@ If you have SSH access, you can set up a webhook:
 ## Support
 
 For issues specific to:
+
 - **Hosting**: Contact your hosting provider's support
 - **Application**: Check GitHub repository issues
 - **Database**: Verify credentials and table structure

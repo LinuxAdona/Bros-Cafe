@@ -1358,7 +1358,7 @@ $current_user = getCurrentUser();
         document.addEventListener('click', function(event) {
             const dropdown = document.getElementById('exportDropdown');
             const button = event.target.closest('button[onclick="toggleExportDropdown()"]');
-            
+
             if (!button && dropdown && !dropdown.contains(event.target)) {
                 dropdown.classList.add('hidden');
             }
