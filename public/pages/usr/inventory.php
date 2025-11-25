@@ -7,17 +7,52 @@ requireEmployee();
 $db = new Database();
 $conn = $db->getConnection();
 
+// Get filter parameters
+$date_filter = isset($_GET['date']) ? $_GET['date'] : '';
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Pagination parameters
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$per_page = 10; // Orders per page
+$offset = ($page - 1) * $per_page;
+
+// Build query based on filters
+$where = ["1=1"];
+$params = [];
+
+if ($date_filter && $date_filter !== '') {
+    $where[] = "DATE(i.last_restocked) = :date";
+    $params['date'] = $date_filter;
+}
+
+if ($search) {
+    $where[] = "(i.name LIKE :search)";
+    $params['search'] = "%$search%";
+}
+
+$where_clause = implode(' AND ', $where);
+
 // Get all ingredients with inventory
-$stmt = $conn->query("
+$sql = "
     SELECT DISTINCT pi.*, i.quantity, i.reorder_level, i.last_restocked, i.unit
     FROM ingredients pi
     LEFT JOIN product_ingredients pii ON pi.id = pii.ingredient_id 
     LEFT JOIN products p ON pii.product_id = p.id 
     LEFT JOIN categories c ON p.category_id = c.id
     LEFT JOIN inventory i ON pi.id = i.ingredient_id
-    ORDER BY pi.name
-");
-$products = $stmt->fetchAll();
+    WHERE $where_clause
+    GROUP BY pi.name
+    ORDER BY i.last_restocked DESC
+    LIMIT :limit OFFSET :offset
+";
+$stmt = $conn->prepare($sql);
+foreach ($params as $key => $value) {
+    $stmt->bindValue(":$key", $value);
+}
+$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
+$items = $stmt->fetchAll();
 
 // Get low stock items
 $stmt = $conn->query("
@@ -39,7 +74,7 @@ $stmt = $conn->query("
     FROM categories c
     JOIN products p ON c.id = p.category_id
     JOIN product_ingredients pi ON p.id = pi.product_id
-    JOIN inventory i ON pi.ingredient_id = i.id
+    JOIN inventory i ON pi.ingredient_id = i.ingredient_id
     GROUP BY c.name
     ORDER BY c.name;
 ");
@@ -77,6 +112,15 @@ function convertUnit($stock, $unit)
     // Otherwise, return original value and unit
     return [$stock, $unit];
 }
+
+// Get Total count for Pagination
+$stmt = $conn->query("
+    SELECT COUNT(*) as total 
+    FROM ingredients 
+    JOIN inventory ON ingredients.id = inventory.ingredient_id
+");
+$total_ingredients = $stmt->fetch()['total'];
+$total_pages = ceil($total_ingredients / $per_page);
 
 $current_user = getCurrentUser();
 ?>
@@ -285,8 +329,8 @@ $current_user = getCurrentUser();
                                 </svg>
                             </div>
                             <div class="ml-5">
-                                <p class="text-sm text-gray-500">Total Products</p>
-                                <p class="text-2xl font-semibold text-gray-900"><?php echo count($products); ?></p>
+                                <p class="text-sm text-gray-500">Total Items</p>
+                                <p class="text-2xl font-semibold text-gray-900"><?php echo count($items); ?></p>
                             </div>
                         </div>
                     </div>
@@ -317,7 +361,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Available Items</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($products, fn ($p) => $p['quantity'] > $p['reorder_level'])); ?>
+                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] > $p['reorder_level'])); ?>
                                 </p>
                             </div>
                         </div>
@@ -334,7 +378,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Out of Stock</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($products, fn ($p) => $p['quantity'] == 0)); ?>
+                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] == 0)); ?>
                                 </p>
                             </div>
                         </div>
@@ -445,8 +489,36 @@ $current_user = getCurrentUser();
                     </div>
                 <?php endif; ?>
 
+                <!-- Filters -->
+               <div class="p-6 mb-6 bg-white rounded-lg shadow-md">
+                    <form method="GET" class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-700">Date</label>
+                            <input type="date" name="date" value="<?php echo htmlspecialchars($date_filter); ?>"
+                                placeholder="All dates"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-700">Search</label>
+                            <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>"
+                                placeholder="Order # or customer name"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <button type="submit"
+                                class="flex-1 px-6 py-2 text-white transition-colors rounded-lg bg-amber-600 hover:bg-amber-700">
+                                <i class="mr-2 fa-solid fa-filter"></i>Apply Filters
+                            </button>
+                            <a href="inventory.php"
+                                class="px-6 py-2 text-gray-700 transition-colors bg-gray-200 rounded-lg hover:bg-gray-300">
+                                <i class="fa-solid fa-times"></i>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
                 <!-- Inventory Table -->
-                <div class="overflow-hidden bg-white rounded-lg shadow">
+                <div class="overflow-hidden bg-white rounded-lg shadow-md">
                     <div class="px-6 py-4 border-b border-gray-200">
                         <div class="flex items-center justify-between">
                             <h3 class="text-lg font-semibold text-gray-800">Product Inventory</h3>
@@ -468,7 +540,7 @@ $current_user = getCurrentUser();
                                 <tr>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                        Product</th>
+                                        Items</th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Stock</th>
@@ -487,7 +559,7 @@ $current_user = getCurrentUser();
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <?php foreach ($products as $product): ?>
+                                <?php foreach ($items as $product): ?>
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-medium text-gray-900"><?php echo $product['name']; ?>
@@ -537,6 +609,88 @@ $current_user = getCurrentUser();
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination -->
+                    <?php if ($total_pages > 1): ?>
+                        <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+                            <div class="flex items-center text-sm text-gray-700">
+                                <span>Showing <span class="font-semibold"><?php echo $offset + 1; ?></span> to
+                                    <span
+                                        class="font-semibold"><?php echo min($offset + $per_page, $total_ingredients); ?></span>
+                                    of
+                                    <span class="font-semibold"><?php echo $total_ingredients; ?></span> orders</span>
+                            </div>
+
+                            <div class="flex gap-2">
+                                <!-- Previous Button -->
+                                <?php if ($page > 1): ?>
+                                    <a href="?page=<?php echo $page - 1; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
+                                    </a>
+                                <?php else: ?>
+                                    <span
+                                        class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
+                                    </span>
+                                <?php endif; ?>
+
+                                <!-- Page Numbers -->
+                                <div class="flex gap-1">
+                                    <?php
+                                    $start_page = max(1, $page - 2);
+$end_page = min($total_pages, $page + 2);
+
+if ($start_page > 1): ?>
+                                        <a href="?page=1&&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                            1
+                                        </a>
+                                        <?php if ($start_page > 2): ?>
+                                            <span class="px-3 py-2 text-sm text-gray-500">...</span>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+
+                                    <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
+                                        <?php if ($i == $page): ?>
+                                            <span class="px-3 py-2 text-sm font-medium text-white rounded-lg bg-amber-600">
+                                                <?php echo $i; ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <a href="?page=<?php echo $i; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                                class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                                <?php echo $i; ?>
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php endfor; ?>
+
+                                    <?php if ($end_page < $total_pages): ?>
+                                        <?php if ($end_page < $total_pages - 1): ?>
+                                            <span class="px-3 py-2 text-sm text-gray-500">...</span>
+                                        <?php endif; ?>
+                                        <a href="?page=<?php echo $total_pages; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                            <?php echo $total_pages; ?>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+
+                                <!-- Next Button -->
+                                <?php if ($page < $total_pages): ?>
+                                    <a href="?page=<?php echo $page + 1; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        Next <i class="ml-1 fa-solid fa-chevron-right"></i>
+                                    </a>
+                                <?php else: ?>
+                                    <span
+                                        class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+                                        Next <i class="ml-1 fa-solid fa-chevron-right"></i>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
                 </div>
             </div>
         </div>
@@ -550,7 +704,7 @@ $current_user = getCurrentUser();
                 <form id="restockForm" onsubmit="submitRestock(event)">
                     <input type="hidden" id="restock_product_id">
                     <div class="mb-4">
-                        <label class="block mb-2 text-sm font-medium text-gray-700">Product</label>
+                        <label class="block mb-2 text-sm font-medium text-gray-700">Items</label>
                         <p id="restock_product_name" class="font-semibold text-gray-900"></p>
                     </div>
                     <div class="mb-4">
