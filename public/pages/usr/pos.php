@@ -13,7 +13,7 @@ $categories = $stmt->fetchAll();
 
 // Get all products with inventory
 $stmt = $conn->query("
-    SELECT p.*, c.name as category_name, i.quantity as stock 
+    SELECT p.*, c.id as category_id, c.name as category_name, i.quantity as stock 
     FROM products p 
     LEFT JOIN categories c ON p.category_id = c.id 
     LEFT JOIN inventory i ON p.id = i.ingredient_id 
@@ -272,10 +272,10 @@ $current_user = getCurrentUser();
                                 'price_sedici' => $product['price_sedici'],
                                 'category_id' => $product['category_id']
                             ];
-                            ?>
+                        ?>
                         <div class="transition-shadow bg-white rounded-lg shadow cursor-pointer product-card hover:shadow-lg"
                             data-category="<?php echo $product['category_id']; ?>"
-                            onclick='addToCart(<?php echo json_encode($productData); ?>)'>
+                            onclick="addToCart(<?php echo htmlspecialchars(json_encode($productData), ENT_QUOTES, 'UTF-8'); ?>)">
                             <div class="p-4">
                                 <div class="flex items-center justify-center w-full mb-3 overflow-hidden bg-gray-100 rounded-lg"
                                     style="aspect-ratio: 1 / 1;">
@@ -315,8 +315,12 @@ $current_user = getCurrentUser();
                     class="relative p-3 text-white transition-all rounded-full shadow-lg bg-amber-600 hover:bg-amber-700 hover:shadow-xl">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 01b4 0z" />
                     </svg>
+                    <!-- Badge for item count when cart is hidden -->
+                    <span id="cart-badge"
+                        class="absolute top-0 right-0 flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 rounded-full"
+                        style="display: none;"></span>
                 </button>
             </div>
 

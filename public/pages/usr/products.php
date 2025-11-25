@@ -80,10 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Get all products
 $stmt = $conn->query("
-    SELECT p.*, c.name as category_name, i.quantity as stock_quantity
+    SELECT p.*, c.name as category_name
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
-    LEFT JOIN inventory i ON p.id = i.product_id
     ORDER BY p.name
 ");
 $products = $stmt->fetchAll();
@@ -330,33 +329,33 @@ $current_user = getCurrentUser();
                         </div>
                     </div>
 
-                    <div class="p-6 bg-white rounded-lg shadow-md">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-gray-600">Available</p>
-                                <p class="text-2xl font-bold text-green-600">
-                                    <?php echo count(array_filter($products, fn($p) => $p['status'] === 'available')); ?>
-                                </p>
-                            </div>
-                            <div class="p-3 bg-green-100 rounded-full">
-                                <i class="text-2xl text-green-600 fa-solid fa-check-circle"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-6 bg-white rounded-lg shadow-md">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-gray-600">Unavailable</p>
-                                <p class="text-2xl font-bold text-red-600">
-                                    <?php echo count(array_filter($products, fn($p) => $p['status'] === 'unavailable')); ?>
-                                </p>
-                            </div>
-                            <div class="p-3 bg-red-100 rounded-full">
-                                <i class="text-2xl text-red-600 fa-solid fa-times-circle"></i>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- <div class="p-6 bg-white rounded-lg shadow-md"> -->
+                    <!--     <div class="flex items-center justify-between"> -->
+                    <!--         <div> -->
+                    <!--             <p class="text-sm text-gray-600">Available</p> -->
+                    <!--             <p class="text-2xl font-bold text-green-600"> -->
+                    <!--                 <?php echo count(array_filter($products, fn ($p) => $p['status'] === 'available')); ?> -->
+                    <!--             </p> -->
+                    <!--         </div> -->
+                    <!--         <div class="p-3 bg-green-100 rounded-full"> -->
+                    <!--             <i class="text-2xl text-green-600 fa-solid fa-check-circle"></i> -->
+                    <!--         </div> -->
+                    <!--     </div> -->
+                    <!-- </div> -->
+                    <!---->
+                    <!-- <div class="p-6 bg-white rounded-lg shadow-md"> -->
+                    <!--     <div class="flex items-center justify-between"> -->
+                    <!--         <div> -->
+                    <!--             <p class="text-sm text-gray-600">Unavailable</p> -->
+                    <!--             <p class="text-2xl font-bold text-red-600"> -->
+                    <!--                 <?php echo count(array_filter($products, fn ($p) => $p['status'] === 'unavailable')); ?> -->
+                    <!--             </p> -->
+                    <!--         </div> -->
+                    <!--         <div class="p-3 bg-red-100 rounded-full"> -->
+                    <!--             <i class="text-2xl text-red-600 fa-solid fa-times-circle"></i> -->
+                    <!--         </div> -->
+                    <!--     </div> -->
+                    <!-- </div> -->
                 </div>
 
                 <!-- Products Table -->
@@ -380,14 +379,6 @@ $current_user = getCurrentUser();
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Sedici (16oz)
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                        Stock
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                        Status
                                     </th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
@@ -416,16 +407,6 @@ $current_user = getCurrentUser();
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                             <?php echo $product['price_sedici'] ? '₱' . number_format($product['price_sedici'], 2) : '-'; ?>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                                            <?php echo $product['stock_quantity'] ?? 0; ?>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span
-                                                class="px-2 py-1 text-xs font-medium rounded-full 
-                                                <?php echo $product['status'] === 'available' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'; ?>">
-                                                <?php echo ucfirst($product['status']); ?>
-                                            </span>
                                         </td>
                                         <td class="px-6 py-4 text-sm whitespace-nowrap">
                                             <button onclick='editProduct(<?php echo json_encode($product); ?>)'

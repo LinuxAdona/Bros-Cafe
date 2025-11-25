@@ -65,22 +65,22 @@ try {
         $stmt = $conn->prepare("
             UPDATE inventory 
             SET quantity = quantity - :quantity 
-            WHERE product_id = :product_id
+            WHERE ingredient_id = :ingredient_id
         ");
 
         $stmt->execute([
             'quantity' => $item['quantity'],
-            'product_id' => $item['id']
+            'ingredient_id' => $item['id']
         ]);
 
         // Log inventory transaction
         $stmt = $conn->prepare("
-            INSERT INTO inventory_transactions (product_id, transaction_type, quantity, user_id) 
-            VALUES (:product_id, 'sale', :quantity, :user_id)
+            INSERT INTO inventory_transactions (ingredient_id, transaction_type, quantity, user_id) 
+            VALUES (:ingredient_id, 'sale', :quantity, :user_id)
         ");
 
         $stmt->execute([
-            'product_id' => $item['id'],
+            'ingredient_id' => $item['id'],
             'quantity' => -$item['quantity'],
             'user_id' => $_SESSION['user_id']
         ]);

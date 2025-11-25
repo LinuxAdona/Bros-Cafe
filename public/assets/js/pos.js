@@ -405,16 +405,20 @@ function confirmCashPayment() {
         }
     }
 
+    // Save pending order before closing modal (which sets cashPendingOrder to null)
+    const orderToSubmit = cashPendingOrder;
+    
     // Close modal and submit order (include amount_paid if provided)
     closeCashConfirmModal();
 
-    if (amountPaid !== null) {
-        cashPendingOrder.amount_paid = amountPaid;
+    if (amountPaid !== null && orderToSubmit) {
+        orderToSubmit.amount_paid = amountPaid;
     }
 
     // proceed to submit
-    submitOrder(cashPendingOrder);
-    cashPendingOrder = null;
+    if (orderToSubmit) {
+        submitOrder(orderToSubmit);
+    }
 }
 
 // Show change modal
