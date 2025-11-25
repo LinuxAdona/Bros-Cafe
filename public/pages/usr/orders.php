@@ -494,7 +494,7 @@ $current_user = getCurrentUser();
                                                         'gcash' => 'bg-purple-100 text-purple-800',
                                                         default => 'bg-gray-100 text-gray-800'
                                                     };
-                                                    ?>">
+                                        ?>">
                                                     <?php echo strtoupper($order['payment_method']); ?>
                                                 </span>
                                             </td>
@@ -504,15 +504,15 @@ $current_user = getCurrentUser();
                                             <td class="px-6 py-4 text-sm whitespace-nowrap">
                                                 <span class="px-2 py-1 text-xs font-medium rounded-full 
                                                     <?php
-                                                    echo match ($order['status']) {
-                                                        'pending' => 'bg-yellow-100 text-yellow-800',
-                                                        'preparing' => 'bg-blue-100 text-blue-800',
-                                                        'ready' => 'bg-purple-100 text-purple-800',
-                                                        'completed' => 'bg-green-100 text-green-800',
-                                                        'cancelled' => 'bg-red-100 text-red-800',
-                                                        default => 'bg-gray-100 text-gray-800'
-                                                    };
-                                                    ?>">
+                                        echo match ($order['status']) {
+                                            'pending' => 'bg-yellow-100 text-yellow-800',
+                                            'preparing' => 'bg-blue-100 text-blue-800',
+                                            'ready' => 'bg-purple-100 text-purple-800',
+                                            'completed' => 'bg-green-100 text-green-800',
+                                            'cancelled' => 'bg-red-100 text-red-800',
+                                            default => 'bg-gray-100 text-gray-800'
+                                        };
+                                        ?>">
                                                     <?php echo ucfirst($order['status']); ?>
                                                 </span>
                                             </td>
@@ -574,9 +574,9 @@ $current_user = getCurrentUser();
                                 <div class="flex gap-1">
                                     <?php
                                     $start_page = max(1, $page - 2);
-                                    $end_page = min($total_pages, $page + 2);
+$end_page = min($total_pages, $page + 2);
 
-                                    if ($start_page > 1): ?>
+if ($start_page > 1): ?>
                                         <a href="?page=1&status=<?php echo $status_filter; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
                                             class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                             1
@@ -665,7 +665,6 @@ $current_user = getCurrentUser();
                 </button>
             </div>
         </div>
-    </div>
     </div>
 
     <!-- Update Status Modal -->

@@ -361,7 +361,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Available Items</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] > $p['reorder_level'])); ?>
+                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] > $p['reorder_level'])); ?>
                                 </p>
                             </div>
                         </div>
@@ -378,7 +378,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Out of Stock</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] == 0)); ?>
+                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] == 0)); ?>
                                 </p>
                             </div>
                         </div>
@@ -435,9 +435,9 @@ $current_user = getCurrentUser();
                                                         <?php echo date('M d, Y', strtotime($restock['last_restocked'])); ?></td>
                                                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
                                                         <?php
-                                                            list($convertedQty, $convertedUnit) = convertUnit($restock['quantity'], $restock['unit']);
-                                                echo $convertedQty . ' ' . $convertedUnit;
-                                                ?>
+                                                        list($convertedQty, $convertedUnit) = convertUnit($restock['quantity'], $restock['unit']);
+                                                        echo $convertedQty . ' ' . $convertedUnit;
+                                                        ?>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -459,10 +459,18 @@ $current_user = getCurrentUser();
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
-                                            <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Category</th>
-                                            <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Products</th>
-                                            <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Avg Stock</th>
-                                            <th class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Total Stock</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Category</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Products</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Avg Stock</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                Total Stock</th>
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
@@ -490,7 +498,7 @@ $current_user = getCurrentUser();
                 <?php endif; ?>
 
                 <!-- Filters -->
-               <div class="p-6 mb-6 bg-white rounded-lg shadow-md">
+                <div class="p-6 mb-6 bg-white rounded-lg shadow-md">
                     <form method="GET" class="grid grid-cols-1 gap-4 md:grid-cols-3">
                         <div>
                             <label class="block mb-2 text-sm font-medium text-gray-700">Date</label>
@@ -568,15 +576,15 @@ $current_user = getCurrentUser();
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">
                                                 <?php
-                                                    list($convertedQty, $convertedUnit) = convertUnit($product['quantity'], $product['unit']);
-                                    echo $convertedQty . ' ' . $convertedUnit;
-                                    ?></div>
+                                                list($convertedQty, $convertedUnit) = convertUnit($product['quantity'], $product['unit']);
+                                                echo $convertedQty . ' ' . $convertedUnit;
+                                                ?></div>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                                             <?php
-                                                list($convertedReorderQty, $convertedReorderUnit) = convertUnit($product['reorder_level'], $product['unit']);
-                                    echo $convertedReorderQty . ' ' . $convertedReorderUnit;
-                                    ?>
+                                            list($convertedReorderQty, $convertedReorderUnit) = convertUnit($product['reorder_level'], $product['unit']);
+                                            echo $convertedReorderQty . ' ' . $convertedReorderUnit;
+                                            ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <?php if ($product['quantity'] == 0): ?>
@@ -598,7 +606,7 @@ $current_user = getCurrentUser();
                                         </td>
                                         <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
                                             <button
-                                                onclick="openRestockModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>)"
+                                                onclick="openRestockModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>, '<?php echo addslashes($product['unit']); ?>')"
                                                 class="mr-3 text-amber-600 hover:text-amber-900">Restock</button>
                                             <button
                                                 onclick="openAdjustModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>)"
@@ -639,9 +647,9 @@ $current_user = getCurrentUser();
                                 <div class="flex gap-1">
                                     <?php
                                     $start_page = max(1, $page - 2);
-$end_page = min($total_pages, $page + 2);
+                                    $end_page = min($total_pages, $page + 2);
 
-if ($start_page > 1): ?>
+                                    if ($start_page > 1): ?>
                                         <a href="?page=1&&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
                                             class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                             1
@@ -691,44 +699,94 @@ if ($start_page > 1): ?>
                         </div>
                     <?php endif; ?>
                 </div>
-                </div>
             </div>
         </div>
     </div>
+    </div>
 
-    <!-- Restock Modal -->
-    <div id="restockModal" class="fixed inset-0 z-50 hidden w-full h-full overflow-y-auto bg-gray-600 bg-opacity-50">
-        <div class="relative p-5 mx-auto bg-white border rounded-md shadow-lg top-20 w-96">
-            <div class="mt-3">
-                <h3 class="mb-4 text-lg font-medium text-gray-900">Restock Product</h3>
+    <div id="restockModal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-30 backdrop-blur modal-backdrop">
+        <div
+            class="w-full max-w-md mx-4 overflow-hidden transition-all transform bg-white shadow-2xl rounded-2xl animate-modal border border-amber-200">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-amber-500 to-amber-600">
+                <div class="flex items-center justify-between text-white">
+                    <div>
+                        <h3 class="text-xl font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-boxes-stacked mr-2"></i> Restock Item
+                        </h3>
+                    </div>
+                    <button onclick="closeRestockModal()" class="text-white transition-colors hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-4" style="max-height: 500px; overflow-y: auto;">
                 <form id="restockForm" onsubmit="submitRestock(event)">
                     <input type="hidden" id="restock_product_id">
+                    <input type="hidden" id="restock_base_unit">
+                    <input type="hidden" id="restock_base_quantity">
+
                     <div class="mb-4">
-                        <label class="block mb-2 text-sm font-medium text-gray-700">Items</label>
-                        <p id="restock_product_name" class="font-semibold text-gray-900"></p>
+                        <label class="block mb-2 text-sm font-medium text-gray-700">Item Name</label>
+                        <p id="restock_product_name" class="font-semibold text-gray-900 text-lg"></p>
                     </div>
+
+                    <!-- Current Stock Display with Unit Selector -->
+                    <div class="p-4 mb-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="text-sm font-medium text-gray-700">Current Stock</label>
+                            <select id="restock_display_unit" onchange="updateDisplayUnit()"
+                                class="text-sm px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500">
+                                <!-- Options will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span id="restock_current_stock" class="text-2xl font-bold text-gray-900"></span>
+                            <span id="restock_current_unit" class="text-lg font-medium text-gray-500"></span>
+                        </div>
+                    </div>
+
+                    <!-- Add Quantity with Unit Selector -->
                     <div class="mb-4">
-                        <label class="block mb-2 text-sm font-medium text-gray-700">Current Stock</label>
-                        <p id="restock_current_stock" class="text-gray-900"></p>
+                        <label for="restock_quantity" class="block mb-2 text-sm font-medium text-gray-700">
+                            Add Quantity
+                        </label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="restock_quantity" step="0.01" min="0.01" required
+                                placeholder="0.00"
+                                class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                            <select id="restock_input_unit"
+                                class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                                <!-- Options will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">
+                            Base unit: <span id="restock_base_unit_display"></span>
+                        </p>
                     </div>
+
+                    <!-- Notes -->
                     <div class="mb-4">
-                        <label for="restock_quantity" class="block mb-2 text-sm font-medium text-gray-700">Add
-                            Quantity</label>
-                        <input type="number" id="restock_quantity" min="1" required
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500">
+                        <label for="restock_notes" class="block mb-2 text-sm font-medium text-gray-700">
+                            Notes (Optional)
+                        </label>
+                        <textarea id="restock_notes" rows="3" placeholder="Add any notes about this restock..."
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"></textarea>
                     </div>
-                    <div class="mb-4">
-                        <label for="restock_notes" class="block mb-2 text-sm font-medium text-gray-700">Notes
-                            (Optional)</label>
-                        <textarea id="restock_notes" rows="2"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500"></textarea>
-                    </div>
-                    <div class="flex justify-end space-x-3">
-                        <button type="button" onclick="closeRestockModal()"
-                            class="px-4 py-2 text-gray-700 bg-gray-300 rounded-md hover:bg-gray-400">Cancel</button>
-                        <button type="submit"
-                            class="px-4 py-2 text-white rounded-md bg-amber-600 hover:bg-amber-700">Restock</button>
-                    </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-gray-200 bg-gray-50 flex justify-end space-x-3">
+                <button type="button" onclick="closeRestockModal()"
+                    class="px-4 py-2 text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
+                <button type="submit"
+                    class="px-4 py-2 text-white rounded-lg bg-amber-600 hover:bg-amber-700">Restock</button>
                 </form>
             </div>
         </div>
@@ -775,7 +833,78 @@ if ($start_page > 1): ?>
         </div>
     </div>
 
+    <!-- Success Modal -->
+    <div id="successModal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-30 backdrop-blur modal-backdrop">
+        <div
+            class="w-full max-w-sm mx-4 overflow-hidden transition-all transform bg-white shadow-2xl rounded-2xl animate-modal">
+            <div class="p-6 bg-gradient-to-r from-green-500 to-green-600">
+                <div class="flex items-center justify-center w-16 h-16 mx-auto bg-white rounded-full">
+                    <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="p-6 text-center">
+                <h3 class="mb-2 text-xl font-bold text-gray-900">Success!</h3>
+                <p id="successMessage" class="text-gray-600"></p>
+            </div>
+            <div class="p-4 border-t border-gray-200 bg-gray-50">
+                <button onclick="closeSuccessModal()"
+                    class="w-full px-4 py-2 text-white transition-colors rounded-lg bg-green-600 hover:bg-green-700">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="errorModal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-30 backdrop-blur modal-backdrop">
+        <div
+            class="w-full max-w-sm mx-4 overflow-hidden transition-all transform bg-white shadow-2xl rounded-2xl animate-modal">
+            <div class="p-6 bg-gradient-to-r from-red-500 to-red-600">
+                <div class="flex items-center justify-center w-16 h-16 mx-auto bg-white rounded-full">
+                    <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+            <div class="p-6 text-center">
+                <h3 class="mb-2 text-xl font-bold text-gray-900">Error!</h3>
+                <p id="errorMessage" class="text-gray-600"></p>
+            </div>
+            <div class="p-4 border-t border-gray-200 bg-gray-50">
+                <button onclick="closeErrorModal()"
+                    class="w-full px-4 py-2 text-white transition-colors rounded-lg bg-red-600 hover:bg-red-700">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Modal functions
+        function showSuccessModal(message) {
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            location.reload();
+        }
+
+        function showErrorModal(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorModal').classList.remove('hidden');
+        }
+
+        function closeErrorModal() {
+            document.getElementById('errorModal').classList.add('hidden');
+        }
+
         // Initialize charts when the page loads
         document.addEventListener('DOMContentLoaded', function() {
             // Stock Status Chart
@@ -843,10 +972,14 @@ if ($start_page > 1): ?>
 
             // Category Stock Chart
             const categoryStockCtx = document.getElementById('categoryStockChart').getContext('2d');
-            const categoryLabels = <?php echo json_encode(array_column($category_analytics, 'product_category')); ?>;
-            const categoryStockData = <?php echo json_encode(array_map(fn ($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
-            const avgStockData = <?php echo json_encode(array_map(fn ($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
-            const numProductsData = <?php echo json_encode(array_map(fn ($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
+            const categoryLabels =
+                <?php echo json_encode(array_column($category_analytics, 'product_category')); ?>;
+            const categoryStockData =
+                <?php echo json_encode(array_map(fn($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
+            const avgStockData =
+                <?php echo json_encode(array_map(fn($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
+            const numProductsData =
+                <?php echo json_encode(array_map(fn($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
 
             const categoryStockChart = new Chart(categoryStockCtx, {
                 type: 'bar',
@@ -932,8 +1065,9 @@ if ($start_page > 1): ?>
 
         // Low Stock Products by Category Chart
         const lowStockCategoryCtx = document.getElementById('lowStockCategoryChart').getContext('2d');
-        const lowStockLabels = <?php echo json_encode(array_map(fn ($c) => $c['category'] ?? '', $category_analytics)); ?>;
-        const lowStockData = <?php echo json_encode(array_map(fn ($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
+        const lowStockLabels = <?php echo json_encode(array_map(fn($c) => $c['category'] ?? '', $category_analytics)); ?>;
+        const lowStockData =
+            <?php echo json_encode(array_map(fn($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
 
         const lowStockCategoryChart = new Chart(lowStockCategoryCtx, {
             type: 'bar',
@@ -953,7 +1087,9 @@ if ($start_page > 1): ?>
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: false },
+                    legend: {
+                        display: false
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
@@ -963,8 +1099,17 @@ if ($start_page > 1): ?>
                     }
                 },
                 scales: {
-                    x: { beginAtZero: true },
-                    y: { ticks: { font: { size: 11, weight: 'bold' } } }
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 11,
+                                weight: 'bold'
+                            }
+                        }
+                    }
                 }
             }
         });
