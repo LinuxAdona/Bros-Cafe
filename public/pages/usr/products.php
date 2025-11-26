@@ -78,14 +78,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get all products
-$stmt = $conn->query("
+// Get filter parameters
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$category_filter = isset($_GET['category']) ? $_GET['category'] : '';
+$status_filter = isset($_GET['status']) ? $_GET['status'] : '';
+
+// Pagination parameters
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$per_page = 10;
+$offset = ($page - 1) * $per_page;
+
+// Build query based on filters
+$where = ["1=1"];
+$params = [];
+
+if ($search) {
+    $where[] = "(p.name LIKE :search OR p.description LIKE :search)";
+    $params['search'] = "%$search%";
+}
+
+if ($category_filter) {
+    $where[] = "p.category_id = :category";
+    $params['category'] = $category_filter;
+}
+
+if ($status_filter) {
+    $where[] = "p.status = :status";
+    $params['status'] = $status_filter;
+}
+
+$where_clause = implode(' AND ', $where);
+
+// Get products with filters and pagination
+$sql = "
     SELECT p.*, c.name as category_name
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
+    WHERE $where_clause
     ORDER BY p.name
-");
+    LIMIT :limit OFFSET :offset
+";
+$stmt = $conn->prepare($sql);
+foreach ($params as $key => $value) {
+    $stmt->bindValue(":$key", $value);
+}
+$stmt->bindValue(':limit', $per_page, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
 $products = $stmt->fetchAll();
+
+// Get total count for pagination
+$count_sql = "SELECT COUNT(*) as total FROM products p WHERE $where_clause";
+$count_stmt = $conn->prepare($count_sql);
+foreach ($params as $key => $value) {
+    $count_stmt->bindValue(":$key", $value);
+}
+$count_stmt->execute();
+$total_products = $count_stmt->fetch()['total'];
+$total_pages = ceil($total_products / $per_page);
 
 // Get all categories
 $stmt = $conn->query("SELECT * FROM categories ORDER BY name");
@@ -393,6 +443,53 @@ $current_user = getCurrentUser();
                     </div>
                 </div>
 
+                <!-- Filters -->
+                <div class="p-6 mb-6 bg-white rounded-lg shadow-md">
+                    <form method="GET" class="grid grid-cols-1 gap-4 md:grid-cols-4">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-700">Search</label>
+                            <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>"
+                                placeholder="Search products..."
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-700">Category</label>
+                            <select name="category"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                <option value="">All Categories</option>
+                                <?php foreach ($categories as $cat): ?>
+                                    <option value="<?php echo $cat['id']; ?>"
+                                        <?php echo $category_filter == $cat['id'] ? 'selected' : ''; ?>>
+                                        <?php echo htmlspecialchars($cat['name']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-700">Status</label>
+                            <select name="status"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                <option value="">All Status</option>
+                                <option value="available"
+                                    <?php echo $status_filter === 'available' ? 'selected' : ''; ?>>Available</option>
+                                <option value="unavailable"
+                                    <?php echo $status_filter === 'unavailable' ? 'selected' : ''; ?>>Unavailable
+                                </option>
+                            </select>
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <button type="submit"
+                                class="flex-1 px-4 py-2 text-white rounded-md bg-amber-600 hover:bg-amber-700 transition-colors">
+                                <i class="fa-solid fa-filter mr-1"></i> Filter
+                            </button>
+                            <a href="products.php"
+                                class="px-4 py-2 text-gray-700 bg-gray-300 rounded-md hover:bg-gray-400 transition-colors">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
                 <!-- Products Table -->
                 <div class="overflow-hidden bg-white rounded-lg shadow-md">
                     <div class="overflow-x-auto">
@@ -449,7 +546,8 @@ $current_user = getCurrentUser();
                                                 class="mr-3 text-purple-600 hover:text-purple-800" title="View Ingredients">
                                                 <i class="fa-solid fa-list"></i>
                                             </button>
-                                            <button onclick='editProduct(<?php echo json_encode($product); ?>)'
+                                            <button
+                                                onclick="editProduct(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['category_id']; ?>, '<?php echo addslashes($product['description'] ?? ''); ?>', '<?php echo $product['status']; ?>', <?php echo $product['price_dodici'] ? $product['price_dodici'] : 'null'; ?>, <?php echo $product['price_sedici'] ? $product['price_sedici'] : 'null'; ?>)"
                                                 class="mr-3 text-blue-600 hover:text-blue-800" title="Edit Product">
                                                 <i class="fa-solid fa-edit"></i>
                                             </button>
@@ -464,6 +562,52 @@ $current_user = getCurrentUser();
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination -->
+                    <?php if ($total_pages > 1): ?>
+                        <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+                            <div class="flex items-center text-sm text-gray-700">
+                                Showing <?php echo $offset + 1; ?> to
+                                <?php echo min($offset + $per_page, $total_products); ?> of <?php echo $total_products; ?>
+                                products
+                            </div>
+                            <div class="flex gap-2">
+                                <?php if ($page > 1): ?>
+                                    <a href="?page=1<?php echo $search ? '&search=' . urlencode($search) : ''; ?><?php echo $category_filter ? '&category=' . urlencode($category_filter) : ''; ?><?php echo $status_filter ? '&status=' . urlencode($status_filter) : ''; ?>"
+                                        class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                        <i class="fa-solid fa-angles-left"></i>
+                                    </a>
+                                    <a href="?page=<?php echo $page - 1; ?><?php echo $search ? '&search=' . urlencode($search) : ''; ?><?php echo $category_filter ? '&category=' . urlencode($category_filter) : ''; ?><?php echo $status_filter ? '&status=' . urlencode($status_filter) : ''; ?>"
+                                        class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                        <i class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                <?php endif; ?>
+
+                                <?php
+                                $start_page = max(1, $page - 2);
+                                $end_page = min($total_pages, $page + 2);
+
+                                for ($i = $start_page; $i <= $end_page; $i++):
+                                ?>
+                                    <a href="?page=<?php echo $i; ?><?php echo $search ? '&search=' . urlencode($search) : ''; ?><?php echo $category_filter ? '&category=' . urlencode($category_filter) : ''; ?><?php echo $status_filter ? '&status=' . urlencode($status_filter) : ''; ?>"
+                                        class="px-3 py-2 text-sm font-medium <?php echo $i === $page ? 'text-white bg-amber-600' : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'; ?> rounded-md">
+                                        <?php echo $i; ?>
+                                    </a>
+                                <?php endfor; ?>
+
+                                <?php if ($page < $total_pages): ?>
+                                    <a href="?page=<?php echo $page + 1; ?><?php echo $search ? '&search=' . urlencode($search) : ''; ?><?php echo $category_filter ? '&category=' . urlencode($category_filter) : ''; ?><?php echo $status_filter ? '&status=' . urlencode($status_filter) : ''; ?>"
+                                        class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                        <i class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                    <a href="?page=<?php echo $total_pages; ?><?php echo $search ? '&search=' . urlencode($search) : ''; ?><?php echo $category_filter ? '&category=' . urlencode($category_filter) : ''; ?><?php echo $status_filter ? '&status=' . urlencode($status_filter) : ''; ?>"
+                                        class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                        <i class="fa-solid fa-angles-right"></i>
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -761,9 +905,143 @@ $current_user = getCurrentUser();
         </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-30 backdrop-blur modal-backdrop">
+        <div
+            class="w-full max-w-md mx-4 overflow-hidden transition-all transform bg-white shadow-2xl rounded-2xl animate-modal">
+            <div class="p-6 bg-gradient-to-r from-red-500 to-red-600">
+                <div class="flex items-center justify-center w-16 h-16 mx-auto bg-white rounded-full">
+                    <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+            <div class="p-6 text-center">
+                <h3 class="mb-2 text-xl font-bold text-gray-900">Delete Product</h3>
+                <p class="text-gray-600 mb-1">Are you sure you want to delete</p>
+                <p id="deleteProductName" class="text-lg font-semibold text-gray-900 mb-2"></p>
+                <p class="text-sm text-red-600">This action cannot be undone.</p>
+            </div>
+            <div class="p-4 border-t border-gray-200 bg-gray-50 flex justify-end space-x-3">
+                <button onclick="closeDeleteModal()"
+                    class="px-4 py-2 text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400 transition-colors">
+                    Cancel
+                </button>
+                <button onclick="confirmDelete()"
+                    class="px-4 py-2 text-white rounded-lg bg-red-600 hover:bg-red-700 transition-colors">
+                    <i class="fa-solid fa-trash mr-1"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-30 backdrop-blur modal-backdrop">
+        <div
+            class="w-full max-w-sm mx-4 overflow-hidden transition-all transform bg-white shadow-2xl rounded-2xl animate-modal">
+            <div class="p-6 bg-gradient-to-r from-green-500 to-green-600">
+                <div class="flex items-center justify-center w-16 h-16 mx-auto bg-white rounded-full">
+                    <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="p-6 text-center">
+                <h3 class="mb-2 text-xl font-bold text-gray-900">Success!</h3>
+                <p id="successMessage" class="text-gray-600"></p>
+            </div>
+            <div class="p-4 border-t border-gray-200 bg-gray-50">
+                <button onclick="closeSuccessModal()"
+                    class="w-full px-4 py-2 text-white transition-colors rounded-lg bg-green-600 hover:bg-green-700">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="errorModal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-30 backdrop-blur modal-backdrop">
+        <div
+            class="w-full max-w-sm mx-4 overflow-hidden transition-all transform bg-white shadow-2xl rounded-2xl animate-modal">
+            <div class="p-6 bg-gradient-to-r from-red-500 to-red-600">
+                <div class="flex items-center justify-center w-16 h-16 mx-auto bg-white rounded-full">
+                    <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+            <div class="p-6 text-center">
+                <h3 class="mb-2 text-xl font-bold text-gray-900">Error!</h3>
+                <p id="errorMessage" class="text-gray-600"></p>
+            </div>
+            <div class="p-4 border-t border-gray-200 bg-gray-50">
+                <button onclick="closeErrorModal()"
+                    class="w-full px-4 py-2 text-white transition-colors rounded-lg bg-red-600 hover:bg-red-700">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="../../assets/js/admin.js"></script>
     <script src="../../assets/js/products.js"></script>
     <script>
+        // Modal functions
+        function showSuccessModal(message) {
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            location.reload();
+        }
+
+        function showErrorModal(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorModal').classList.remove('hidden');
+        }
+
+        function closeErrorModal() {
+            document.getElementById('errorModal').classList.add('hidden');
+        }
+
+        // Delete modal functions
+        let deleteProductData = {
+            id: null,
+            name: null
+        };
+
+        function showDeleteModal(id, name) {
+            deleteProductData = {
+                id,
+                name
+            };
+            document.getElementById('deleteProductName').textContent = `"${name}"?`;
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            deleteProductData = {
+                id: null,
+                name: null
+            };
+        }
+
+        function confirmDelete() {
+            if (deleteProductData.id) {
+                document.getElementById('deleteProductId').value = deleteProductData.id;
+                document.getElementById('deleteForm').submit();
+            }
+        }
+
         // Available ingredients from PHP
         const availableIngredients = <?php echo json_encode($ingredients); ?>;
 
@@ -972,16 +1250,15 @@ $current_user = getCurrentUser();
                 .then(response => response.json())
                 .then(result => {
                     if (result.success) {
-                        alert(result.message);
                         closeModal();
-                        location.reload();
+                        showSuccessModal(result.message);
                     } else {
-                        alert('Error: ' + result.message);
+                        showErrorModal(result.message || 'Failed to save product');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Failed to save product');
+                    showErrorModal('An error occurred while saving the product');
                 });
         }
 
@@ -1144,6 +1421,74 @@ $current_user = getCurrentUser();
 
         function closeIngredientsModal() {
             document.getElementById('ingredientsModal').classList.add('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').classList.add('hidden');
+        }
+
+        function editProduct(id, name, categoryId, description, status, priceDodici, priceSedici) {
+            console.log('Edit product:', {
+                id,
+                name,
+                categoryId,
+                description,
+                status,
+                priceDodici,
+                priceSedici
+            });
+
+            // Show modal
+            document.getElementById('productModal').classList.remove('hidden');
+            document.getElementById('modal-title').textContent = 'Edit Product';
+
+            // Set form action and product ID
+            document.getElementById('formAction').value = 'edit';
+            document.getElementById('productId').value = id;
+
+            // Populate basic fields
+            document.getElementById('productName').value = name || '';
+            document.getElementById('categoryId').value = categoryId || '';
+            document.getElementById('productDescription').value = description || '';
+            document.getElementById('productStatus').value = status || 'available';
+
+            // Clear and populate sizes
+            document.getElementById('sizesContainer').innerHTML = '';
+
+            if (priceDodici && priceDodici !== 'null') {
+                addSize('dodici', 'Dodici (12oz)', priceDodici);
+            }
+            if (priceSedici && priceSedici !== 'null') {
+                addSize('sedici', 'Sedici (16oz)', priceSedici);
+            }
+
+            // If no sizes exist, add default ones
+            if ((!priceDodici || priceDodici === 'null') && (!priceSedici || priceSedici === 'null')) {
+                addSize('dodici', 'Dodici (12oz)', '');
+                addSize('sedici', 'Sedici (16oz)', '');
+            }
+
+            // Clear ingredients container
+            document.getElementById('ingredientsContainer').innerHTML = '';
+
+            // Fetch product ingredients
+            fetch('get_product_ingredients.php?product_id=' + id)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Ingredients data:', data);
+                    if (data.success && data.ingredients && data.ingredients.length > 0) {
+                        data.ingredients.forEach(ing => {
+                            addIngredientRow(ing.id, ing.quantity, ing.unit);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading ingredients:', error);
+                });
+        }
+
+        function deleteProduct(id, name) {
+            showDeleteModal(id, name);
         }
     </script>
 </body>
