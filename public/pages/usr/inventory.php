@@ -364,7 +364,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Available Items</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] > $p['reorder_level'])); ?>
+                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] > $p['reorder_level'])); ?>
                                 </p>
                             </div>
                         </div>
@@ -381,7 +381,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Out of Stock</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] == 0)); ?>
+                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] == 0)); ?>
                                 </p>
                             </div>
                         </div>
@@ -454,8 +454,8 @@ $current_user = getCurrentUser();
                                                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
                                                         <?php
                                                         list($convertedQty, $convertedUnit) = convertUnit($restock['quantity'], $restock['unit']);
-                                                echo $convertedQty . ' ' . $convertedUnit;
-                                                ?>
+                                                        echo $convertedQty . ' ' . $convertedUnit;
+                                                        ?>
                                                     </td>
                                                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
                                                         <?php echo $restock['notes'] ?></td>
@@ -512,7 +512,7 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <h3 class="text-lg font-semibold text-gray-800">Inventory</h3>
                             <div class="flex space-x-2">
-                                <?php if ($_SESSION['user_role'] === 'admin'): ?>
+                                <?php if ($_SESSION['role'] === 'admin'): ?>
                                     <a href="generate_qr.php"
                                         class="px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-md hover:bg-indigo-100"
                                         title="Generate Admin QR Code for verification">
@@ -586,14 +586,14 @@ $current_user = getCurrentUser();
                                             <div class="text-sm text-gray-900">
                                                 <?php
                                                 list($convertedQty, $convertedUnit) = convertUnit($product['quantity'], $product['unit']);
-                                    echo $convertedQty . ' ' . $convertedUnit;
-                                    ?></div>
+                                                echo $convertedQty . ' ' . $convertedUnit;
+                                                ?></div>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                                             <?php
                                             list($convertedReorderQty, $convertedReorderUnit) = convertUnit($product['reorder_level'], $product['unit']);
-                                    echo $convertedReorderQty . ' ' . $convertedReorderUnit;
-                                    ?>
+                                            echo $convertedReorderQty . ' ' . $convertedReorderUnit;
+                                            ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <?php if ($product['quantity'] == 0): ?>
@@ -656,9 +656,9 @@ $current_user = getCurrentUser();
                                 <div class="flex gap-1">
                                     <?php
                                     $start_page = max(1, $page - 2);
-$end_page = min($total_pages, $page + 2);
+                                    $end_page = min($total_pages, $page + 2);
 
-if ($start_page > 1): ?>
+                                    if ($start_page > 1): ?>
                                         <a href="?page=1&&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
                                             class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                             1
@@ -1418,11 +1418,11 @@ if ($start_page > 1): ?>
                 const categoryLabels =
                     <?php echo json_encode(array_column($category_analytics, 'product_category')); ?>;
                 const categoryStockData =
-                    <?php echo json_encode(array_map(fn ($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
                 const avgStockData =
-                    <?php echo json_encode(array_map(fn ($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
                 const numProductsData =
-                    <?php echo json_encode(array_map(fn ($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
 
                 const categoryStockChart = new Chart(categoryStockCtx.getContext('2d'), {
                     type: 'bar',
@@ -1511,9 +1511,9 @@ if ($start_page > 1): ?>
         const lowStockCategoryCtx = document.getElementById('lowStockCategoryChart');
         if (lowStockCategoryCtx) {
             const lowStockLabels =
-                <?php echo json_encode(array_map(fn ($c) => $c['category'] ?? '', $category_analytics)); ?>;
+                <?php echo json_encode(array_map(fn($c) => $c['category'] ?? '', $category_analytics)); ?>;
             const lowStockData =
-                <?php echo json_encode(array_map(fn ($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
+                <?php echo json_encode(array_map(fn($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
 
             const lowStockCategoryChart = new Chart(lowStockCategoryCtx.getContext('2d'), {
                 type: 'bar',

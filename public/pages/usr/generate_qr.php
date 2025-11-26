@@ -68,8 +68,7 @@ $expiryTime = date('h:i A', $timestamp + 300);
             <!-- QR Code Display -->
             <div class="bg-white border-2 border-gray-200 rounded-lg p-6">
                 <div class="flex justify-center mb-4">
-                    <canvas id="qrcode" style="display:none;"></canvas>
-                    <img id="qrImage" alt="QR Code" class="mx-auto" />
+                    <div id="qrcode"></div>
                 </div>
                 <div class="text-center">
                     <p class="text-xs text-gray-500 mb-2">QR Code Value:</p>
@@ -111,30 +110,37 @@ $expiryTime = date('h:i A', $timestamp + 300);
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script>
         const qrCodeValue = '<?php echo $qrCode; ?>';
 
         document.addEventListener("DOMContentLoaded", function() {
-            var canvas = document.getElementById('qrcode');
-            var qrImage = document.getElementById('qrImage');
-            
-            QRCode.toCanvas(canvas, qrCodeValue, {
-                width: 250,
-                margin: 2,
-                color: {
-                    dark: '#4F46E5', // Indigo
-                    light: '#FFFFFF'
-                }
-            }, function(error) {
-                if (error) {
-                    console.error('QR Code generation error:', error);
-                    return;
-                }
-                // Set image src to canvas data URL
-                qrImage.src = canvas.toDataURL('image/png');
+            const container = document.getElementById('qrcode');
+
+            try {
+                // Generate QR code using QRCodeJS
+                const qrcode = new QRCode(container, {
+                    text: qrCodeValue,
+                    width: 250,
+                    height: 250,
+                    colorDark: '#4F46E5',
+                    colorLight: '#FFFFFF',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
                 console.log('QR Code generated successfully');
-            });
+
+                // Add styling to the generated image
+                setTimeout(() => {
+                    const img = container.querySelector('img');
+                    if (img) {
+                        img.className = 'mx-auto rounded-lg shadow-md';
+                    }
+                }, 100);
+            } catch (error) {
+                console.error('QR Code generation error:', error);
+                container.innerHTML = '<p class="text-red-500">Error generating QR code</p>';
+            }
         });
 
         // Copy to clipboard
@@ -143,7 +149,14 @@ $expiryTime = date('h:i A', $timestamp + 300);
                 const btn = event.target.closest('button');
                 const originalText = btn.innerHTML;
                 btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i>Copied!';
+                btn.classList.remove('text-gray-700', 'bg-white', 'hover:bg-gray-50');
                 btn.classList.add('bg-green-50', 'text-green-700', 'border-green-300');
+
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.add('text-gray-700', 'bg-white', 'hover:bg-gray-50');
+                    btn.classList.remove('bg-green-50', 'text-green-700', 'border-green-300');
+                }, 2000);
             }).catch(err => {
                 alert('Failed to copy: ' + err);
             });
@@ -151,7 +164,14 @@ $expiryTime = date('h:i A', $timestamp + 300);
 
         // Download QR Code
         function downloadQR() {
-            const canvas = document.getElementById('qrcode');
+            const container = document.getElementById('qrcode');
+            const canvas = container.querySelector('canvas');
+
+            if (!canvas) {
+                alert('QR Code not ready yet. Please wait a moment.');
+                return;
+            }
+
             const url = canvas.toDataURL('image/png');
             const link = document.createElement('a');
             link.download = 'admin-qr-code-<?php echo $admin['username']; ?>-<?php echo $timestamp; ?>.png';
