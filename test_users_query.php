@@ -31,7 +31,7 @@ try {
     $count_stmt->execute();
     $total = $count_stmt->fetch()['total'];
     echo "Total found: $total\n\n";
-    
+
     // Main query
     $sql = "
         SELECT u.*, 
@@ -52,12 +52,11 @@ try {
     $stmt->bindValue(':offset', 0, PDO::PARAM_INT);
     $stmt->execute();
     $users = $stmt->fetchAll();
-    
+
     echo "\nUsers found: " . count($users) . "\n";
     foreach ($users as $user) {
         echo "- " . $user['username'] . " (" . $user['full_name'] . ")\n";
     }
-    
 } catch (PDOException $e) {
     echo "ERROR: " . $e->getMessage() . "\n";
     echo "Error code: " . $e->getCode() . "\n";

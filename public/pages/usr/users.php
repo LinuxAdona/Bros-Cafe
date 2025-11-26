@@ -139,7 +139,7 @@ try {
     error_log("Status filter: '$status_filter'");
     error_log("WHERE clause: $where_clause");
     error_log("Params array: " . print_r($params, true));
-    
+
     // First, get total count for pagination
     $count_sql = "SELECT COUNT(*) as total FROM users u WHERE $where_clause AND u.role IN ('admin', 'employee')";
     error_log("Count SQL: $count_sql");
@@ -152,7 +152,7 @@ try {
     $total_users = $count_stmt->fetch()['total'];
     error_log("Total users found: $total_users");
     $total_pages = ceil($total_users / $per_page);
-    
+
     // Then get the actual users with pagination
     $sql = "
         SELECT u.*, 
@@ -164,7 +164,7 @@ try {
         LIMIT $per_page OFFSET $offset
     ";
     error_log("Main SQL: $sql");
-    
+
     $stmt = $conn->prepare($sql);
     foreach ($params as $key => $value) {
         $stmt->bindValue(":$key", $value);
@@ -176,7 +176,6 @@ try {
         error_log("  - {$user['username']} ({$user['full_name']})");
     }
     error_log("=== END DEBUG ===");
-    
 } catch (PDOException $e) {
     error_log("Database error in users.php: " . $e->getMessage());
     $users = [];
@@ -462,20 +461,24 @@ $current_user = getCurrentUser();
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium text-gray-700">Role</label>
-                            <select name="role" 
+                            <select name="role"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
                                 <option value="">All Roles</option>
-                                <option value="admin" <?php echo $role_filter === 'admin' ? 'selected' : ''; ?>>Administrator</option>
-                                <option value="employee" <?php echo $role_filter === 'employee' ? 'selected' : ''; ?>>Employee</option>
+                                <option value="admin" <?php echo $role_filter === 'admin' ? 'selected' : ''; ?>>
+                                    Administrator</option>
+                                <option value="employee" <?php echo $role_filter === 'employee' ? 'selected' : ''; ?>>
+                                    Employee</option>
                             </select>
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium text-gray-700">Status</label>
-                            <select name="status" 
+                            <select name="status"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
                                 <option value="">All Status</option>
-                                <option value="active" <?php echo $status_filter === 'active' ? 'selected' : ''; ?>>Active</option>
-                                <option value="inactive" <?php echo $status_filter === 'inactive' ? 'selected' : ''; ?>>Inactive</option>
+                                <option value="active" <?php echo $status_filter === 'active' ? 'selected' : ''; ?>>
+                                    Active</option>
+                                <option value="inactive" <?php echo $status_filter === 'inactive' ? 'selected' : ''; ?>>
+                                    Inactive</option>
                             </select>
                         </div>
                         <div class="flex items-end gap-2">
@@ -547,84 +550,85 @@ $current_user = getCurrentUser();
                                 <?php else: ?>
                                     <?php foreach ($users as $user): ?>
                                         <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="shrink-0 w-10 h-10">
-                                                    <div
-                                                        class="flex items-center justify-center w-10 h-10 text-white rounded-full bg-amber-600">
-                                                        <?php echo strtoupper(substr($user['full_name'], 0, 2)); ?>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <div class="shrink-0 w-10 h-10">
+                                                        <div
+                                                            class="flex items-center justify-center w-10 h-10 text-white rounded-full bg-amber-600">
+                                                            <?php echo strtoupper(substr($user['full_name'], 0, 2)); ?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ml-4">
+                                                        <div class="text-sm font-medium text-gray-900">
+                                                            <?php echo $user['full_name']; ?></div>
+                                                        <div class="text-sm text-gray-500">Joined
+                                                            <?php echo date('M Y', strtotime($user['created_at'])); ?></div>
                                                     </div>
                                                 </div>
-                                                <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900">
-                                                        <?php echo $user['full_name']; ?></div>
-                                                    <div class="text-sm text-gray-500">Joined
-                                                        <?php echo date('M Y', strtotime($user['created_at'])); ?></div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                                            <?php echo $user['username']; ?>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                                            <?php echo $user['email']; ?>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                                            <?php echo $user['phone'] ?: '-'; ?>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span
-                                                class="px-2 py-1 text-xs font-medium rounded-full 
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                                                <?php echo $user['username']; ?>
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                                                <?php echo $user['email']; ?>
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                                                <?php echo $user['phone'] ?: '-'; ?>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span
+                                                    class="px-2 py-1 text-xs font-medium rounded-full 
                                                 <?php echo $user['role'] === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'; ?>">
-                                                <?php echo ucfirst($user['role']); ?>
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                                            <?php echo $user['total_orders'] ?? 0; ?>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm font-semibold text-gray-900 whitespace-nowrap">
-                                            ₱<?php echo number_format($user['total_sales'] ?? 0, 2); ?>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span
-                                                class="px-2 py-1 text-xs font-medium rounded-full 
+                                                    <?php echo ucfirst($user['role']); ?>
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                                                <?php echo $user['total_orders'] ?? 0; ?>
+                                            </td>
+                                            <td class="px-6 py-4 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                                                ₱<?php echo number_format($user['total_sales'] ?? 0, 2); ?>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span
+                                                    class="px-2 py-1 text-xs font-medium rounded-full 
                                                 <?php echo $user['status'] === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'; ?>">
-                                                <?php echo ucfirst($user['status']); ?>
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm whitespace-nowrap">
-                                            <button
-                                                onclick="editUser(<?php echo $user['id']; ?>, '<?php echo addslashes($user['username']); ?>', '<?php echo addslashes($user['email']); ?>', '<?php echo addslashes($user['full_name']); ?>', '<?php echo $user['role']; ?>', '<?php echo addslashes($user['phone'] ?? ''); ?>', '<?php echo $user['status']; ?>')"
-                                                class="mr-3 text-blue-600 hover:text-blue-800" title="Edit">
-                                                <i class="fa-solid fa-edit"></i>
-                                            </button>
-                                            <button
-                                                onclick="toggleUserStatus(<?php echo $user['id']; ?>, '<?php echo addslashes($user['full_name']); ?>', '<?php echo $user['status']; ?>')"
-                                                class="mr-3 text-yellow-600 hover:text-yellow-800" title="Toggle Status">
-                                                <i
-                                                    class="fa-solid fa-toggle-<?php echo $user['status'] === 'active' ? 'on' : 'off'; ?>"></i>
-                                            </button>
-                                            <?php if ($user['id'] != $current_user['id']): ?>
+                                                    <?php echo ucfirst($user['status']); ?>
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 text-sm whitespace-nowrap">
                                                 <button
-                                                    onclick="deleteUser(<?php echo $user['id']; ?>, '<?php echo addslashes($user['full_name']); ?>')"
-                                                    class="text-red-600 hover:text-red-800" title="Delete">
-                                                    <i class="fa-solid fa-trash"></i>
+                                                    onclick="editUser(<?php echo $user['id']; ?>, '<?php echo addslashes($user['username']); ?>', '<?php echo addslashes($user['email']); ?>', '<?php echo addslashes($user['full_name']); ?>', '<?php echo $user['role']; ?>', '<?php echo addslashes($user['phone'] ?? ''); ?>', '<?php echo $user['status']; ?>')"
+                                                    class="mr-3 text-blue-600 hover:text-blue-800" title="Edit">
+                                                    <i class="fa-solid fa-edit"></i>
                                                 </button>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
+                                                <button
+                                                    onclick="toggleUserStatus(<?php echo $user['id']; ?>, '<?php echo addslashes($user['full_name']); ?>', '<?php echo $user['status']; ?>')"
+                                                    class="mr-3 text-yellow-600 hover:text-yellow-800" title="Toggle Status">
+                                                    <i
+                                                        class="fa-solid fa-toggle-<?php echo $user['status'] === 'active' ? 'on' : 'off'; ?>"></i>
+                                                </button>
+                                                <?php if ($user['id'] != $current_user['id']): ?>
+                                                    <button
+                                                        onclick="deleteUser(<?php echo $user['id']; ?>, '<?php echo addslashes($user['full_name']); ?>')"
+                                                        class="text-red-600 hover:text-red-800" title="Delete">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <!-- Pagination -->
                     <?php if ($total_pages > 1): ?>
                         <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200">
                             <div class="flex items-center text-sm text-gray-700">
-                                Showing <span class="font-medium mx-1"><?php echo $offset + 1; ?></span> to 
-                                <span class="font-medium mx-1"><?php echo min($offset + $per_page, $total_users); ?></span> of 
+                                Showing <span class="font-medium mx-1"><?php echo $offset + 1; ?></span> to
+                                <span class="font-medium mx-1"><?php echo min($offset + $per_page, $total_users); ?></span>
+                                of
                                 <span class="font-medium mx-1"><?php echo $total_users; ?></span> results
                             </div>
 
@@ -644,7 +648,8 @@ $current_user = getCurrentUser();
                                         <i class="fa-solid fa-chevron-left"></i>
                                     </a>
                                 <?php else: ?>
-                                    <span class="px-3 py-2 text-sm text-gray-400 bg-gray-100 border border-gray-200 rounded cursor-not-allowed">
+                                    <span
+                                        class="px-3 py-2 text-sm text-gray-400 bg-gray-100 border border-gray-200 rounded cursor-not-allowed">
                                         <i class="fa-solid fa-chevron-left"></i>
                                     </span>
                                 <?php endif; ?>
@@ -697,7 +702,8 @@ $current_user = getCurrentUser();
                                         <i class="fa-solid fa-chevron-right"></i>
                                     </a>
                                 <?php else: ?>
-                                    <span class="px-3 py-2 text-sm text-gray-400 bg-gray-100 border border-gray-200 rounded cursor-not-allowed">
+                                    <span
+                                        class="px-3 py-2 text-sm text-gray-400 bg-gray-100 border border-gray-200 rounded cursor-not-allowed">
                                         <i class="fa-solid fa-chevron-right"></i>
                                     </span>
                                 <?php endif; ?>
