@@ -92,12 +92,12 @@ $stock_distribution = $stmt->fetch();
 
 // Get recent restocks
 $stmt = $conn->query("
-    SELECT ig.name, i.last_restocked, i.quantity, i.unit
+    SELECT ig.name, i.last_restocked, it.quantity, i.unit, it.notes
     FROM inventory i
     JOIN ingredients ig ON i.ingredient_id = ig.id
+    JOIN inventory_transactions it ON ig.id = it.ingredient_id
     WHERE i.last_restocked IS NOT NULL
     ORDER BY i.last_restocked DESC
-    LIMIT 5
 ");
 $recent_restocks = $stmt->fetchAll();
 
@@ -361,7 +361,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Available Items</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] > $p['reorder_level'])); ?>
+                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] > $p['reorder_level'])); ?>
                                 </p>
                             </div>
                         </div>
@@ -378,7 +378,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Out of Stock</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] == 0)); ?>
+                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] == 0)); ?>
                                 </p>
                             </div>
                         </div>
@@ -408,45 +408,62 @@ $current_user = getCurrentUser();
                     <!-- Recent Restocks and Category Analytics -->
                     <div class="grid grid-cols-1 gap-6 mb-6">
                         <!-- Recent Restocks -->
-                        <div class="p-6 bg-white rounded-lg shadow">
-                            <h3 class="mb-4 text-lg font-semibold text-gray-800">Recent Restocks</h3>
-                            <div class="overflow-x-auto">
+                        <div class="p-6 bg-white rounded-lg shadow" style="height: 500px; display: flex; flex-direction: column;">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Recent Restocks</h3>
+                                <div class="relative">
+                                    <input type="text" id="restockSearch" placeholder="Search items..."
+                                        class="px-4 py-2 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                                        onkeyup="searchRestocks()">
+                                    <i class="absolute text-gray-400 transform -translate-y-1/2 fa-solid fa-search right-3 top-1/2"></i>
+                                </div>
+                            </div>
+                            <!-- Scrollable container with max height -->
+                            <div class="overflow-x-auto flex-1" style="overflow-y: auto;">
                                 <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
+                                    <thead class="bg-gray-50 sticky top-0 z-10">
                                         <tr>
                                             <th
-                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50">
                                                 Items</th>
                                             <th
-                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50">
                                                 Date</th>
                                             <th
-                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50">
                                                 Stock</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50">
+                                                Notes</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
+                                    <tbody class="bg-white divide-y divide-gray-200" id="restockTableBody">
                                         <?php if (count($recent_restocks) > 0): ?>
                                             <?php foreach ($recent_restocks as $restock): ?>
-                                                <tr>
-                                                    <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap">
+                                                <tr class="restock-row">
+                                                    <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap restock-name">
                                                         <?php echo $restock['name']; ?></td>
                                                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
                                                         <?php echo date('M d, Y', strtotime($restock['last_restocked'])); ?></td>
                                                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
                                                         <?php
                                                         list($convertedQty, $convertedUnit) = convertUnit($restock['quantity'], $restock['unit']);
-                                                        echo $convertedQty . ' ' . $convertedUnit;
-                                                        ?>
-                                                    </td>
+                                                echo $convertedQty . ' ' . $convertedUnit;
+                                                ?>
+                                            </td>
+                                            <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                        <?php echo $restock['notes'] ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         <?php else: ?>
-                                            <tr>
+                                            <tr id="noRestocksRow">
                                                 <td colspan="3" class="px-4 py-3 text-sm text-center text-gray-500">No recent
                                                     restocks</td>
                                             </tr>
                                         <?php endif; ?>
+                                        <tr id="noMatchRow" class="hidden">
+                                            <td colspan="3" class="px-4 py-3 text-sm text-center text-gray-500">No matching items found</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -555,14 +572,14 @@ $current_user = getCurrentUser();
                                             <div class="text-sm text-gray-900">
                                                 <?php
                                                 list($convertedQty, $convertedUnit) = convertUnit($product['quantity'], $product['unit']);
-                                                echo $convertedQty . ' ' . $convertedUnit;
-                                                ?></div>
+                                    echo $convertedQty . ' ' . $convertedUnit;
+                                    ?></div>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                                             <?php
                                             list($convertedReorderQty, $convertedReorderUnit) = convertUnit($product['reorder_level'], $product['unit']);
-                                            echo $convertedReorderQty . ' ' . $convertedReorderUnit;
-                                            ?>
+                                    echo $convertedReorderQty . ' ' . $convertedReorderUnit;
+                                    ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <?php if ($product['quantity'] == 0): ?>
@@ -625,9 +642,9 @@ $current_user = getCurrentUser();
                                 <div class="flex gap-1">
                                     <?php
                                     $start_page = max(1, $page - 2);
-                                    $end_page = min($total_pages, $page + 2);
+$end_page = min($total_pages, $page + 2);
 
-                                    if ($start_page > 1): ?>
+if ($start_page > 1): ?>
                                         <a href="?page=1&&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
                                             class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                             1
@@ -1162,11 +1179,11 @@ $current_user = getCurrentUser();
                 const categoryLabels =
                     <?php echo json_encode(array_column($category_analytics, 'product_category')); ?>;
                 const categoryStockData =
-                    <?php echo json_encode(array_map(fn($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn ($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
                 const avgStockData =
-                    <?php echo json_encode(array_map(fn($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn ($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
                 const numProductsData =
-                    <?php echo json_encode(array_map(fn($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn ($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
 
                 const categoryStockChart = new Chart(categoryStockCtx.getContext('2d'), {
                     type: 'bar',
@@ -1255,9 +1272,9 @@ $current_user = getCurrentUser();
         const lowStockCategoryCtx = document.getElementById('lowStockCategoryChart');
         if (lowStockCategoryCtx) {
             const lowStockLabels =
-                <?php echo json_encode(array_map(fn($c) => $c['category'] ?? '', $category_analytics)); ?>;
+                <?php echo json_encode(array_map(fn ($c) => $c['category'] ?? '', $category_analytics)); ?>;
             const lowStockData =
-                <?php echo json_encode(array_map(fn($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
+                <?php echo json_encode(array_map(fn ($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
 
             const lowStockCategoryChart = new Chart(lowStockCategoryCtx.getContext('2d'), {
                 type: 'bar',
@@ -1303,6 +1320,32 @@ $current_user = getCurrentUser();
                     }
                 }
             });
+        }
+
+        // Search function for Recent Restocks table
+        function searchRestocks() {
+            const searchInput = document.getElementById('restockSearch');
+            const filter = searchInput.value.toLowerCase();
+            const rows = document.querySelectorAll('.restock-row');
+            const noMatchRow = document.getElementById('noMatchRow');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const itemName = row.querySelector('.restock-name').textContent.toLowerCase();
+                if (itemName.includes(filter)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Show "no match" message if no rows are visible
+            if (visibleCount === 0 && rows.length > 0) {
+                noMatchRow.classList.remove('hidden');
+            } else {
+                noMatchRow.classList.add('hidden');
+            }
         }
 
         // Export inventory function
