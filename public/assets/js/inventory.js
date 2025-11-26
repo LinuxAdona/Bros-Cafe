@@ -173,18 +173,28 @@ function setAdjustmentType(type) {
 function submitAdjust(event) {
   event.preventDefault();
 
-  const ingredientId = document.getElementById("adjust_product_id").value;
-  const quantity = parseFloat(document.getElementById("adjust_quantity").value);
-  const inputUnit = document.getElementById("adjust_input_unit").value;
-  const baseUnit = document.getElementById("adjust_base_unit").value;
-  const notes = document.getElementById("adjust_notes").value;
-  const adjustmentType = document.getElementById("adjustment_type").value;
+  // Store the adjust data
+  const adjustData = {
+    ingredientId: document.getElementById("adjust_product_id").value,
+    quantity: parseFloat(document.getElementById("adjust_quantity").value),
+    inputUnit: document.getElementById("adjust_input_unit").value,
+    baseUnit: document.getElementById("adjust_base_unit").value,
+    notes: document.getElementById("adjust_notes").value,
+    adjustmentType: document.getElementById("adjustment_type").value,
+  };
 
+  // Open verification modal with callback to execute adjustment
+  openVerificationModal(() => {
+    executeAdjustment(adjustData);
+  });
+}
+
+function executeAdjustment(data) {
   // Convert input quantity to base unit for storage
-  let baseQuantity = convertValue(quantity, inputUnit, baseUnit);
+  let baseQuantity = convertValue(data.quantity, data.inputUnit, data.baseUnit);
   
   // Make negative if subtracting
-  if (adjustmentType === "subtract") {
+  if (data.adjustmentType === "subtract") {
     baseQuantity = -baseQuantity;
   }
 
@@ -194,10 +204,10 @@ function submitAdjust(event) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      ingredient_id: ingredientId,
+      ingredient_id: data.ingredientId,
       quantity: baseQuantity,
       type: "adjustment",
-      notes: notes,
+      notes: data.notes,
     }),
   })
     .then((response) => response.json())
@@ -217,14 +227,24 @@ function submitAdjust(event) {
 function submitRestock(event) {
   event.preventDefault();
 
-  const ingredientId = document.getElementById("restock_product_id").value;
-  const quantity = parseFloat(document.getElementById("restock_quantity").value);
-  const inputUnit = document.getElementById("restock_input_unit").value;
-  const baseUnit = document.getElementById("restock_base_unit").value;
-  const notes = document.getElementById("restock_notes").value;
+  // Store the restock data
+  const restockData = {
+    ingredientId: document.getElementById("restock_product_id").value,
+    quantity: parseFloat(document.getElementById("restock_quantity").value),
+    inputUnit: document.getElementById("restock_input_unit").value,
+    baseUnit: document.getElementById("restock_base_unit").value,
+    notes: document.getElementById("restock_notes").value,
+  };
 
+  // Open verification modal with callback to execute restock
+  openVerificationModal(() => {
+    executeRestock(restockData);
+  });
+}
+
+function executeRestock(data) {
   // Convert input quantity to base unit for storage
-  const baseQuantity = convertValue(quantity, inputUnit, baseUnit);
+  const baseQuantity = convertValue(data.quantity, data.inputUnit, data.baseUnit);
 
   fetch("update_inventory.php", {
     method: "POST",
@@ -232,10 +252,10 @@ function submitRestock(event) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      ingredient_id: ingredientId,
+      ingredient_id: data.ingredientId,
       quantity: baseQuantity,
       type: "restock",
-      notes: notes,
+      notes: data.notes,
     }),
   })
     .then((response) => response.json())

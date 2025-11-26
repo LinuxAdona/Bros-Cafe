@@ -130,8 +130,11 @@ $current_user = getCurrentUser();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Inventory Management - Bro's Cafe</title>
-    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css?v=<?php echo time(); ?>">
     <link rel="icon" type="image/png" href="../../assets/images/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -361,7 +364,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Available Items</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] > $p['reorder_level'])); ?>
+                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] > $p['reorder_level'])); ?>
                                 </p>
                             </div>
                         </div>
@@ -378,7 +381,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Out of Stock</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] == 0)); ?>
+                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] == 0)); ?>
                                 </p>
                             </div>
                         </div>
@@ -408,14 +411,16 @@ $current_user = getCurrentUser();
                     <!-- Recent Restocks and Category Analytics -->
                     <div class="grid grid-cols-1 gap-6 mb-6">
                         <!-- Recent Restocks -->
-                        <div class="p-6 bg-white rounded-lg shadow" style="height: 500px; display: flex; flex-direction: column;">
+                        <div class="p-6 bg-white rounded-lg shadow"
+                            style="height: 500px; display: flex; flex-direction: column;">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-lg font-semibold text-gray-800">Recent Restocks</h3>
                                 <div class="relative">
                                     <input type="text" id="restockSearch" placeholder="Search items..."
                                         class="px-4 py-2 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                                         onkeyup="searchRestocks()">
-                                    <i class="absolute text-gray-400 transform -translate-y-1/2 fa-solid fa-search right-3 top-1/2"></i>
+                                    <i
+                                        class="absolute text-gray-400 transform -translate-y-1/2 fa-solid fa-search right-3 top-1/2"></i>
                                 </div>
                             </div>
                             <!-- Scrollable container with max height -->
@@ -441,18 +446,19 @@ $current_user = getCurrentUser();
                                         <?php if (count($recent_restocks) > 0): ?>
                                             <?php foreach ($recent_restocks as $restock): ?>
                                                 <tr class="restock-row">
-                                                    <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap restock-name">
+                                                    <td
+                                                        class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap restock-name">
                                                         <?php echo $restock['name']; ?></td>
                                                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
                                                         <?php echo date('M d, Y', strtotime($restock['last_restocked'])); ?></td>
                                                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
                                                         <?php
                                                         list($convertedQty, $convertedUnit) = convertUnit($restock['quantity'], $restock['unit']);
-                                                echo $convertedQty . ' ' . $convertedUnit;
-                                                ?>
-                                            </td>
-                                            <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                        <?php echo $restock['notes'] ?></td>
+                                                        echo $convertedQty . ' ' . $convertedUnit;
+                                                        ?>
+                                                    </td>
+                                                    <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                        <?php echo $restock['notes'] ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         <?php else: ?>
@@ -462,7 +468,8 @@ $current_user = getCurrentUser();
                                             </tr>
                                         <?php endif; ?>
                                         <tr id="noMatchRow" class="hidden">
-                                            <td colspan="3" class="px-4 py-3 text-sm text-center text-gray-500">No matching items found</td>
+                                            <td colspan="3" class="px-4 py-3 text-sm text-center text-gray-500">No matching
+                                                items found</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -505,6 +512,13 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <h3 class="text-lg font-semibold text-gray-800">Inventory</h3>
                             <div class="flex space-x-2">
+                                <?php if ($_SESSION['role'] === 'admin'): ?>
+                                    <a href="generate_qr.php"
+                                        class="px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-md hover:bg-indigo-100"
+                                        title="Generate Admin QR Code for verification">
+                                        <i class="fa-solid fa-qrcode mr-1"></i> QR Code
+                                    </a>
+                                <?php endif; ?>
                                 <div class="relative inline-block text-left">
                                     <button onclick="toggleExportDropdown()" type="button"
                                         class="inline-flex justify-between items-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">
@@ -572,14 +586,14 @@ $current_user = getCurrentUser();
                                             <div class="text-sm text-gray-900">
                                                 <?php
                                                 list($convertedQty, $convertedUnit) = convertUnit($product['quantity'], $product['unit']);
-                                    echo $convertedQty . ' ' . $convertedUnit;
-                                    ?></div>
+                                                echo $convertedQty . ' ' . $convertedUnit;
+                                                ?></div>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                                             <?php
                                             list($convertedReorderQty, $convertedReorderUnit) = convertUnit($product['reorder_level'], $product['unit']);
-                                    echo $convertedReorderQty . ' ' . $convertedReorderUnit;
-                                    ?>
+                                            echo $convertedReorderQty . ' ' . $convertedReorderUnit;
+                                            ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <?php if ($product['quantity'] == 0): ?>
@@ -602,10 +616,10 @@ $current_user = getCurrentUser();
                                         <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
                                             <button
                                                 onclick="openRestockModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>, '<?php echo addslashes($product['unit']); ?>')"
-                                                class="mr-3 text-amber-600 hover:text-amber-900">Restock</button>
+                                                class="cursor-pointer mr-3 text-amber-600 hover:text-amber-900">Restock</button>
                                             <button
                                                 onclick="openAdjustModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>, '<?php echo addslashes($product['unit']); ?>')"
-                                                class="text-blue-600 hover:text-blue-900">Adjust</button>
+                                                class="cursor-pointer text-blue-600 hover:text-blue-900">Adjust</button>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -642,9 +656,9 @@ $current_user = getCurrentUser();
                                 <div class="flex gap-1">
                                     <?php
                                     $start_page = max(1, $page - 2);
-$end_page = min($total_pages, $page + 2);
+                                    $end_page = min($total_pages, $page + 2);
 
-if ($start_page > 1): ?>
+                                    if ($start_page > 1): ?>
                                         <a href="?page=1&&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
                                             class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                             1
@@ -1064,6 +1078,92 @@ if ($start_page > 1): ?>
         </div>
     </div>
 
+    <!-- Admin Verification Modal -->
+    <div id="verificationModal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50 backdrop-blur modal-backdrop">
+        <div class="w-full max-w-md mx-4 overflow-hidden bg-white shadow-2xl rounded-2xl border border-indigo-200">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-indigo-600 to-indigo-700">
+                <div class="flex items-center justify-between text-white">
+                    <div>
+                        <h3 class="text-xl font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved"></i> Admin Verification Required
+                        </h3>
+                        <p class="text-sm text-indigo-100 mt-1">Please verify your admin credentials</p>
+                    </div>
+                    <button onclick="closeVerificationModal()" class="text-white transition-colors hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6">
+                <!-- Verification Method Tabs -->
+                <div class="flex space-x-2 mb-6 bg-gray-100 p-1 rounded-lg">
+                    <button onclick="switchVerificationMethod('password')" id="passwordTab"
+                        class="flex-1 py-2 px-4 rounded-md font-medium transition-all bg-white text-indigo-600 shadow-sm">
+                        <i class="fa-solid fa-key mr-2"></i>Password
+                    </button>
+                    <button onclick="switchVerificationMethod('qr')" id="qrTab"
+                        class="flex-1 py-2 px-4 rounded-md font-medium transition-all text-gray-600 hover:text-indigo-600">
+                        <i class="fa-solid fa-qrcode mr-2"></i>QR Code
+                    </button>
+                </div>
+
+                <!-- Password Verification -->
+                <div id="passwordVerification" class="verification-method">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Admin Password
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="adminPassword"
+                                class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                placeholder="Enter admin password">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QR Code Verification -->
+                <div id="qrVerification" class="verification-method hidden">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Scan Admin QR Code
+                        </label>
+                        <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                            <i class="fa-solid fa-qrcode text-6xl text-gray-400 mb-3"></i>
+                            <p class="text-sm text-gray-600 mb-4">Use the admin mobile app to scan QR code</p>
+                            <input type="text" id="qrCodeInput"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-center"
+                                placeholder="Or enter QR code manually">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="verificationError" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p class="text-sm text-red-600" id="verificationErrorMessage"></p>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-6 bg-gray-50 border-t border-gray-200 flex gap-3">
+                <button onclick="closeVerificationModal()"
+                    class="flex-1 px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 font-medium transition-colors">
+                    Cancel
+                </button>
+                <button onclick="submitVerification()"
+                    class="flex-1 px-4 py-3 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 font-medium transition-colors">
+                    Verify & Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Modal functions
         function showSuccessModal(message) {
@@ -1102,9 +1202,148 @@ if ($start_page > 1): ?>
             const dataToSend = bulkRestockData;
             closeConfirmModal();
             if (dataToSend) {
-                executeBulkRestock(dataToSend);
+                // Require admin verification before bulk restock
+                openVerificationModal(() => {
+                    executeBulkRestock(dataToSend);
+                });
             }
         }
+
+        // Admin Verification System
+        let verificationCallback = null;
+        let currentVerificationMethod = 'password';
+
+        function openVerificationModal(callback) {
+            verificationCallback = callback;
+            document.getElementById('verificationModal').classList.remove('hidden');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('qrCodeInput').value = '';
+            document.getElementById('verificationError').classList.add('hidden');
+        }
+
+        function closeVerificationModal() {
+            document.getElementById('verificationModal').classList.add('hidden');
+            verificationCallback = null;
+        }
+
+        function switchVerificationMethod(method) {
+            currentVerificationMethod = method;
+
+            // Update tab styles
+            const passwordTab = document.getElementById('passwordTab');
+            const qrTab = document.getElementById('qrTab');
+
+            if (method === 'password') {
+                passwordTab.className =
+                    'flex-1 py-2 px-4 rounded-md font-medium transition-all bg-white text-indigo-600 shadow-sm';
+                qrTab.className =
+                    'flex-1 py-2 px-4 rounded-md font-medium transition-all text-gray-600 hover:text-indigo-600';
+                document.getElementById('passwordVerification').classList.remove('hidden');
+                document.getElementById('qrVerification').classList.add('hidden');
+            } else {
+                passwordTab.className =
+                    'flex-1 py-2 px-4 rounded-md font-medium transition-all text-gray-600 hover:text-indigo-600';
+                qrTab.className =
+                    'flex-1 py-2 px-4 rounded-md font-medium transition-all bg-white text-indigo-600 shadow-sm';
+                document.getElementById('passwordVerification').classList.add('hidden');
+                document.getElementById('qrVerification').classList.remove('hidden');
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('adminPassword');
+            const toggleIcon = document.getElementById('passwordToggleIcon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'fa-solid fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'fa-solid fa-eye';
+            }
+        }
+
+        function submitVerification() {
+            const errorDiv = document.getElementById('verificationError');
+            const errorMsg = document.getElementById('verificationErrorMessage');
+
+            let data = {
+                method: currentVerificationMethod
+            };
+
+            if (currentVerificationMethod === 'password') {
+                const password = document.getElementById('adminPassword').value;
+                if (!password) {
+                    errorMsg.textContent = 'Please enter admin password';
+                    errorDiv.classList.remove('hidden');
+                    return;
+                }
+                data.password = password;
+            } else {
+                const qrCode = document.getElementById('qrCodeInput').value;
+                if (!qrCode) {
+                    errorMsg.textContent = 'Please enter or scan QR code';
+                    errorDiv.classList.remove('hidden');
+                    return;
+                }
+                data.qr_code = qrCode;
+            }
+
+            // Verify with server
+            fetch('verify_admin.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    console.log('Verification result:', result);
+                    if (result.success) {
+                        console.log('Verification successful, executing callback');
+                        // Store callback before closing modal
+                        const callbackToExecute = verificationCallback;
+                        closeVerificationModal();
+                        // Execute the callback function after closing
+                        if (callbackToExecute) {
+                            console.log('Callback exists, executing...');
+                            callbackToExecute();
+                        } else {
+                            console.error('No callback function found!');
+                        }
+                    } else {
+                        console.error('Verification failed:', result.message);
+                        errorMsg.textContent = result.message || 'Verification failed';
+                        errorDiv.classList.remove('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Verification error:', error);
+                    errorMsg.textContent = 'Verification error: ' + error.message;
+                    errorDiv.classList.remove('hidden');
+                });
+        } // Allow Enter key to submit verification
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('adminPassword');
+            const qrInput = document.getElementById('qrCodeInput');
+
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        submitVerification();
+                    }
+                });
+            }
+
+            if (qrInput) {
+                qrInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        submitVerification();
+                    }
+                });
+            }
+        });
 
         // Initialize charts when the page loads
         document.addEventListener('DOMContentLoaded', function() {
@@ -1179,11 +1418,11 @@ if ($start_page > 1): ?>
                 const categoryLabels =
                     <?php echo json_encode(array_column($category_analytics, 'product_category')); ?>;
                 const categoryStockData =
-                    <?php echo json_encode(array_map(fn ($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
                 const avgStockData =
-                    <?php echo json_encode(array_map(fn ($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
                 const numProductsData =
-                    <?php echo json_encode(array_map(fn ($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
 
                 const categoryStockChart = new Chart(categoryStockCtx.getContext('2d'), {
                     type: 'bar',
@@ -1272,9 +1511,9 @@ if ($start_page > 1): ?>
         const lowStockCategoryCtx = document.getElementById('lowStockCategoryChart');
         if (lowStockCategoryCtx) {
             const lowStockLabels =
-                <?php echo json_encode(array_map(fn ($c) => $c['category'] ?? '', $category_analytics)); ?>;
+                <?php echo json_encode(array_map(fn($c) => $c['category'] ?? '', $category_analytics)); ?>;
             const lowStockData =
-                <?php echo json_encode(array_map(fn ($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
+                <?php echo json_encode(array_map(fn($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
 
             const lowStockCategoryChart = new Chart(lowStockCategoryCtx.getContext('2d'), {
                 type: 'bar',
