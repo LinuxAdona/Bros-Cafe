@@ -69,27 +69,13 @@ $expiryTime = date('h:i A', $timestamp + 300);
             <!-- QR Code Display -->
             <div class="bg-white border-2 border-gray-200 rounded-lg p-6">
                 <div class="flex justify-center mb-4">
-                    <canvas id="qrcode"></canvas>
+                    <canvas id="qrcode" style="display:none;"></canvas>
+                    <img id="qrImage" alt="QR Code" class="mx-auto" />
                 </div>
                 <div class="text-center">
                     <p class="text-xs text-gray-500 mb-2">QR Code Value:</p>
                     <div class="bg-gray-50 rounded p-2 break-all text-xs font-mono text-gray-700" id="qrCodeText">
                         <?php echo $qrCode; ?>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Expiry Warning -->
-            <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                <div class="flex items-start">
-                    <i class="fa-solid fa-clock text-amber-600 mt-0.5 mr-3"></i>
-                    <div>
-                        <h4 class="text-sm font-semibold text-amber-900 mb-1">QR Code Expires Soon</h4>
-                        <p class="text-xs text-amber-700">
-                            This QR code will expire at <strong><?php echo $expiryTime; ?></strong> (5 minutes from
-                            now).
-                            Generate a new one if expired.
-                        </p>
                     </div>
                 </div>
             </div>
@@ -126,20 +112,24 @@ $expiryTime = date('h:i A', $timestamp + 300);
         </div>
     </div>
 
+    <script src="/js/qrcode.min.js"></script>
     <script>
         const qrCodeValue = '<?php echo $qrCode; ?>';
 
-        // Generate QR Code
-        const canvas = document.getElementById('qrcode');
-        QRCode.toCanvas(canvas, qrCodeValue, {
-            width: 250,
-            margin: 2,
-            color: {
-                dark: '#4F46E5', // Indigo
-                light: '#FFFFFF'
-            }
-        }, function(error) {
-            if (error) console.error(error);
+        document.addEventListener("DOMContentLoaded", function() {
+            var canvas = document.getElementById('qrcode');
+            QRCode.toCanvas(canvas, qrCodeValue, {
+                width: 250,
+                margin: 2,
+                color: {
+                    dark: '#4F46E5', // Indigo
+                    light: '#FFFFFF'
+                }
+            }, function(error) {
+                if (error) console.error(error);
+                // Set image src to canvas data URL
+                document.getElementById('qrImage').src = canvas.toDataURL('image/png');
+            });
         });
 
         // Copy to clipboard
@@ -149,11 +139,6 @@ $expiryTime = date('h:i A', $timestamp + 300);
                 const originalText = btn.innerHTML;
                 btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i>Copied!';
                 btn.classList.add('bg-green-50', 'text-green-700', 'border-green-300');
-
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.classList.remove('bg-green-50', 'text-green-700', 'border-green-300');
-                }, 2000);
             }).catch(err => {
                 alert('Failed to copy: ' + err);
             });
@@ -168,13 +153,6 @@ $expiryTime = date('h:i A', $timestamp + 300);
             link.href = url;
             link.click();
         }
-
-        // Auto-refresh warning before expiry
-        setTimeout(() => {
-            if (confirm('QR code will expire soon. Generate a new one?')) {
-                location.reload();
-            }
-        }, 240000); // 4 minutes
     </script>
 </body>
 
