@@ -34,7 +34,6 @@ $expiryTime = date('h:i A', $timestamp + 300);
     <title>Admin QR Code Generator - Bros Cafe</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
 
 <body class="bg-gray-50">
@@ -112,12 +111,14 @@ $expiryTime = date('h:i A', $timestamp + 300);
         </div>
     </div>
 
-    <script src="/js/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <script>
         const qrCodeValue = '<?php echo $qrCode; ?>';
 
         document.addEventListener("DOMContentLoaded", function() {
             var canvas = document.getElementById('qrcode');
+            var qrImage = document.getElementById('qrImage');
+            
             QRCode.toCanvas(canvas, qrCodeValue, {
                 width: 250,
                 margin: 2,
@@ -126,9 +127,13 @@ $expiryTime = date('h:i A', $timestamp + 300);
                     light: '#FFFFFF'
                 }
             }, function(error) {
-                if (error) console.error(error);
+                if (error) {
+                    console.error('QR Code generation error:', error);
+                    return;
+                }
                 // Set image src to canvas data URL
-                document.getElementById('qrImage').src = canvas.toDataURL('image/png');
+                qrImage.src = canvas.toDataURL('image/png');
+                console.log('QR Code generated successfully');
             });
         });
 
