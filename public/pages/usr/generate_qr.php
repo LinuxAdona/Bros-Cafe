@@ -34,9 +34,14 @@ $expiryTime = date('h:i A', $timestamp + 300);
     <title>Admin QR Code Generator - Bros Cafe</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-50 font-['Montserrat']">
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
             <!-- Header -->
@@ -80,7 +85,7 @@ $expiryTime = date('h:i A', $timestamp + 300);
 
             <!-- Actions -->
             <div class="flex gap-3">
-                <button onclick="copyToClipboard()"
+                <button onclick="copyToClipboard(event)"
                     class="flex-1 flex items-center justify-center px-4 py-3 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     <i class="fa-solid fa-copy mr-2"></i>
                     Copy Code
@@ -123,7 +128,7 @@ $expiryTime = date('h:i A', $timestamp + 300);
                     text: qrCodeValue,
                     width: 250,
                     height: 250,
-                    colorDark: '#4F46E5',
+                    colorDark: '#000',
                     colorLight: '#FFFFFF',
                     correctLevel: QRCode.CorrectLevel.H
                 });
@@ -144,7 +149,7 @@ $expiryTime = date('h:i A', $timestamp + 300);
         });
 
         // Copy to clipboard
-        function copyToClipboard() {
+        function copyToClipboard(event) {
             navigator.clipboard.writeText(qrCodeValue).then(() => {
                 const btn = event.target.closest('button');
                 const originalText = btn.innerHTML;
