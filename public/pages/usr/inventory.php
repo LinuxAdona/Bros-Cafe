@@ -406,7 +406,7 @@ $current_user = getCurrentUser();
                     </div>
 
                     <!-- Recent Restocks and Category Analytics -->
-                    <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+                    <div class="grid grid-cols-1 gap-6 mb-6">
                         <!-- Recent Restocks -->
                         <div class="p-6 bg-white rounded-lg shadow">
                             <h3 class="mb-4 text-lg font-semibold text-gray-800">Recent Restocks</h3>
@@ -416,7 +416,7 @@ $current_user = getCurrentUser();
                                         <tr>
                                             <th
                                                 class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                                Product</th>
+                                                Items</th>
                                             <th
                                                 class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                                 Date</th>
@@ -451,49 +451,6 @@ $current_user = getCurrentUser();
                                 </table>
                             </div>
                         </div>
-
-                        <!-- Category Analytics -->
-                        <div class="p-6 bg-white rounded-lg shadow">
-                            <h3 class="mb-4 text-lg font-semibold text-gray-800">Category Analytics</h3>
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th
-                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                                Category</th>
-                                            <th
-                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                                Products</th>
-                                            <th
-                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                                Avg Stock</th>
-                                            <th
-                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                                Total Stock</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
-                                        <?php foreach ($category_analytics as $category): ?>
-                                            <tr>
-                                                <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap">
-                                                    <?php echo $category['product_category']; ?>
-                                                </td>
-                                                <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                                    <?php echo $category['num_products_in_category']; ?>
-                                                </td>
-                                                <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                                    <?php echo round($category['avg_ingredient_quantity'], 1); ?>
-                                                </td>
-                                                <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                                    <?php echo $category['total_ingredient_stock'] ?? 0; ?>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
                     </div>
                 <?php endif; ?>
 
@@ -509,7 +466,7 @@ $current_user = getCurrentUser();
                         <div>
                             <label class="block mb-2 text-sm font-medium text-gray-700">Search</label>
                             <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>"
-                                placeholder="Order # or customer name"
+                                placeholder="Item name"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
                         </div>
                         <div class="flex items-end gap-2">
@@ -536,15 +493,21 @@ $current_user = getCurrentUser();
                                         class="inline-flex justify-between items-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">
                                         Export
                                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7"></path>
                                         </svg>
                                     </button>
-                                    <div id="exportDropdown" class="hidden absolute right-0 z-10 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                    <div id="exportDropdown"
+                                        class="hidden absolute right-0 z-10 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                                         <div class="py-1" role="menu">
-                                            <button onclick="exportInventory('csv')" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                            <button onclick="exportInventory('csv')"
+                                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                role="menuitem">
                                                 Export as CSV
                                             </button>
-                                            <button onclick="exportInventory('pdf')" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                            <button onclick="exportInventory('pdf')"
+                                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                role="menuitem">
                                                 Export as PDF
                                             </button>
                                         </div>
