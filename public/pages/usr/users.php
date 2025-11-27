@@ -266,7 +266,9 @@ $current_user = getCurrentUser();
 
 <body class="bg-gray-100 font-['Montserrat']">
     <!-- Mobile Sidebar Overlay -->
-    <div id="sidebarOverlay" class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden" onclick="toggleMobileSidebar()"></div>
+    <div id="sidebarOverlay"
+        class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden"
+        onclick="toggleMobileSidebar()"></div>
 
     <div class="flex h-screen overflow-hidden flex-col lg:flex-row">
         <!-- Mobile Header -->
@@ -274,8 +276,8 @@ $current_user = getCurrentUser();
             <button id="mobileSidebarBtn"
                 class="p-2 text-gray-900 bg-gray-100 rounded-lg shadow transition-all duration-300 hover:bg-gray-200"
                 onclick="toggleMobileSidebar()">
-                <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
+                <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
@@ -283,7 +285,8 @@ $current_user = getCurrentUser();
         </div>
 
         <!-- Sidebar -->
-        <aside id="sidebar" class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
+        <aside id="sidebar"
+            class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center justify-between sidebar-logo">
                     <!-- Logo and text (shown when expanded) -->
@@ -617,13 +620,13 @@ $current_user = getCurrentUser();
                                                     class="mr-3 text-blue-600 hover:text-blue-800" title="Edit">
                                                     <i class="fa-solid fa-edit"></i>
                                                 </button>
-                                                <button
-                                                    onclick="toggleUserStatus(<?php echo $user['id']; ?>, '<?php echo addslashes($user['full_name']); ?>', '<?php echo $user['status']; ?>')"
-                                                    class="mr-3 text-yellow-600 hover:text-yellow-800" title="Toggle Status">
-                                                    <i
-                                                        class="fa-solid fa-toggle-<?php echo $user['status'] === 'active' ? 'on' : 'off'; ?>"></i>
-                                                </button>
                                                 <?php if ($user['id'] != $current_user['id']): ?>
+                                                    <button
+                                                        onclick="toggleUserStatus(<?php echo $user['id']; ?>, '<?php echo addslashes($user['full_name']); ?>', '<?php echo $user['status']; ?>')"
+                                                        class="mr-3 text-yellow-600 hover:text-yellow-800" title="Toggle Status">
+                                                        <i
+                                                            class="fa-solid fa-toggle-<?php echo $user['status'] === 'active' ? 'on' : 'off'; ?>"></i>
+                                                    </button>
                                                     <button
                                                         onclick="deleteUser(<?php echo $user['id']; ?>, '<?php echo addslashes($user['full_name']); ?>')"
                                                         class="text-red-600 hover:text-red-800" title="Delete">
@@ -652,19 +655,19 @@ $current_user = getCurrentUser();
                                 <?php
                                 // Build query string for pagination
                                 $query_params = [];
-                        if ($search) {
-                            $query_params[] = 'search=' . urlencode($search);
-                        }
-                        if ($role_filter) {
-                            $query_params[] = 'role=' . urlencode($role_filter);
-                        }
-                        if ($status_filter) {
-                            $query_params[] = 'status=' . urlencode($status_filter);
-                        }
-                        $query_string = !empty($query_params) ? '&' . implode('&', $query_params) : '';
+                                if ($search) {
+                                    $query_params[] = 'search=' . urlencode($search);
+                                }
+                                if ($role_filter) {
+                                    $query_params[] = 'role=' . urlencode($role_filter);
+                                }
+                                if ($status_filter) {
+                                    $query_params[] = 'status=' . urlencode($status_filter);
+                                }
+                                $query_string = !empty($query_params) ? '&' . implode('&', $query_params) : '';
 
-                        // Previous button
-                        if ($page > 1): ?>
+                                // Previous button
+                                if ($page > 1): ?>
                                     <a href="?page=<?php echo $page - 1; ?><?php echo $query_string; ?>"
                                         class="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50">
                                         <i class="fa-solid fa-chevron-left"></i>
@@ -677,12 +680,12 @@ $current_user = getCurrentUser();
                                 <?php endif; ?>
 
                                 <?php
-                        // Page numbers
-                        $start_page = max(1, $page - 2);
-$end_page = min($total_pages, $page + 2);
+                                // Page numbers
+                                $start_page = max(1, $page - 2);
+                                $end_page = min($total_pages, $page + 2);
 
-// First page
-if ($start_page > 1): ?>
+                                // First page
+                                if ($start_page > 1): ?>
                                     <a href="?page=1<?php echo $query_string; ?>"
                                         class="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50">
                                         1
@@ -706,8 +709,8 @@ if ($start_page > 1): ?>
                                 <?php endfor; ?>
 
                                 <?php
-// Last page
-if ($end_page < $total_pages): ?>
+                                // Last page
+                                if ($end_page < $total_pages): ?>
                                     <?php if ($end_page < $total_pages - 1): ?>
                                         <span class="px-3 py-2 text-sm text-gray-400">...</span>
                                     <?php endif; ?>
@@ -982,12 +985,20 @@ if ($end_page < $total_pages): ?>
                 s = document.getElementById("hamburgerIcon"),
                 a = document.getElementById("mobileSidebarBtn"),
                 l = !e.classList.contains("-translate-x-full");
-            l ? (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-200"), a.classList.add("bg-gray-100")) : (e.classList.remove("-translate-x-full"), t.classList.remove("opacity-0", "pointer-events-none"), t.classList.add("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />', s.classList.add("rotate-90"), a.classList.add("bg-gray-200"), a.classList.remove("bg-gray-100"))
+            l ? (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList
+                .remove("opacity-50"), s.innerHTML =
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />',
+                s.classList.remove("rotate-90"), a.classList.remove("bg-gray-200"), a.classList.add("bg-gray-100")) : (e
+                .classList.remove("-translate-x-full"), t.classList.remove("opacity-0", "pointer-events-none"), t
+                .classList.add("opacity-50"), s.innerHTML =
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />', s
+                .classList.add("rotate-90"), a.classList.add("bg-gray-200"), a.classList.remove("bg-gray-100"))
         }
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll("#sidebar nav a").forEach(e => {
                 e.addEventListener("click", function() {
-                    window.innerWidth < 1024 && !document.getElementById("sidebar").classList.contains("-translate-x-full") && toggleMobileSidebar()
+                    window.innerWidth < 1024 && !document.getElementById("sidebar").classList
+                        .contains("-translate-x-full") && toggleMobileSidebar()
                 })
             })
         });
@@ -996,7 +1007,12 @@ if ($end_page < $total_pages): ?>
                 t = document.getElementById("sidebarOverlay"),
                 s = document.getElementById("hamburgerIcon"),
                 a = document.getElementById("mobileSidebarBtn");
-            window.innerWidth >= 1024 ? (e.classList.remove("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50")) : (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-200"), a.classList.add("bg-gray-100"))
+            window.innerWidth >= 1024 ? (e.classList.remove("-translate-x-full"), t.classList.add("opacity-0",
+                "pointer-events-none"), t.classList.remove("opacity-50")) : (e.classList.add(
+                    "-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), s.innerHTML =
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />',
+                s.classList.remove("rotate-90"), a.classList.remove("bg-gray-200"), a.classList.add(
+                    "bg-gray-100"))
         });
         if (window.innerWidth < 1024) document.getElementById("sidebar").classList.add("-translate-x-full");
     </script>

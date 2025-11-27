@@ -26,24 +26,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db = new Database();
         $conn = $db->getConnection();
 
-        $stmt = $conn->prepare("SELECT * FROM users WHERE (username = :username OR email = :email) AND status = 'active'");
+        // Check if user exists (regardless of status)
+        $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username OR email = :email");
         $stmt->execute(['username' => $username, 'email' => $username]);
         $user = $stmt->fetch();
 
-        if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['email'] = $user['email'];
-            $_SESSION['full_name'] = $user['full_name'];
-            $_SESSION['user_role'] = $user['role'];
+        if ($user) {
+            // Check if account is inactive
+            if ($user['status'] === 'inactive') {
+                $error = 'Your account has been deactivated. Please contact the administrator for assistance.';
+            } elseif (password_verify($password, $user['password'])) {
+                // Account is active and password is correct
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['email'] = $user['email'];
+                $_SESSION['full_name'] = $user['full_name'];
+                $_SESSION['user_role'] = $user['role'];
 
-            // Redirect based on role
-            if ($user['role'] === 'admin') {
-                header('Location: ./usr/dashboard.php');
+                // Redirect based on role
+                if ($user['role'] === 'admin') {
+                    header('Location: ./usr/dashboard.php');
+                } else {
+                    header('Location: ./usr/pos.php');
+                }
+                exit();
             } else {
-                header('Location: ./usr/pos.php');
+                $error = 'Invalid username or password';
             }
-            exit();
         } else {
             $error = 'Invalid username or password';
         }

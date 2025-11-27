@@ -146,7 +146,7 @@ $stmt = $conn->query("SELECT * FROM ingredients ORDER BY name");
 $ingredients = $stmt->fetchAll();
 
 // Calculate statistics
-$products_with_both_sizes = count(array_filter($products, fn ($p) => $p['price_dodici'] && $p['price_sedici']));
+$products_with_both_sizes = count(array_filter($products, fn($p) => $p['price_dodici'] && $p['price_sedici']));
 $products_single_size = count($products) - $products_with_both_sizes;
 
 // Get average price (considering both sizes)
@@ -237,7 +237,9 @@ $current_user = getCurrentUser();
 
 <body class="bg-gray-100 font-['Montserrat']">
     <!-- Mobile Sidebar Overlay -->
-    <div id="sidebarOverlay" class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden" onclick="toggleMobileSidebar()"></div>
+    <div id="sidebarOverlay"
+        class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden"
+        onclick="toggleMobileSidebar()"></div>
 
     <div class="flex h-screen overflow-hidden flex-col lg:flex-row">
         <!-- Mobile Header -->
@@ -245,8 +247,8 @@ $current_user = getCurrentUser();
             <button id="mobileSidebarBtn"
                 class="p-2 text-gray-900 bg-gray-100 rounded-lg shadow transition-all duration-300 hover:bg-gray-200"
                 onclick="toggleMobileSidebar()">
-                <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
+                <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
@@ -254,7 +256,8 @@ $current_user = getCurrentUser();
         </div>
 
         <!-- Sidebar -->
-        <aside id="sidebar" class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
+        <aside id="sidebar"
+            class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center justify-between sidebar-logo">
                     <!-- Logo and text (shown when expanded) -->
@@ -390,10 +393,10 @@ $current_user = getCurrentUser();
                     </div>
                 </div>
                 <?php if (isAdmin()): ?>
-                <button onclick="openAddModal()"
-                    class="px-6 py-3 text-white transition-colors rounded-lg shadow-md bg-amber-600 hover:bg-amber-700">
-                    <i class="mr-2 fa-solid fa-plus"></i>Add Product
-                </button>
+                    <button onclick="openAddModal()"
+                        class="px-6 py-3 text-white transition-colors rounded-lg shadow-md bg-amber-600 hover:bg-amber-700">
+                        <i class="mr-2 fa-solid fa-plus"></i>Add Product
+                    </button>
                 <?php endif; ?>
             </div>
             <div class="p-6">
@@ -412,7 +415,8 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Total Products</p>
-                                <p class="text-lg lg:text-2xl font-bold text-gray-800"><?php echo count($products); ?></p>
+                                <p class="text-lg lg:text-2xl font-bold text-gray-800"><?php echo count($products); ?>
+                                </p>
                             </div>
                             <div class="p-3 bg-blue-100 rounded-full">
                                 <i class="text-lg lg:text-2xl text-blue-600 fa-solid fa-coffee"></i>
@@ -452,7 +456,8 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Categories</p>
-                                <p class="text-lg lg:text-2xl font-bold text-purple-600"><?php echo count($categories); ?></p>
+                                <p class="text-lg lg:text-2xl font-bold text-purple-600">
+                                    <?php echo count($categories); ?></p>
                             </div>
                             <div class="p-3 bg-purple-100 rounded-full">
                                 <i class="text-lg lg:text-2xl text-purple-600 fa-solid fa-layer-group"></i>
@@ -565,16 +570,16 @@ $current_user = getCurrentUser();
                                                 <i class="fa-solid fa-list"></i>
                                             </button>
                                             <?php if (isAdmin()): ?>
-                                            <button
-                                                onclick="editProduct(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['category_id']; ?>, '<?php echo addslashes($product['description'] ?? ''); ?>', '<?php echo $product['status']; ?>', <?php echo $product['price_dodici'] ? $product['price_dodici'] : 'null'; ?>, <?php echo $product['price_sedici'] ? $product['price_sedici'] : 'null'; ?>)"
-                                                class="mr-3 text-blue-600 hover:text-blue-800" title="Edit Product">
-                                                <i class="fa-solid fa-edit"></i>
-                                            </button>
-                                            <button
-                                                onclick="deleteProduct(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>')"
-                                                class="text-red-600 hover:text-red-800" title="Delete Product">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
+                                                <button
+                                                    onclick="editProduct(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['category_id']; ?>, '<?php echo addslashes($product['description'] ?? ''); ?>', '<?php echo $product['status']; ?>', <?php echo $product['price_dodici'] ? $product['price_dodici'] : 'null'; ?>, <?php echo $product['price_sedici'] ? $product['price_sedici'] : 'null'; ?>)"
+                                                    class="mr-3 text-blue-600 hover:text-blue-800" title="Edit Product">
+                                                    <i class="fa-solid fa-edit"></i>
+                                                </button>
+                                                <button
+                                                    onclick="deleteProduct(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>')"
+                                                    class="text-red-600 hover:text-red-800" title="Delete Product">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -605,10 +610,10 @@ $current_user = getCurrentUser();
 
                                 <?php
                                 $start_page = max(1, $page - 2);
-                        $end_page = min($total_pages, $page + 2);
+                                $end_page = min($total_pages, $page + 2);
 
-                        for ($i = $start_page; $i <= $end_page; $i++):
-                            ?>
+                                for ($i = $start_page; $i <= $end_page; $i++):
+                                ?>
                                     <a href="?page=<?php echo $i; ?><?php echo $search ? '&search=' . urlencode($search) : ''; ?><?php echo $category_filter ? '&category=' . urlencode($category_filter) : ''; ?><?php echo $status_filter ? '&status=' . urlencode($status_filter) : ''; ?>"
                                         class="px-3 py-2 text-sm font-medium <?php echo $i === $page ? 'text-white bg-amber-600' : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'; ?> rounded-md">
                                         <?php echo $i; ?>
@@ -700,10 +705,6 @@ $current_user = getCurrentUser();
                     <div class="border-t pt-4">
                         <div class="flex items-center justify-between mb-3">
                             <label class="text-sm font-medium text-gray-700">Sizes & Prices</label>
-                            <button type="button" onclick="addSize()"
-                                class="px-3 py-1 text-sm text-white bg-green-600 rounded-lg hover:bg-green-700">
-                                <i class="fa-solid fa-plus mr-1"></i> Add Size
-                            </button>
                         </div>
                         <div id="sizesContainer" class="space-y-2">
                             <!-- Sizes will be added here dynamically -->
@@ -1017,12 +1018,20 @@ $current_user = getCurrentUser();
                 s = document.getElementById("hamburgerIcon"),
                 a = document.getElementById("mobileSidebarBtn"),
                 l = !e.classList.contains("-translate-x-full");
-            l ? (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-200"), a.classList.add("bg-gray-100")) : (e.classList.remove("-translate-x-full"), t.classList.remove("opacity-0", "pointer-events-none"), t.classList.add("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />', s.classList.add("rotate-90"), a.classList.add("bg-gray-200"), a.classList.remove("bg-gray-100"))
+            l ? (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList
+                .remove("opacity-50"), s.innerHTML =
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />',
+                s.classList.remove("rotate-90"), a.classList.remove("bg-gray-200"), a.classList.add("bg-gray-100")) : (e
+                .classList.remove("-translate-x-full"), t.classList.remove("opacity-0", "pointer-events-none"), t
+                .classList.add("opacity-50"), s.innerHTML =
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />', s
+                .classList.add("rotate-90"), a.classList.add("bg-gray-200"), a.classList.remove("bg-gray-100"))
         }
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll("#sidebar nav a").forEach(e => {
                 e.addEventListener("click", function() {
-                    window.innerWidth < 1024 && !document.getElementById("sidebar").classList.contains("-translate-x-full") && toggleMobileSidebar()
+                    window.innerWidth < 1024 && !document.getElementById("sidebar").classList
+                        .contains("-translate-x-full") && toggleMobileSidebar()
                 })
             })
         });
@@ -1031,7 +1040,12 @@ $current_user = getCurrentUser();
                 t = document.getElementById("sidebarOverlay"),
                 s = document.getElementById("hamburgerIcon"),
                 a = document.getElementById("mobileSidebarBtn");
-            window.innerWidth >= 1024 ? (e.classList.remove("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50")) : (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-200"), a.classList.add("bg-gray-100"))
+            window.innerWidth >= 1024 ? (e.classList.remove("-translate-x-full"), t.classList.add("opacity-0",
+                "pointer-events-none"), t.classList.remove("opacity-50")) : (e.classList.add(
+                    "-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), s.innerHTML =
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />',
+                s.classList.remove("rotate-90"), a.classList.remove("bg-gray-200"), a.classList.add(
+                    "bg-gray-100"))
         });
         if (window.innerWidth < 1024) document.getElementById("sidebar").classList.add("-translate-x-full");
     </script>
