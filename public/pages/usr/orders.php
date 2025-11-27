@@ -533,14 +533,19 @@ $current_user = getCurrentUser();
                                             </td>
                                             <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                                                 <button onclick="viewOrderDetails(<?php echo $order['id']; ?>)"
-                                                    class="text-blue-600 hover:text-blue-800">
+                                                    class="text-blue-600 hover:text-blue-800" title="View Details">
                                                     <i class="fa-solid fa-eye"></i>
                                                 </button>
                                                 <?php if ($order['status'] !== 'completed' && $order['status'] !== 'cancelled'): ?>
                                                     <button
                                                         onclick="updateOrderStatus(<?php echo $order['id']; ?>, '<?php echo $order['status']; ?>')"
-                                                        class="ml-3 text-green-600 hover:text-green-800">
+                                                        class="ml-3 text-green-600 hover:text-green-800" title="Update Status">
                                                         <i class="fa-solid fa-edit"></i>
+                                                    </button>
+                                                    <button
+                                                        onclick="cancelOrder(<?php echo $order['id']; ?>, '<?php echo addslashes($order['order_number']); ?>')"
+                                                        class="ml-3 text-red-600 hover:text-red-800" title="Cancel Order">
+                                                        <i class="fa-solid fa-times-circle"></i>
                                                     </button>
                                                 <?php endif; ?>
                                             </td>
@@ -729,6 +734,97 @@ $current_user = getCurrentUser();
         </div>
     </div>
 
+    <!-- Admin Verification Modal for Cancel Order -->
+    <div id="cancelVerificationModal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50 backdrop-blur modal-backdrop">
+        <div class="w-full max-w-md mx-4 overflow-hidden bg-white shadow-2xl rounded-2xl border border-red-200">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-red-600 to-red-700">
+                <div class="flex items-center justify-between text-white">
+                    <div>
+                        <h3 class="text-xl font-bold"><i class="fa-solid fa-shield-halved mr-2"></i>Admin Verification
+                            Required</h3>
+                        <p class="text-sm opacity-90 mt-1">Verify admin credentials to cancel order</p>
+                    </div>
+                    <button onclick="closeCancelVerificationModal()"
+                        class="text-white transition-colors hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6">
+                <!-- Order Info -->
+                <div class="mb-4 p-4 bg-red-50 rounded-lg border border-red-200">
+                    <p class="text-sm text-gray-600 mb-1">Order to Cancel:</p>
+                    <p id="cancelOrderNumber" class="text-lg font-bold text-gray-900"></p>
+                </div>
+
+                <!-- Verification Tabs -->
+                <div class="flex border-b border-gray-200 mb-4">
+                    <button id="cancelPasswordTab" onclick="switchCancelVerificationMethod('password')"
+                        class="flex-1 py-2 px-4 text-sm font-medium border-b-2 border-indigo-600 text-indigo-600">
+                        Password
+                    </button>
+                    <!-- 
+                    <button id="cancelQrTab" onclick="switchCancelVerificationMethod('qr')"
+                        class="flex-1 py-2 px-4 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+                        QR Code
+                    </button> -->
+                </div>
+
+                <!-- Password Verification -->
+                <div id="cancelPasswordVerification">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Admin Password</label>
+                    <div class="relative">
+                        <input type="password" id="cancelAdminPassword"
+                            class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            placeholder="Enter admin password">
+                        <!-- <button type="button" onclick="toggleCancelPasswordVisibility()"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                            <i id="cancelPasswordToggleIcon" class="fa-solid fa-eye"></i>
+                        </button> -->
+                    </div>
+                </div>
+
+                <!-- QR Code Verification -->
+                <div id="cancelQrVerification" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Admin QR Code</label>
+                    <input type="text" id="cancelQrCodeInput"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        placeholder="Scan or enter QR code">
+                    <p class="text-xs text-gray-500 mt-2">
+                        <i class="fa-solid fa-info-circle"></i> Scan admin QR code or paste the code manually
+                    </p>
+                </div>
+
+                <!-- Error Message -->
+                <div id="cancelVerificationError" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p class="text-sm text-red-600">
+                        <i class="fa-solid fa-exclamation-triangle mr-1"></i>
+                        <span id="cancelVerificationErrorMessage"></span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-6 bg-gray-50 border-t border-gray-200 flex gap-3">
+                <button onclick="closeCancelVerificationModal()"
+                    class="flex-1 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                    Cancel
+                </button>
+                <button onclick="submitCancelVerification()"
+                    class="flex-1 px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors font-medium">
+                    <i class="fa-solid fa-shield-halved mr-1"></i> Verify & Cancel Order
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="../../assets/js/admin.js"></script>
     <script>
         // Mobile sidebar toggle
@@ -787,7 +883,7 @@ $current_user = getCurrentUser();
         });
         if (window.innerWidth < 1024) document.getElementById('sidebar').classList.add('-translate-x-full');
     </script>
-    <script src="../../assets/js/orders.js"></script>
+    <script src="../../assets/js/orders.js?v=<?php echo time(); ?>"></script>
 </body>
 
 </html>
