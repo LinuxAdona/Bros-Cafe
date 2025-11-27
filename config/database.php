@@ -1,8 +1,9 @@
 <?php
+
 // Create connection
 class Database
 {
-    private const ENVIRONMENT = 'development';
+    private const ENVIRONMENT = 'production';
     private $host = 'localhost';
     private $user = self::ENVIRONMENT === 'production' ? 'broscafe_sys' : 'root';
     private $pass = self::ENVIRONMENT === 'production' ? '-Ski;c5)nQL9' : '';
