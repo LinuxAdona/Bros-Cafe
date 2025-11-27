@@ -32,22 +32,22 @@ deployment:
     - /bin/cp DATABASE_IMAGE_INTEGRATION.md $DEPLOYPATH
 
     # Copy directories recursively
-    - /bin/cp -R config/* $DEPLOYPATH/config/
-    - /bin/cp -R database/* $DEPLOYPATH/database/
-    - /bin/cp -R public/* $DEPLOYPATH/public/
-    - /bin/cp -R src/* $DEPLOYPATH/src/
+    - /bin/cp -R config $DEPLOYPATH/config/
+    - /bin/cp -R database $DEPLOYPATH/database/
+    - /bin/cp -R public $DEPLOYPATH/public/
+    - /bin/cp -R src $DEPLOYPATH/src/
 
-    # # Set proper permissions
-    # - chmod 755 $DEPLOYPATH
-    # - chmod 755 $DEPLOYPATH/public
-    # - chmod 755 $DEPLOYPATH/public/pages
-    # - chmod 755 $DEPLOYPATH/public/pages/usr
-    # - chmod 755 $DEPLOYPATH/public/assets
-    # - chmod 755 $DEPLOYPATH/public/assets/images
-    # - chmod 777 $DEPLOYPATH/public/assets/images/products
-    # - chmod 644 $DEPLOYPATH/config/database.php
-    # - chmod 644 $DEPLOYPATH/index.php
-    #
+    # Set proper permissions
+    - chmod 755 $DEPLOYPATH
+    - chmod 755 $DEPLOYPATH/public
+    - chmod 755 $DEPLOYPATH/public/pages
+    - chmod 755 $DEPLOYPATH/public/pages/usr
+    - chmod 755 $DEPLOYPATH/public/assets
+    - chmod 755 $DEPLOYPATH/public/assets/images
+    - chmod 777 $DEPLOYPATH/public/assets/images/products
+    - chmod 644 $DEPLOYPATH/config/database.php
+    - chmod 644 $DEPLOYPATH/index.php
+
     # Set permissions for writable directories (for image uploads, logs, etc.)
-    # - find $DEPLOYPATH/public/assets/images/products -type d -exec chmod 777 {} \;
-    # - find $DEPLOYPATH/public/assets/images/products -type f -exec chmod 666 {} \;
+    - find $DEPLOYPATH/public/assets/images/products -type d -exec chmod 777 {} \;
+    - find $DEPLOYPATH/public/assets/images/products -type f -exec chmod 666 {} \;
