@@ -101,6 +101,73 @@ $stmt = $conn->query("
 ");
 $recent_restocks = $stmt->fetchAll();
 
+// Transaction History Pagination and Filters
+$trans_page = isset($_GET['trans_page']) ? (int)$_GET['trans_page'] : 1;
+$trans_per_page = 10;
+$trans_offset = ($trans_page - 1) * $trans_per_page;
+$trans_search = isset($_GET['trans_search']) ? $_GET['trans_search'] : '';
+$trans_type_filter = isset($_GET['trans_type']) ? $_GET['trans_type'] : '';
+$trans_date_filter = isset($_GET['trans_date']) ? $_GET['trans_date'] : '';
+
+// Build transaction query
+$trans_where = ["1=1"];
+$trans_params = [];
+
+if ($trans_search) {
+    $trans_where[] = "ig.name LIKE :search";
+    $trans_params['search'] = "%$trans_search%";
+}
+
+if ($trans_type_filter && $trans_type_filter !== '') {
+    $trans_where[] = "it.transaction_type = :type";
+    $trans_params['type'] = $trans_type_filter;
+}
+
+if ($trans_date_filter && $trans_date_filter !== '') {
+    $trans_where[] = "DATE(it.created_at) = :date";
+    $trans_params['date'] = $trans_date_filter;
+}
+
+$trans_where_clause = implode(' AND ', $trans_where);
+
+// Get transactions with pagination
+$trans_sql = "
+    SELECT 
+        it.id,
+        ig.name AS ingredient_name,
+        it.transaction_type,
+        it.quantity,
+        i.unit,
+        it.notes,
+        it.created_at,
+        u.username AS user_name
+    FROM inventory_transactions it
+    JOIN ingredients ig ON it.ingredient_id = ig.id
+    JOIN inventory i ON ig.id = i.ingredient_id
+    LEFT JOIN users u ON it.user_id = u.id
+    WHERE $trans_where_clause
+    ORDER BY it.created_at DESC
+    LIMIT :limit OFFSET :offset
+";
+$trans_stmt = $conn->prepare($trans_sql);
+foreach ($trans_params as $key => $value) {
+    $trans_stmt->bindValue(":$key", $value);
+}
+$trans_stmt->bindValue(':limit', $trans_per_page, PDO::PARAM_INT);
+$trans_stmt->bindValue(':offset', $trans_offset, PDO::PARAM_INT);
+$trans_stmt->execute();
+$transactions = $trans_stmt->fetchAll();
+
+// Get total transactions count for pagination
+$count_sql = "SELECT COUNT(*) as total FROM inventory_transactions it JOIN ingredients ig ON it.ingredient_id = ig.id WHERE $trans_where_clause";
+$count_stmt = $conn->prepare($count_sql);
+foreach ($trans_params as $key => $value) {
+    $count_stmt->bindValue(":$key", $value);
+}
+$count_stmt->execute();
+$total_transactions = $count_stmt->fetch()['total'];
+$trans_total_pages = ceil($total_transactions / $trans_per_page);
+
 function convertUnit($stock, $unit)
 {
     // Only convert if unit is 'ml' or 'g'
@@ -159,7 +226,9 @@ $current_user = getCurrentUser();
 
 <body class="bg-gray-100 font-['Montserrat']">
     <!-- Mobile Sidebar Overlay -->
-    <div id="sidebarOverlay" class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden" onclick="toggleMobileSidebar()"></div>
+    <div id="sidebarOverlay"
+        class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden"
+        onclick="toggleMobileSidebar()"></div>
 
     <div class="flex h-screen overflow-hidden flex-col lg:flex-row">
         <!-- Mobile Header -->
@@ -167,8 +236,8 @@ $current_user = getCurrentUser();
             <button id="mobileSidebarBtn"
                 class="p-2 text-gray-900 bg-gray-100 rounded-lg shadow transition-all duration-300 hover:bg-gray-200"
                 onclick="toggleMobileSidebar()">
-                <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
+                <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
@@ -176,7 +245,8 @@ $current_user = getCurrentUser();
         </div>
 
         <!-- Sidebar -->
-        <aside id="sidebar" class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
+        <aside id="sidebar"
+            class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center justify-between sidebar-logo">
                     <!-- Logo and text (shown when expanded) -->
@@ -261,16 +331,16 @@ $current_user = getCurrentUser();
                             </a>
                         </li>
                     <?php endif; ?>
-                        <li>
-                            <a href="products.php" data-tooltip="Products"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                </svg>
-                                <span class="ml-3 sidebar-text">Products</span>
-                            </a>
-                        </li>
+                    <li>
+                        <a href="products.php" data-tooltip="Products"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                            <span class="ml-3 sidebar-text">Products</span>
+                        </a>
+                    </li>
                     <?php if (isAdmin()): ?>
                         <li>
                             <a href="users.php" data-tooltip="Employees"
@@ -349,7 +419,8 @@ $current_user = getCurrentUser();
                             </div>
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Total Items</p>
-                                <p class="text-lg lg:text-2xl font-semibold text-gray-900"><?php echo count($items); ?></p>
+                                <p class="text-lg lg:text-2xl font-semibold text-gray-900"><?php echo count($items); ?>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -364,7 +435,8 @@ $current_user = getCurrentUser();
                             </div>
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Low Stock Items</p>
-                                <p class="text-lg lg:text-2xl font-semibold text-gray-900"><?php echo count($low_stock); ?></p>
+                                <p class="text-lg lg:text-2xl font-semibold text-gray-900">
+                                    <?php echo count($low_stock); ?></p>
                             </div>
                         </div>
                     </div>
@@ -380,7 +452,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Available Items</p>
                                 <p class="text-lg lg:text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] > $p['reorder_level'])); ?>
+                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] > $p['reorder_level'])); ?>
                                 </p>
                             </div>
                         </div>
@@ -397,7 +469,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Out of Stock</p>
                                 <p class="text-lg lg:text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] == 0)); ?>
+                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] == 0)); ?>
                                 </p>
                             </div>
                         </div>
@@ -470,8 +542,8 @@ $current_user = getCurrentUser();
                                                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
                                                         <?php
                                                         list($convertedQty, $convertedUnit) = convertUnit($restock['quantity'], $restock['unit']);
-                                                echo $convertedQty . ' ' . $convertedUnit;
-                                                ?>
+                                                        echo $convertedQty . ' ' . $convertedUnit;
+                                                        ?>
                                                     </td>
                                                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
                                                         <?php echo $restock['notes'] ?></td>
@@ -595,14 +667,14 @@ $current_user = getCurrentUser();
                                             <div class="text-sm text-gray-900">
                                                 <?php
                                                 list($convertedQty, $convertedUnit) = convertUnit($product['quantity'], $product['unit']);
-                                    echo $convertedQty . ' ' . $convertedUnit;
-                                    ?></div>
+                                                echo $convertedQty . ' ' . $convertedUnit;
+                                                ?></div>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                                             <?php
                                             list($convertedReorderQty, $convertedReorderUnit) = convertUnit($product['reorder_level'], $product['unit']);
-                                    echo $convertedReorderQty . ' ' . $convertedReorderUnit;
-                                    ?>
+                                            echo $convertedReorderQty . ' ' . $convertedReorderUnit;
+                                            ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <?php if ($product['quantity'] == 0): ?>
@@ -665,9 +737,9 @@ $current_user = getCurrentUser();
                                 <div class="flex gap-1">
                                     <?php
                                     $start_page = max(1, $page - 2);
-$end_page = min($total_pages, $page + 2);
+                                    $end_page = min($total_pages, $page + 2);
 
-if ($start_page > 1): ?>
+                                    if ($start_page > 1): ?>
                                         <a href="?page=1&&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
                                             class="px-3 py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                             1
@@ -679,7 +751,8 @@ if ($start_page > 1): ?>
 
                                     <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
                                         <?php if ($i == $page): ?>
-                                            <span class="px-3 py-2 text-xs lg:text-sm font-medium text-white rounded-lg bg-amber-600">
+                                            <span
+                                                class="px-3 py-2 text-xs lg:text-sm font-medium text-white rounded-lg bg-amber-600">
                                                 <?php echo $i; ?>
                                             </span>
                                         <?php else: ?>
@@ -704,6 +777,260 @@ if ($start_page > 1): ?>
                                 <!-- Next Button -->
                                 <?php if ($page < $total_pages): ?>
                                     <a href="?page=<?php echo $page + 1; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                        class="flex items-center justify-center px-4 py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        Next <i class="ml-1 fa-solid fa-chevron-right"></i>
+                                    </a>
+                                <?php else: ?>
+                                    <span
+                                        class="flex items-center justify-center px-4 py-2 text-xs lg:text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+                                        Next <i class="ml-1 fa-solid fa-chevron-right"></i>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Transaction History Section -->
+                <div class="mt-6 overflow-hidden bg-white rounded-lg shadow-md">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex flex-wrap items-center justify-between gap-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Transaction History</h3>
+                            <div class="relative inline-block text-left">
+                                <button onclick="toggleTransactionExportDropdown()" type="button"
+                                    class="inline-flex justify-between items-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">
+                                    Export
+                                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div id="transactionExportDropdown"
+                                    class="hidden absolute right-0 z-10 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                    <div class="py-1" role="menu">
+                                        <button onclick="exportTransactions('csv')"
+                                            class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            role="menuitem">
+                                            Export as CSV
+                                        </button>
+                                        <button onclick="exportTransactions('pdf')"
+                                            class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            role="menuitem">
+                                            Export as PDF
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Filters -->
+                    <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                        <form method="GET" class="grid grid-cols-1 gap-4 md:grid-cols-4">
+                            <input type="hidden" name="page" value="<?php echo $page; ?>">
+                            <input type="hidden" name="date" value="<?php echo htmlspecialchars($date_filter); ?>">
+                            <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
+
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-700">Search</label>
+                                <input type="text" name="trans_search"
+                                    value="<?php echo htmlspecialchars($trans_search); ?>" placeholder="Ingredient name"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                            </div>
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-700">Type</label>
+                                <select name="trans_type"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                                    <option value="">All Types</option>
+                                    <option value="restock"
+                                        <?php echo $trans_type_filter === 'restock' ? 'selected' : ''; ?>>Restock
+                                    </option>
+                                    <option value="sale" <?php echo $trans_type_filter === 'sale' ? 'selected' : ''; ?>>
+                                        Sale</option>
+                                    <option value="adjustment"
+                                        <?php echo $trans_type_filter === 'adjustment' ? 'selected' : ''; ?>>Adjustment
+                                    </option>
+                                    <option value="waste"
+                                        <?php echo $trans_type_filter === 'waste' ? 'selected' : ''; ?>>Waste</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-700">Date</label>
+                                <input type="date" name="trans_date"
+                                    value="<?php echo htmlspecialchars($trans_date_filter); ?>"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                            </div>
+                            <div class="flex items-end gap-2">
+                                <button type="submit"
+                                    class="flex-1 px-6 py-2 text-white transition-colors rounded-lg bg-amber-600 hover:bg-amber-700">
+                                    <i class="mr-2 fa-solid fa-filter"></i>Filter
+                                </button>
+                                <a href="?page=<?php echo $page; ?>&date=<?php echo htmlspecialchars($date_filter); ?>&search=<?php echo htmlspecialchars($search); ?>"
+                                    class="px-6 py-2 text-gray-700 transition-colors bg-gray-200 rounded-lg hover:bg-gray-300">
+                                    <i class="fa-solid fa-times"></i>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Transaction Table -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                        Date & Time</th>
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                        Ingredient</th>
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                        Type</th>
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                        Quantity</th>
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                        User</th>
+                                    <th
+                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                        Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <?php if (count($transactions) > 0): ?>
+                                    <?php foreach ($transactions as $transaction): ?>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm text-gray-900">
+                                                    <?php echo date('M d, Y', strtotime($transaction['created_at'])); ?>
+                                                </div>
+                                                <div class="text-xs text-gray-500">
+                                                    <?php echo date('h:i A', strtotime($transaction['created_at'])); ?>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm font-medium text-gray-900">
+                                                    <?php echo htmlspecialchars($transaction['ingredient_name']); ?></div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <?php
+                                                $type = $transaction['transaction_type'];
+                                                $typeColors = [
+                                                    'restock' => 'bg-green-100 text-green-800',
+                                                    'sale' => 'bg-blue-100 text-blue-800',
+                                                    'adjustment' => 'bg-yellow-100 text-yellow-800',
+                                                    'waste' => 'bg-red-100 text-red-800'
+                                                ];
+                                                $colorClass = $typeColors[$type] ?? 'bg-gray-100 text-gray-800';
+                                                ?>
+                                                <span
+                                                    class="inline-flex px-2 text-xs font-semibold leading-5 rounded-full <?php echo $colorClass; ?>">
+                                                    <?php echo ucfirst($type); ?>
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm text-gray-900">
+                                                    <?php
+                                                    $qty = $transaction['quantity'];
+                                                    $sign = ($type === 'restock' || ($type === 'adjustment' && $qty > 0)) ? '+' : '';
+                                                    list($convertedQty, $convertedUnit) = convertUnit(abs($qty), $transaction['unit']);
+                                                    echo $sign . $convertedQty . ' ' . $convertedUnit;
+                                                    ?>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm text-gray-500">
+                                                    <?php echo htmlspecialchars($transaction['user_name'] ?? 'N/A'); ?></div>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <div class="text-sm text-gray-500">
+                                                    <?php echo htmlspecialchars($transaction['notes'] ?? '-'); ?></div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                                            <i class="text-4xl text-gray-300 fa-solid fa-inbox"></i>
+                                            <p class="mt-2">No transactions found</p>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Transaction Pagination -->
+                    <?php if ($trans_total_pages > 1): ?>
+                        <div class="flex items-center justify-center lg:justify-between px-6 py-4 border-t border-gray-200">
+                            <div class="hidden lg:flex items-center text-sm text-gray-700">
+                                <span>Showing <span class="font-semibold"><?php echo $trans_offset + 1; ?></span> to
+                                    <span
+                                        class="font-semibold"><?php echo min($trans_offset + $trans_per_page, $total_transactions); ?></span>
+                                    of <span class="font-semibold"><?php echo $total_transactions; ?></span>
+                                    transactions</span>
+                            </div>
+
+                            <div class="flex gap-2">
+                                <!-- Previous Button -->
+                                <?php if ($trans_page > 1): ?>
+                                    <a href="?page=<?php echo $page; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>&trans_page=<?php echo $trans_page - 1; ?>&trans_search=<?php echo urlencode($trans_search); ?>&trans_type=<?php echo $trans_type_filter; ?>&trans_date=<?php echo $trans_date_filter; ?>"
+                                        class="flex items-center justify-center px-4 py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Prev
+                                    </a>
+                                <?php else: ?>
+                                    <span
+                                        class="flex items-center justify-center px-4 py-2 text-xs lg:text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Prev
+                                    </span>
+                                <?php endif; ?>
+
+                                <!-- Page Numbers -->
+                                <div class="flex gap-1">
+                                    <?php
+                                    $trans_start_page = max(1, $trans_page - 2);
+                                    $trans_end_page = min($trans_total_pages, $trans_page + 2);
+
+                                    if ($trans_start_page > 1): ?>
+                                        <a href="?page=<?php echo $page; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>&trans_page=1&trans_search=<?php echo urlencode($trans_search); ?>&trans_type=<?php echo $trans_type_filter; ?>&trans_date=<?php echo $trans_date_filter; ?>"
+                                            class="px-3 py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                            1
+                                        </a>
+                                        <?php if ($trans_start_page > 2): ?>
+                                            <span class="px-3 py-2 text-xs lg:text-sm text-gray-500">...</span>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+
+                                    <?php for ($i = $trans_start_page; $i <= $trans_end_page; $i++): ?>
+                                        <?php if ($i == $trans_page): ?>
+                                            <span
+                                                class="px-3 py-2 text-xs lg:text-sm font-medium text-white rounded-lg bg-amber-600">
+                                                <?php echo $i; ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <a href="?page=<?php echo $page; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>&trans_page=<?php echo $i; ?>&trans_search=<?php echo urlencode($trans_search); ?>&trans_type=<?php echo $trans_type_filter; ?>&trans_date=<?php echo $trans_date_filter; ?>"
+                                                class="px-3 py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                                <?php echo $i; ?>
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php endfor; ?>
+
+                                    <?php if ($trans_end_page < $trans_total_pages): ?>
+                                        <?php if ($trans_end_page < $trans_total_pages - 1): ?>
+                                            <span class="px-3 py-2 text-xs lg:text-sm text-gray-500">...</span>
+                                        <?php endif; ?>
+                                        <a href="?page=<?php echo $page; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>&trans_page=<?php echo $trans_total_pages; ?>&trans_search=<?php echo urlencode($trans_search); ?>&trans_type=<?php echo $trans_type_filter; ?>&trans_date=<?php echo $trans_date_filter; ?>"
+                                            class="px-3 py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                            <?php echo $trans_total_pages; ?>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+
+                                <!-- Next Button -->
+                                <?php if ($trans_page < $trans_total_pages): ?>
+                                    <a href="?page=<?php echo $page; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>&trans_page=<?php echo $trans_page + 1; ?>&trans_search=<?php echo urlencode($trans_search); ?>&trans_type=<?php echo $trans_type_filter; ?>&trans_date=<?php echo $trans_date_filter; ?>"
                                         class="flex items-center justify-center px-4 py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                         Next <i class="ml-1 fa-solid fa-chevron-right"></i>
                                     </a>
@@ -1399,11 +1726,11 @@ if ($start_page > 1): ?>
                 const categoryLabels =
                     <?php echo json_encode(array_column($category_analytics, 'product_category')); ?>;
                 const categoryStockData =
-                    <?php echo json_encode(array_map(fn ($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
                 const avgStockData =
-                    <?php echo json_encode(array_map(fn ($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
                 const numProductsData =
-                    <?php echo json_encode(array_map(fn ($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
 
                 const categoryStockChart = new Chart(categoryStockCtx.getContext('2d'), {
                     type: 'bar',
@@ -1492,9 +1819,9 @@ if ($start_page > 1): ?>
         const lowStockCategoryCtx = document.getElementById('lowStockCategoryChart');
         if (lowStockCategoryCtx) {
             const lowStockLabels =
-                <?php echo json_encode(array_map(fn ($c) => $c['category'] ?? '', $category_analytics)); ?>;
+                <?php echo json_encode(array_map(fn($c) => $c['category'] ?? '', $category_analytics)); ?>;
             const lowStockData =
-                <?php echo json_encode(array_map(fn ($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
+                <?php echo json_encode(array_map(fn($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
 
             const lowStockCategoryChart = new Chart(lowStockCategoryCtx.getContext('2d'), {
                 type: 'bar',
@@ -1580,6 +1907,28 @@ if ($start_page > 1): ?>
             dropdown.classList.toggle('hidden');
         }
 
+        // Export transactions function
+        function exportTransactions(format) {
+            const params = new URLSearchParams(window.location.search);
+            const trans_search = params.get('trans_search') || '';
+            const trans_type = params.get('trans_type') || '';
+            const trans_date = params.get('trans_date') || '';
+
+            let url = 'export_transactions.php?format=' + format;
+            if (trans_search) url += '&trans_search=' + encodeURIComponent(trans_search);
+            if (trans_type) url += '&trans_type=' + encodeURIComponent(trans_type);
+            if (trans_date) url += '&trans_date=' + encodeURIComponent(trans_date);
+
+            window.location.href = url;
+            toggleTransactionExportDropdown(); // Close dropdown after selection
+        }
+
+        // Toggle transaction export dropdown
+        function toggleTransactionExportDropdown() {
+            const dropdown = document.getElementById('transactionExportDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
             const dropdown = document.getElementById('exportDropdown');
@@ -1587,6 +1936,13 @@ if ($start_page > 1): ?>
 
             if (!button && dropdown && !dropdown.contains(event.target)) {
                 dropdown.classList.add('hidden');
+            }
+
+            const transDropdown = document.getElementById('transactionExportDropdown');
+            const transButton = event.target.closest('button[onclick="toggleTransactionExportDropdown()"]');
+
+            if (!transButton && transDropdown && !transDropdown.contains(event.target)) {
+                transDropdown.classList.add('hidden');
             }
         });
 
@@ -1655,12 +2011,20 @@ if ($start_page > 1): ?>
                 s = document.getElementById("hamburgerIcon"),
                 a = document.getElementById("mobileSidebarBtn"),
                 l = !e.classList.contains("-translate-x-full");
-            l ? (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-200"), a.classList.add("bg-gray-100")) : (e.classList.remove("-translate-x-full"), t.classList.remove("opacity-0", "pointer-events-none"), t.classList.add("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />', s.classList.add("rotate-90"), a.classList.add("bg-gray-200"), a.classList.remove("bg-gray-100"))
+            l ? (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList
+                .remove("opacity-50"), s.innerHTML =
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />',
+                s.classList.remove("rotate-90"), a.classList.remove("bg-gray-200"), a.classList.add("bg-gray-100")) : (e
+                .classList.remove("-translate-x-full"), t.classList.remove("opacity-0", "pointer-events-none"), t
+                .classList.add("opacity-50"), s.innerHTML =
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />', s
+                .classList.add("rotate-90"), a.classList.add("bg-gray-200"), a.classList.remove("bg-gray-100"))
         }
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll("#sidebar nav a").forEach(e => {
                 e.addEventListener("click", function() {
-                    window.innerWidth < 1024 && !document.getElementById("sidebar").classList.contains("-translate-x-full") && toggleMobileSidebar()
+                    window.innerWidth < 1024 && !document.getElementById("sidebar").classList
+                        .contains("-translate-x-full") && toggleMobileSidebar()
                 })
             })
         });
@@ -1669,7 +2033,12 @@ if ($start_page > 1): ?>
                 t = document.getElementById("sidebarOverlay"),
                 s = document.getElementById("hamburgerIcon"),
                 a = document.getElementById("mobileSidebarBtn");
-            window.innerWidth >= 1024 ? (e.classList.remove("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50")) : (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-800"), a.classList.add("bg-gray-900"))
+            window.innerWidth >= 1024 ? (e.classList.remove("-translate-x-full"), t.classList.add("opacity-0",
+                "pointer-events-none"), t.classList.remove("opacity-50")) : (e.classList.add(
+                    "-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), s.innerHTML =
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />',
+                s.classList.remove("rotate-90"), a.classList.remove("bg-gray-800"), a.classList.add(
+                    "bg-gray-900"))
         });
         if (window.innerWidth < 1024) document.getElementById("sidebar").classList.add("-translate-x-full");
     </script>

@@ -42,7 +42,6 @@ $where_clause = implode(' AND ', $where);
 $count_stmt = $conn->prepare("
     SELECT COUNT(*) as total
     FROM orders o
-    LEFT JOIN users u ON o.customer_id = u.id
     LEFT JOIN users e ON o.employee_id = e.id
     WHERE $where_clause
 ");
@@ -53,11 +52,9 @@ $total_pages = ceil($total_orders / $per_page);
 // Get orders with pagination
 $stmt = $conn->prepare("
     SELECT o.*, 
-           u.full_name as customer_name,
            e.full_name as employee_name,
            COUNT(oi.id) as item_count
     FROM orders o
-    LEFT JOIN users u ON o.customer_id = u.id
     LEFT JOIN users e ON o.employee_id = e.id
     LEFT JOIN order_items oi ON o.id = oi.order_id
     WHERE $where_clause
@@ -172,7 +169,9 @@ $current_user = getCurrentUser();
 
 <body class="bg-gray-100 font-['Montserrat']">
     <!-- Mobile Sidebar Overlay -->
-    <div id="sidebarOverlay" class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden" onclick="toggleMobileSidebar()"></div>
+    <div id="sidebarOverlay"
+        class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden"
+        onclick="toggleMobileSidebar()"></div>
 
     <div class="flex h-screen overflow-hidden flex-col lg:flex-row">
         <!-- Mobile Header -->
@@ -180,8 +179,8 @@ $current_user = getCurrentUser();
             <button id="mobileSidebarBtn"
                 class="p-2 text-gray-900 bg-gray-100 rounded-lg shadow transition-all duration-300 hover:bg-gray-200"
                 onclick="toggleMobileSidebar()">
-                <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
+                <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
@@ -189,7 +188,8 @@ $current_user = getCurrentUser();
         </div>
 
         <!-- Sidebar -->
-        <aside id="sidebar" class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
+        <aside id="sidebar"
+            class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center justify-between sidebar-logo">
                     <!-- Logo and text (shown when expanded) -->
@@ -274,16 +274,16 @@ $current_user = getCurrentUser();
                             </a>
                         </li>
                     <?php endif; ?>
-                        <li>
-                            <a href="products.php" data-tooltip="Products"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                </svg>
-                                <span class="ml-3 sidebar-text">Products</span>
-                            </a>
-                        </li>
+                    <li>
+                        <a href="products.php" data-tooltip="Products"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                            <span class="ml-3 sidebar-text">Products</span>
+                        </a>
+                    </li>
                     <?php if (isAdmin()): ?>
                         <li>
                             <a href="users.php" data-tooltip="Employees"
@@ -340,7 +340,8 @@ $current_user = getCurrentUser();
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-sm text-gray-600">Total Orders</p>
-                                    <p class="text-lg lg:text-2xl font-bold text-gray-800"><?php echo $stats['total_orders']; ?>
+                                    <p class="text-lg lg:text-2xl font-bold text-gray-800">
+                                        <?php echo $stats['total_orders']; ?>
                                     </p>
                                 </div>
                                 <div class="p-3 bg-blue-100 rounded-full">
@@ -353,7 +354,8 @@ $current_user = getCurrentUser();
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-sm text-gray-600">Pending</p>
-                                    <p class="text-lg lg:text-2xl font-bold text-yellow-600"><?php echo $stats['pending']; ?></p>
+                                    <p class="text-lg lg:text-2xl font-bold text-yellow-600">
+                                        <?php echo $stats['pending']; ?></p>
                                 </div>
                                 <div class="p-3 bg-yellow-100 rounded-full">
                                     <i class="text-2xl text-yellow-600 fa-solid fa-clock"></i>
@@ -365,7 +367,8 @@ $current_user = getCurrentUser();
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-sm text-gray-600">Completed</p>
-                                    <p class="text-lg lg:text-2xl font-bold text-green-600"><?php echo $stats['completed']; ?></p>
+                                    <p class="text-lg lg:text-2xl font-bold text-green-600">
+                                        <?php echo $stats['completed']; ?></p>
                                 </div>
                                 <div class="p-3 bg-green-100 rounded-full">
                                     <i class="text-2xl text-green-600 fa-solid fa-check-circle"></i>
@@ -418,7 +421,7 @@ $current_user = getCurrentUser();
                         <div>
                             <label class="block mb-2 text-sm font-medium text-gray-700">Search</label>
                             <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>"
-                                placeholder="Order # or customer name"
+                                placeholder="Order #"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
                         </div>
                         <div class="flex items-end gap-2">
@@ -443,10 +446,6 @@ $current_user = getCurrentUser();
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                         Order #
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                                        Customer
                                     </th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
@@ -490,9 +489,6 @@ $current_user = getCurrentUser();
                                                 <?php echo $order['order_number']; ?>
                                             </td>
                                             <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                                                <?php echo $order['customer_name'] ?? 'Walk-in'; ?>
-                                            </td>
-                                            <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                                                 <?php echo $order['employee_name']; ?>
                                             </td>
                                             <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
@@ -510,7 +506,7 @@ $current_user = getCurrentUser();
                                                         'gcash' => 'bg-purple-100 text-purple-800',
                                                         default => 'bg-gray-100 text-gray-800'
                                                     };
-                                        ?>">
+                                                    ?>">
                                                     <?php echo strtoupper($order['payment_method']); ?>
                                                 </span>
                                             </td>
@@ -520,15 +516,15 @@ $current_user = getCurrentUser();
                                             <td class="px-6 py-4 text-sm whitespace-nowrap">
                                                 <span class="px-2 py-1 text-xs font-medium rounded-full 
                                                     <?php
-                                        echo match ($order['status']) {
-                                            'pending' => 'bg-yellow-100 text-yellow-800',
-                                            'preparing' => 'bg-blue-100 text-blue-800',
-                                            'ready' => 'bg-purple-100 text-purple-800',
-                                            'completed' => 'bg-green-100 text-green-800',
-                                            'cancelled' => 'bg-red-100 text-red-800',
-                                            default => 'bg-gray-100 text-gray-800'
-                                        };
-                                        ?>">
+                                                    echo match ($order['status']) {
+                                                        'pending' => 'bg-yellow-100 text-yellow-800',
+                                                        'preparing' => 'bg-blue-100 text-blue-800',
+                                                        'ready' => 'bg-purple-100 text-purple-800',
+                                                        'completed' => 'bg-green-100 text-green-800',
+                                                        'cancelled' => 'bg-red-100 text-red-800',
+                                                        default => 'bg-gray-100 text-gray-800'
+                                                    };
+                                                    ?>">
                                                     <?php echo ucfirst($order['status']); ?>
                                                 </span>
                                             </td>
@@ -590,9 +586,9 @@ $current_user = getCurrentUser();
                                 <div class="flex gap-1">
                                     <?php
                                     $start_page = max(1, $page - 2);
-$end_page = min($total_pages, $page + 2);
+                                    $end_page = min($total_pages, $page + 2);
 
-if ($start_page > 1): ?>
+                                    if ($start_page > 1): ?>
                                         <a href="?page=1&status=<?php echo $status_filter; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
                                             class="px-3 py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                             1
@@ -604,7 +600,8 @@ if ($start_page > 1): ?>
 
                                     <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
                                         <?php if ($i == $page): ?>
-                                            <span class="px-3 py-2 text-xs lg:text-sm font-medium text-white rounded-lg bg-amber-600">
+                                            <span
+                                                class="px-3 py-2 text-xs lg:text-sm font-medium text-white rounded-lg bg-amber-600">
                                                 <?php echo $i; ?>
                                             </span>
                                         <?php else: ?>
@@ -745,7 +742,8 @@ if ($start_page > 1): ?>
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('opacity-0', 'pointer-events-none');
                 overlay.classList.remove('opacity-50');
-                hamburgerIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />';
+                hamburgerIcon.innerHTML =
+                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />';
                 hamburgerIcon.classList.remove('rotate-90');
                 mobileBtn.classList.remove('bg-gray-200');
                 mobileBtn.classList.add('bg-gray-100');
@@ -753,7 +751,8 @@ if ($start_page > 1): ?>
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('opacity-0', 'pointer-events-none');
                 overlay.classList.add('opacity-50');
-                hamburgerIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
+                hamburgerIcon.innerHTML =
+                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
                 hamburgerIcon.classList.add('rotate-90');
                 mobileBtn.classList.add('bg-gray-200');
                 mobileBtn.classList.remove('bg-gray-100');
@@ -762,7 +761,8 @@ if ($start_page > 1): ?>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('#sidebar nav a').forEach(link => {
                 link.addEventListener('click', function() {
-                    if (window.innerWidth < 1024 && !document.getElementById('sidebar').classList.contains('-translate-x-full')) toggleMobileSidebar();
+                    if (window.innerWidth < 1024 && !document.getElementById('sidebar').classList
+                        .contains('-translate-x-full')) toggleMobileSidebar();
                 });
             });
         });
@@ -778,7 +778,8 @@ if ($start_page > 1): ?>
             } else {
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('opacity-0', 'pointer-events-none');
-                hamburgerIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />';
+                hamburgerIcon.innerHTML =
+                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />';
                 hamburgerIcon.classList.remove('rotate-90');
                 mobileBtn.classList.remove('bg-gray-800');
                 mobileBtn.classList.add('bg-gray-900');
