@@ -209,30 +209,55 @@ button:active, .btn:active {
 }
 
 /* Responsive Sidebar - mobile first */
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
     #sidebar {
         position: fixed;
         top: 0;
         left: 0;
         bottom: 0;
-        z-index: 50;
-        transform: translateX(-100%);
-        margin-left: -256px;
-        opacity: 0;
+        z-index: 40;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     }
-
-    #sidebar:not(.sidebar-hidden) {
-        transform: translateX(0);
-        margin-left: 0;
-        opacity: 1;
+    
+    /* Hide desktop collapse buttons on mobile */
+    #sidebar .toggle-btn-expanded,
+    #sidebar .toggle-btn-collapsed {
+        display: none !important;
     }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 1024px) {
     #sidebar {
         position: relative;
-        transform: translateX(0);
-        margin-left: 0;
-        opacity: 1;
+        transform: translateX(0) !important;
     }
+    
+    /* Hide mobile hamburger on desktop */
+    #mobileSidebarBtn {
+        display: none;
+    }
+}
+
+/* Smooth transitions */
+#sidebar,
+#sidebarOverlay {
+    transition-property: transform, opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hamburger icon animation */
+#hamburgerIcon {
+    transition: transform 0.3s ease;
+}
+
+#hamburgerIcon.rotate-90 {
+    transform: rotate(90deg);
+}
+
+#mobileSidebarBtn {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#mobileSidebarBtn:active {
+    transform: scale(0.95);
 }
