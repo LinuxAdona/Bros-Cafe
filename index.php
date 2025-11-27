@@ -102,12 +102,11 @@ if (count($top_products) == 0) {
                     </li>
                     <li><a href="public/pages/contact.php"
                             class="block px-6 py-2 transition hover:bg-amber-50">Contact</a></li>
-                    <!--
-                    <li class="px-6 pt-4 border-t"><a href="login.php"
+                    <li class="px-6 pt-4 border-t"><a href="public/pages/login.php"
                             class="block py-2 transition hover:text-amber-600">Log in</a></li>
-                    <li class="px-6"><a href="signup.php"
+                    <li class="px-6"><a href="public/pages/signup.php"
                             class="block px-4 py-2 text-center text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600">Sign
-                            up</a></li>-->
+                            up</a></li>
                 </ul>
             </div>
         </nav>
@@ -214,9 +213,9 @@ if (count($top_products) == 0) {
                         'from-lime-100 to-lime-200'
                     ];
 
-                    foreach ($top_products as $index => $product):
-                        $colorClass = $colors[$index % count($colors)];
-                    ?>
+foreach ($top_products as $index => $product):
+    $colorClass = $colors[$index % count($colors)];
+    ?>
                         <!-- Product Card: <?php echo htmlspecialchars($product['name']); ?> -->
                         <div
                             class="overflow-hidden transition-all transform bg-white shadow-lg rounded-xl hover:scale-105 hover:shadow-xl">

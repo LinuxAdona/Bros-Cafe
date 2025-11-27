@@ -99,12 +99,11 @@ foreach ($products as $product) {
                 <li><a href="menu.php" class="block px-6 py-2 transition bg-amber-50 text-amber-600">Menu</a></li>
                 <li><a href="about.php" class="block px-6 py-2 transition hover:bg-amber-50">About</a></li>
                 <li><a href="contact.php" class="block px-6 py-2 transition hover:bg-amber-50">Contact</a></li>
-                <!--
                 <li class="px-6 pt-4 border-t"><a href="login.php"
                         class="block py-2 transition hover:text-amber-600">Log in</a></li>
                 <li class="px-6"><a href="signup.php"
                         class="block px-4 py-2 text-center text-white transition-all rounded-lg bg-amber-500 hover:bg-amber-600">Sign
-                        up</a></li>-->
+                        up</a></li>
             </ul>
         </div>
     </nav>

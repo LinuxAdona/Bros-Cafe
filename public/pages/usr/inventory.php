@@ -302,9 +302,9 @@ $current_user = getCurrentUser();
 
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto">
-            <div class="flex items-center bg-white shadow-lg p-6">
+            <div class="flex items-center bg-white shadow-lg p-4 lg:p-6">
                 <div class="flex flex-col justify-center">
-                    <h2 class="text-3xl font-bold text-gray-800">Inventory Management</h2>
+                    <h2 class="text-xl lg:text-3xl font-bold text-gray-800">Inventory Management</h2>
                     <p class="text-md text-gray-600">Track and manage product stock levels</p>
                 </div>
             </div>
@@ -347,7 +347,7 @@ $current_user = getCurrentUser();
                             </div>
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Total Items</p>
-                                <p class="text-2xl font-semibold text-gray-900"><?php echo count($items); ?></p>
+                                <p class="text-lg lg:text-2xl font-semibold text-gray-900"><?php echo count($items); ?></p>
                             </div>
                         </div>
                     </div>
@@ -362,7 +362,7 @@ $current_user = getCurrentUser();
                             </div>
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Low Stock Items</p>
-                                <p class="text-2xl font-semibold text-gray-900"><?php echo count($low_stock); ?></p>
+                                <p class="text-lg lg:text-2xl font-semibold text-gray-900"><?php echo count($low_stock); ?></p>
                             </div>
                         </div>
                     </div>
@@ -377,8 +377,8 @@ $current_user = getCurrentUser();
                             </div>
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Available Items</p>
-                                <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] > $p['reorder_level'])); ?>
+                                <p class="text-lg lg:text-2xl font-semibold text-gray-900">
+                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] > $p['reorder_level'])); ?>
                                 </p>
                             </div>
                         </div>
@@ -394,8 +394,8 @@ $current_user = getCurrentUser();
                             </div>
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Out of Stock</p>
-                                <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] == 0)); ?>
+                                <p class="text-lg lg:text-2xl font-semibold text-gray-900">
+                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] == 0)); ?>
                                 </p>
                             </div>
                         </div>
@@ -427,7 +427,7 @@ $current_user = getCurrentUser();
                         <!-- Recent Restocks -->
                         <div class="p-6 bg-white rounded-lg shadow"
                             style="height: 500px; display: flex; flex-direction: column;">
-                            <div class="flex items-center justify-between mb-4">
+                            <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
                                 <h3 class="text-lg font-semibold text-gray-800">Recent Restocks</h3>
                                 <div class="relative">
                                     <input type="text" id="restockSearch" placeholder="Search items..."
@@ -468,8 +468,8 @@ $current_user = getCurrentUser();
                                                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
                                                         <?php
                                                         list($convertedQty, $convertedUnit) = convertUnit($restock['quantity'], $restock['unit']);
-                                                        echo $convertedQty . ' ' . $convertedUnit;
-                                                        ?>
+                                                echo $convertedQty . ' ' . $convertedUnit;
+                                                ?>
                                                     </td>
                                                     <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
                                                         <?php echo $restock['notes'] ?></td>
@@ -523,7 +523,7 @@ $current_user = getCurrentUser();
                 <!-- Inventory Table -->
                 <div class="overflow-hidden bg-white rounded-lg shadow-md">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <div class="flex items-center justify-between">
+                        <div class="flex flex-wrap items-center justify-between gap-4">
                             <h3 class="text-lg font-semibold text-gray-800">Inventory</h3>
                             <div class="flex space-x-2">
                                 <div class="relative inline-block text-left">
@@ -593,14 +593,14 @@ $current_user = getCurrentUser();
                                             <div class="text-sm text-gray-900">
                                                 <?php
                                                 list($convertedQty, $convertedUnit) = convertUnit($product['quantity'], $product['unit']);
-                                                echo $convertedQty . ' ' . $convertedUnit;
-                                                ?></div>
+                                    echo $convertedQty . ' ' . $convertedUnit;
+                                    ?></div>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                                             <?php
                                             list($convertedReorderQty, $convertedReorderUnit) = convertUnit($product['reorder_level'], $product['unit']);
-                                            echo $convertedReorderQty . ' ' . $convertedReorderUnit;
-                                            ?>
+                                    echo $convertedReorderQty . ' ' . $convertedReorderUnit;
+                                    ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <?php if ($product['quantity'] == 0): ?>
@@ -636,8 +636,8 @@ $current_user = getCurrentUser();
 
                     <!-- Pagination -->
                     <?php if ($total_pages > 1): ?>
-                        <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200">
-                            <div class="flex items-center text-sm text-gray-700">
+                        <div class="flex items-center justify-center lg:justify-between px-6 py-4 border-t border-gray-200">
+                            <div class="hidden lg:flex items-center text-sm text-gray-700">
                                 <span>Showing <span class="font-semibold"><?php echo $offset + 1; ?></span> to
                                     <span
                                         class="font-semibold"><?php echo min($offset + $per_page, $total_ingredients); ?></span>
@@ -649,13 +649,13 @@ $current_user = getCurrentUser();
                                 <!-- Previous Button -->
                                 <?php if ($page > 1): ?>
                                     <a href="?page=<?php echo $page - 1; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
+                                        class="flex items-center justify-center px-4 py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Prev
                                     </a>
                                 <?php else: ?>
                                     <span
-                                        class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
-                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
+                                        class="flex items-center justify-center px-4 py-2 text-xs lg:text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Prev
                                     </span>
                                 <?php endif; ?>
 
@@ -663,26 +663,26 @@ $current_user = getCurrentUser();
                                 <div class="flex gap-1">
                                     <?php
                                     $start_page = max(1, $page - 2);
-                                    $end_page = min($total_pages, $page + 2);
+$end_page = min($total_pages, $page + 2);
 
-                                    if ($start_page > 1): ?>
+if ($start_page > 1): ?>
                                         <a href="?page=1&&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                            class="px-3 py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                             1
                                         </a>
                                         <?php if ($start_page > 2): ?>
-                                            <span class="px-3 py-2 text-sm text-gray-500">...</span>
+                                            <span class="px-3 py-2 text-xs lg:text-sm text-gray-500">...</span>
                                         <?php endif; ?>
                                     <?php endif; ?>
 
                                     <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
                                         <?php if ($i == $page): ?>
-                                            <span class="px-3 py-2 text-sm font-medium text-white rounded-lg bg-amber-600">
+                                            <span class="px-3 py-2 text-xs lg:text-sm font-medium text-white rounded-lg bg-amber-600">
                                                 <?php echo $i; ?>
                                             </span>
                                         <?php else: ?>
                                             <a href="?page=<?php echo $i; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                                class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                                class="px-3 py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                                 <?php echo $i; ?>
                                             </a>
                                         <?php endif; ?>
@@ -690,10 +690,10 @@ $current_user = getCurrentUser();
 
                                     <?php if ($end_page < $total_pages): ?>
                                         <?php if ($end_page < $total_pages - 1): ?>
-                                            <span class="px-3 py-2 text-sm text-gray-500">...</span>
+                                            <span class="px-3 py-2 text-xs lg:text-sm text-gray-500">...</span>
                                         <?php endif; ?>
                                         <a href="?page=<?php echo $total_pages; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                            class="px-3 py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                             <?php echo $total_pages; ?>
                                         </a>
                                     <?php endif; ?>
@@ -702,12 +702,12 @@ $current_user = getCurrentUser();
                                 <!-- Next Button -->
                                 <?php if ($page < $total_pages): ?>
                                     <a href="?page=<?php echo $page + 1; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        class="flex items-center justify-center px-4 py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                         Next <i class="ml-1 fa-solid fa-chevron-right"></i>
                                     </a>
                                 <?php else: ?>
                                     <span
-                                        class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+                                        class="flex items-center justify-center px-4 py-2 text-xs lg:text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
                                         Next <i class="ml-1 fa-solid fa-chevron-right"></i>
                                     </span>
                                 <?php endif; ?>
@@ -1397,11 +1397,11 @@ $current_user = getCurrentUser();
                 const categoryLabels =
                     <?php echo json_encode(array_column($category_analytics, 'product_category')); ?>;
                 const categoryStockData =
-                    <?php echo json_encode(array_map(fn($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn ($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
                 const avgStockData =
-                    <?php echo json_encode(array_map(fn($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn ($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
                 const numProductsData =
-                    <?php echo json_encode(array_map(fn($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
+                    <?php echo json_encode(array_map(fn ($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
 
                 const categoryStockChart = new Chart(categoryStockCtx.getContext('2d'), {
                     type: 'bar',
@@ -1490,9 +1490,9 @@ $current_user = getCurrentUser();
         const lowStockCategoryCtx = document.getElementById('lowStockCategoryChart');
         if (lowStockCategoryCtx) {
             const lowStockLabels =
-                <?php echo json_encode(array_map(fn($c) => $c['category'] ?? '', $category_analytics)); ?>;
+                <?php echo json_encode(array_map(fn ($c) => $c['category'] ?? '', $category_analytics)); ?>;
             const lowStockData =
-                <?php echo json_encode(array_map(fn($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
+                <?php echo json_encode(array_map(fn ($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
 
             const lowStockCategoryChart = new Chart(lowStockCategoryCtx.getContext('2d'), {
                 type: 'bar',

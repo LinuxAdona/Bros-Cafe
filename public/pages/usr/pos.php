@@ -260,9 +260,9 @@ $current_user = getCurrentUser();
         <div class="flex flex-1 overflow-hidden relative">
             <!-- Products Section -->
             <div class="flex flex-col flex-1 overflow-y-auto w-full">
-                <div class="flex items-center bg-white shadow-lg justify-between p-6 mb-6">
+                <div class="flex items-center bg-white shadow-lg justify-between p-4 lg:p-6 mb-6">
                     <div class="flex flex-col justify-center">
-                        <h2 class="text-3xl font-bold text-gray-800">Products</h2>
+                        <h2 class="text-xl lg:text-3xl font-bold text-gray-800">Products</h2>
                         <p class="text-md text-gray-600">Select items to add to order</p>
                     </div>
                     <button id="desktopCartBtn"
@@ -294,7 +294,7 @@ $current_user = getCurrentUser();
                     </div>
 
                     <!-- Category Filter -->
-                    <div class="flex gap-2 mb-6 overflow-x-auto">
+                    <div class="flex flex-wrap gap-2 mb-6 overflow-x-auto">
                         <button onclick="filterCategory('all')"
                             class="px-4 py-2 text-white rounded-lg category-btn bg-amber-600 whitespace-nowrap">All</button>
                         <?php foreach ($categories as $category): ?>
@@ -314,7 +314,7 @@ $current_user = getCurrentUser();
                                 'price_sedici' => $product['price_sedici'],
                                 'category_id' => $product['category_id']
                             ];
-                        ?>
+                            ?>
                             <div class="transition-shadow bg-white rounded-lg shadow cursor-pointer product-card hover:shadow-lg"
                                 data-category="<?php echo $product['category_id']; ?>"
                                 onclick="addToCart(<?php echo htmlspecialchars(json_encode($productData), ENT_QUOTES, 'UTF-8'); ?>)">

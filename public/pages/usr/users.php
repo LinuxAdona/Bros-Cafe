@@ -405,10 +405,10 @@ $current_user = getCurrentUser();
 
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto">
-            <div class="flex items-center justify-between bg-white shadow-lg p-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-white shadow-lg p-4 lg:p-6">
                 <div class="flex items-center">
                     <div class="flex flex-col justify-center">
-                        <h2 class="text-3xl font-bold text-gray-800">User Management</h2>
+                        <h2 class="text-xl lg:text-3xl font-bold text-gray-800">User Management</h2>
                         <p class="text-gray-600">Manage employees and administrators</p>
                     </div>
                 </div>
@@ -641,7 +641,7 @@ $current_user = getCurrentUser();
                     <!-- Pagination -->
                     <?php if ($total_pages > 1): ?>
                         <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200">
-                            <div class="flex items-center text-sm text-gray-700">
+                            <div class="hidden lg:flex items-center text-sm text-gray-700">
                                 Showing <span class="font-medium mx-1"><?php echo $offset + 1; ?></span> to
                                 <span class="font-medium mx-1"><?php echo min($offset + $per_page, $total_users); ?></span>
                                 of
@@ -652,13 +652,19 @@ $current_user = getCurrentUser();
                                 <?php
                                 // Build query string for pagination
                                 $query_params = [];
-                                if ($search) $query_params[] = 'search=' . urlencode($search);
-                                if ($role_filter) $query_params[] = 'role=' . urlencode($role_filter);
-                                if ($status_filter) $query_params[] = 'status=' . urlencode($status_filter);
-                                $query_string = !empty($query_params) ? '&' . implode('&', $query_params) : '';
+                        if ($search) {
+                            $query_params[] = 'search=' . urlencode($search);
+                        }
+                        if ($role_filter) {
+                            $query_params[] = 'role=' . urlencode($role_filter);
+                        }
+                        if ($status_filter) {
+                            $query_params[] = 'status=' . urlencode($status_filter);
+                        }
+                        $query_string = !empty($query_params) ? '&' . implode('&', $query_params) : '';
 
-                                // Previous button
-                                if ($page > 1): ?>
+                        // Previous button
+                        if ($page > 1): ?>
                                     <a href="?page=<?php echo $page - 1; ?><?php echo $query_string; ?>"
                                         class="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50">
                                         <i class="fa-solid fa-chevron-left"></i>
@@ -671,12 +677,12 @@ $current_user = getCurrentUser();
                                 <?php endif; ?>
 
                                 <?php
-                                // Page numbers
-                                $start_page = max(1, $page - 2);
-                                $end_page = min($total_pages, $page + 2);
+                        // Page numbers
+                        $start_page = max(1, $page - 2);
+$end_page = min($total_pages, $page + 2);
 
-                                // First page
-                                if ($start_page > 1): ?>
+// First page
+if ($start_page > 1): ?>
                                     <a href="?page=1<?php echo $query_string; ?>"
                                         class="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50">
                                         1
@@ -700,8 +706,8 @@ $current_user = getCurrentUser();
                                 <?php endfor; ?>
 
                                 <?php
-                                // Last page
-                                if ($end_page < $total_pages): ?>
+// Last page
+if ($end_page < $total_pages): ?>
                                     <?php if ($end_page < $total_pages - 1): ?>
                                         <span class="px-3 py-2 text-sm text-gray-400">...</span>
                                     <?php endif; ?>

@@ -310,8 +310,8 @@ $current_user = getCurrentUser();
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto">
             <div class="bg-white shadow-lg">
-                <div class="flex flex-col justify-center p-6">
-                    <h2 class="text-3xl font-bold text-gray-800">Dashboard</h2>
+                <div class="flex flex-col justify-center p-4 lg:p-6">
+                    <h2 class="text-xl lg:text-3xl font-bold text-gray-800">Dashboard</h2>
                     <p class="text-md text-gray-600">Welcome back, <?php echo $current_user['full_name']; ?>!</p>
                 </div>
             </div>
@@ -322,7 +322,7 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Today's Sales</p>
-                                <p class="text-3xl font-bold text-gray-900"><?php echo formatCurrency($today_sales); ?>
+                                <p class="text-xl lg:text-3xl font-bold text-gray-900"><?php echo formatCurrency($today_sales); ?>
                                 </p>
                             </div>
                             <div class="p-3 bg-green-100 rounded-full">
@@ -339,7 +339,7 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Today's Orders</p>
-                                <p class="text-3xl font-bold text-gray-900"><?php echo $today_orders; ?></p>
+                                <p class="text-xl lg:text-3xl font-bold text-gray-900"><?php echo $today_orders; ?></p>
                             </div>
                             <div class="p-3 bg-blue-100 rounded-full">
                                 <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor"
@@ -355,7 +355,7 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Low Stock Items</p>
-                                <p class="text-3xl font-bold text-gray-900"><?php echo $low_stock_count; ?></p>
+                                <p class="text-xl lg:text-3xl font-bold text-gray-900"><?php echo $low_stock_count; ?></p>
                             </div>
                             <div class="p-3 bg-red-100 rounded-full">
                                 <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -370,7 +370,7 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Avg Order Value</p>
-                                <p class="text-3xl font-bold text-gray-900">
+                                <p class="text-xl lg:text-3xl font-bold text-gray-900">
                                     <?php echo $today_orders > 0 ? formatCurrency($today_sales / $today_orders) : '₱0.00'; ?>
                                 </p>
                             </div>
@@ -393,19 +393,19 @@ $current_user = getCurrentUser();
                             <h3 class="text-lg font-semibold text-gray-800">Today's Sales</h3>
                         </div>
                         <div class="p-6">
-                            <canvas id="hourlySalesChart" style="height: 300px;"></canvas>
+                            <canvas id="hourlySalesChart" class="h-[200px] lg:h-[300px]"></canvas>
                         </div>
                         <div class="px-6 pb-6">
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="p-3 text-center rounded-lg bg-green-50">
                                     <p class="text-xs text-gray-600">Orders Today</p>
-                                    <p class="text-2xl font-bold text-green-600">
+                                    <p class="text-lg lg:text-2xl font-bold text-green-600">
                                         <?php echo array_sum(array_column($chart_data, 'order_count')); ?>
                                     </p>
                                 </div>
                                 <div class="p-3 text-center rounded-lg bg-amber-50">
                                     <p class="text-xs text-gray-600">Revenue Today</p>
-                                    <p class="text-2xl font-bold text-amber-600">
+                                    <p class="text-lg lg:text-2xl font-bold text-amber-600">
                                         <?php echo formatCurrency(array_sum(array_column($chart_data, 'revenue'))); ?>
                                     </p>
                                 </div>
@@ -420,7 +420,7 @@ $current_user = getCurrentUser();
                         </div>
                         <div class="p-6 flex items-center justify-center">
                             <?php if (count($category_sales) > 0): ?>
-                                <canvas id="categorySalesChart" style="height: 300px; max-width: 350px;"></canvas>
+                                <canvas id="categorySalesChart" class="h-[200px] lg:h-[300px] max-w-[350px]"></canvas>
                             <?php else: ?>
                                 <div class="py-12 text-center">
                                     <svg class="w-16 h-16 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor"
@@ -461,7 +461,7 @@ $current_user = getCurrentUser();
                                     <div
                                         class="flex items-center justify-between p-3 transition-all border border-gray-200 rounded-lg hover:shadow-md">
                                         <div class="flex-1">
-                                            <p class="text-sm font-bold text-gray-900">
+                                            <p class="text-xs lg:text-sm font-bold text-gray-900">
                                                 <?php echo $order['order_number']; ?>
                                             </p>
                                             <p class="text-xs text-gray-500">

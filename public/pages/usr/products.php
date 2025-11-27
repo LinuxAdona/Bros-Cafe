@@ -146,7 +146,7 @@ $stmt = $conn->query("SELECT * FROM ingredients ORDER BY name");
 $ingredients = $stmt->fetchAll();
 
 // Calculate statistics
-$products_with_both_sizes = count(array_filter($products, fn($p) => $p['price_dodici'] && $p['price_sedici']));
+$products_with_both_sizes = count(array_filter($products, fn ($p) => $p['price_dodici'] && $p['price_sedici']));
 $products_single_size = count($products) - $products_with_both_sizes;
 
 // Get average price (considering both sizes)
@@ -382,10 +382,10 @@ $current_user = getCurrentUser();
 
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto">
-            <div class="flex items-center justify-between bg-white shadow-lg p-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-white shadow-lg p-4 lg:p-6">
                 <div class="flex items-center">
                     <div class="flex flex-col justify-center">
-                        <h2 class="text-3xl font-bold text-gray-800">Products Management</h2>
+                        <h2 class="text-xl lg:text-3xl font-bold text-gray-800">Products Management</h2>
                         <p class="text-md text-gray-600">Manage your menu items and pricing</p>
                     </div>
                 </div>
@@ -410,10 +410,10 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Total Products</p>
-                                <p class="text-2xl font-bold text-gray-800"><?php echo count($products); ?></p>
+                                <p class="text-lg lg:text-2xl font-bold text-gray-800"><?php echo count($products); ?></p>
                             </div>
                             <div class="p-3 bg-blue-100 rounded-full">
-                                <i class="text-2xl text-blue-600 fa-solid fa-coffee"></i>
+                                <i class="text-lg lg:text-2xl text-blue-600 fa-solid fa-coffee"></i>
                             </div>
                         </div>
                     </div>
@@ -422,12 +422,12 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Dual Size Options</p>
-                                <p class="text-2xl font-bold text-green-600">
+                                <p class="text-lg lg:text-2xl font-bold text-green-600">
                                     <?php echo $products_with_both_sizes; ?>
                                 </p>
                             </div>
                             <div class="p-3 bg-green-100 rounded-full">
-                                <i class="text-2xl text-green-600 fa-solid fa-arrows-left-right"></i>
+                                <i class="text-lg lg:text-2xl text-green-600 fa-solid fa-arrows-left-right"></i>
                             </div>
                         </div>
                     </div>
@@ -436,12 +436,12 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Average Price</p>
-                                <p class="text-2xl font-bold text-amber-600">
+                                <p class="text-lg lg:text-2xl font-bold text-amber-600">
                                     ₱<?php echo number_format($avg_price, 2); ?>
                                 </p>
                             </div>
                             <div class="p-3 bg-amber-100 rounded-full">
-                                <i class="text-2xl text-amber-600 fa-solid fa-peso-sign"></i>
+                                <i class="text-lg lg:text-2xl text-amber-600 fa-solid fa-peso-sign"></i>
                             </div>
                         </div>
                     </div>
@@ -450,10 +450,10 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Categories</p>
-                                <p class="text-2xl font-bold text-purple-600"><?php echo count($categories); ?></p>
+                                <p class="text-lg lg:text-2xl font-bold text-purple-600"><?php echo count($categories); ?></p>
                             </div>
                             <div class="p-3 bg-purple-100 rounded-full">
-                                <i class="text-2xl text-purple-600 fa-solid fa-layer-group"></i>
+                                <i class="text-lg lg:text-2xl text-purple-600 fa-solid fa-layer-group"></i>
                             </div>
                         </div>
                     </div>
@@ -582,7 +582,7 @@ $current_user = getCurrentUser();
                     <!-- Pagination -->
                     <?php if ($total_pages > 1): ?>
                         <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200">
-                            <div class="flex items-center text-sm text-gray-700">
+                            <div class="hidden lg:flex items-center text-sm text-gray-700">
                                 Showing <?php echo $offset + 1; ?> to
                                 <?php echo min($offset + $per_page, $total_products); ?> of <?php echo $total_products; ?>
                                 products
@@ -601,10 +601,10 @@ $current_user = getCurrentUser();
 
                                 <?php
                                 $start_page = max(1, $page - 2);
-                                $end_page = min($total_pages, $page + 2);
+                        $end_page = min($total_pages, $page + 2);
 
-                                for ($i = $start_page; $i <= $end_page; $i++):
-                                ?>
+                        for ($i = $start_page; $i <= $end_page; $i++):
+                            ?>
                                     <a href="?page=<?php echo $i; ?><?php echo $search ? '&search=' . urlencode($search) : ''; ?><?php echo $category_filter ? '&category=' . urlencode($category_filter) : ''; ?><?php echo $status_filter ? '&status=' . urlencode($status_filter) : ''; ?>"
                                         class="px-3 py-2 text-sm font-medium <?php echo $i === $page ? 'text-white bg-amber-600' : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'; ?> rounded-md">
                                         <?php echo $i; ?>

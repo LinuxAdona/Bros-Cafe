@@ -323,10 +323,10 @@ $current_user = getCurrentUser();
 
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto">
-            <div class="flex items-center justify-between bg-white shadow-lg p-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-white shadow-lg p-4 lg:p-6">
                 <div class="flex items-center">
                     <div class="flex flex-col justify-center">
-                        <h2 class="text-3xl font-bold text-gray-800">Sales Analytics</h2>
+                        <h2 class="text-xl lg:text-3xl font-bold text-gray-800">Sales Analytics</h2>
                         <p class="text-md text-gray-600">Comprehensive business insights and reports</p>
                     </div>
                 </div>
@@ -356,11 +356,11 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Total Revenue</p>
-                                <p class="text-2xl font-bold text-gray-800">
+                                <p class="text-lg lg:text-2xl font-bold text-gray-800">
                                     ₱<?php echo number_format($total_revenue, 2); ?></p>
                             </div>
                             <div class="p-3 bg-green-100 rounded-full">
-                                <i class="text-2xl text-green-600 fa-solid fa-peso-sign"></i>
+                                <i class="text-sm lg:text-2xl text-green-600 fa-solid fa-peso-sign"></i>
                             </div>
                         </div>
                     </div>
@@ -369,11 +369,11 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Total Orders</p>
-                                <p class="text-2xl font-bold text-gray-800"><?php echo number_format($total_orders); ?>
+                                <p class="text-sm lg:text-2xl font-bold text-gray-800"><?php echo number_format($total_orders); ?>
                                 </p>
                             </div>
                             <div class="p-3 bg-blue-100 rounded-full">
-                                <i class="text-2xl text-blue-600 fa-solid fa-shopping-cart"></i>
+                                <i class="text-sm lg:text-2xl text-blue-600 fa-solid fa-shopping-cart"></i>
                             </div>
                         </div>
                     </div>
@@ -382,11 +382,11 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Avg Order Value</p>
-                                <p class="text-2xl font-bold text-gray-800">
+                                <p class="text-sm lg:text-2xl font-bold text-gray-800">
                                     ₱<?php echo number_format($avg_order_value, 2); ?></p>
                             </div>
                             <div class="p-3 rounded-full bg-amber-100">
-                                <i class="text-2xl fa-solid fa-chart-line text-amber-600"></i>
+                                <i class="text-sm lg:text-2xl fa-solid fa-chart-line text-amber-600"></i>
                             </div>
                         </div>
                     </div>
@@ -395,11 +395,11 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Items Sold</p>
-                                <p class="text-2xl font-bold text-gray-800"><?php echo number_format($total_items); ?>
+                                <p class="text-sm lg:text-2xl font-bold text-gray-800"><?php echo number_format($total_items); ?>
                                 </p>
                             </div>
                             <div class="p-3 bg-purple-100 rounded-full">
-                                <i class="text-2xl text-purple-600 fa-solid fa-box"></i>
+                                <i class="text-sm lg:text-2xl text-purple-600 fa-solid fa-box"></i>
                             </div>
                         </div>
                     </div>
@@ -489,8 +489,7 @@ $current_user = getCurrentUser();
                 <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-1">
                     <!-- Employee Performance -->
                     <div class="p-6 bg-white rounded-lg shadow-md">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Employee Performance
-                            (<?php echo $period_label; ?>)</h3>
+                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Employee Performance</h3>
                         <div class="space-y-4">
                             <?php foreach ($employee_performance as $employee): ?>
                                 <div class="p-4 border border-gray-200 rounded-lg">
