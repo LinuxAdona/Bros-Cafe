@@ -122,7 +122,7 @@ $stmt = $conn->query("
     WHERE DATE(o.created_at) = CURDATE()
     AND o.status != 'cancelled'
     GROUP BY c.id, c.name
-    ORDER BY revenue DESC
+
 ");
 $category_sales = $stmt->fetchAll();
 
@@ -158,9 +158,15 @@ $current_user = getCurrentUser();
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 z-30 bg-black bg-opacity-40 hidden lg:hidden" onclick="toggleMobileSidebar()"></div>
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside id="sidebar" class="flex flex-col text-white bg-gray-900">
+        <aside id="sidebar" class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-transform duration-300 lg:translate-x-0 lg:static lg:w-64">
+            <!-- Mobile Hamburger Button -->
+            <button id="mobileSidebarBtn" class="absolute top-4 left-4 z-50 py-2 px-3 w-max text-gray-400 bg-gray-800 rounded-lg lg:hidden" onclick="toggleMobileSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center justify-between sidebar-logo">
                     <!-- Logo and text (shown when expanded) -->
@@ -726,8 +732,36 @@ $current_user = getCurrentUser();
 
     <script src="../../assets/js/admin.js"></script>
     <script>
-    // Show order modal
-    function showOrderModal(order) {
+        // Mobile sidebar toggle
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+        // Ensure sidebar is hidden on mobile by default
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (window.innerWidth >= 1024) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.add('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        });
+        // Initial state
+        if (window.innerWidth < 1024) {
+            document.getElementById('sidebar').classList.add('-translate-x-full');
+        }
+        // Show order modal
+        function showOrderModal(order) {
         // Set order details
         document.getElementById('modalOrderNumber').textContent = order.order_number;
         document.getElementById('modalDateTime').textContent = new Date(order.created_at).toLocaleString('en-US', {
