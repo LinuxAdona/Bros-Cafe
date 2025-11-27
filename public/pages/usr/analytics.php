@@ -369,7 +369,7 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Total Orders</p>
-                                <p class="text-sm lg:text-2xl font-bold text-gray-800"><?php echo number_format($total_orders); ?>
+                                <p class="text-lg lg:text-2xl font-bold text-gray-800"><?php echo number_format($total_orders); ?>
                                 </p>
                             </div>
                             <div class="p-3 bg-blue-100 rounded-full">
@@ -382,7 +382,7 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Avg Order Value</p>
-                                <p class="text-sm lg:text-2xl font-bold text-gray-800">
+                                <p class="text-lg lg:text-2xl font-bold text-gray-800">
                                     ₱<?php echo number_format($avg_order_value, 2); ?></p>
                             </div>
                             <div class="p-3 rounded-full bg-amber-100">
@@ -395,7 +395,7 @@ $current_user = getCurrentUser();
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Items Sold</p>
-                                <p class="text-sm lg:text-2xl font-bold text-gray-800"><?php echo number_format($total_items); ?>
+                                <p class="text-lg lg:text-2xl font-bold text-gray-800"><?php echo number_format($total_items); ?>
                                 </p>
                             </div>
                             <div class="p-3 bg-purple-100 rounded-full">

@@ -216,6 +216,7 @@ $current_user = getCurrentUser();
                                 <span class="ml-3 sidebar-text">Analytics</span>
                             </a>
                         </li>
+                    <?php endif; ?>
                         <li>
                             <a href="products.php" data-tooltip="Products"
                                 class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
@@ -226,6 +227,7 @@ $current_user = getCurrentUser();
                                 <span class="ml-3 sidebar-text">Products</span>
                             </a>
                         </li>
+                    <?php if (isAdmin()): ?>
                         <li>
                             <a href="users.php" data-tooltip="Employees"
                                 class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
@@ -304,7 +306,7 @@ $current_user = getCurrentUser();
                     </div>
 
                     <!-- Products Grid -->
-                    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4" id="products-grid">
+                    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 mb-6" id="products-grid">
                         <?php foreach ($products as $product):
                             // Create product data without the image blob for onclick
                             $productData = [

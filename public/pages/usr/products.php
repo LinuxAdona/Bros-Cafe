@@ -389,10 +389,12 @@ $current_user = getCurrentUser();
                         <p class="text-md text-gray-600">Manage your menu items and pricing</p>
                     </div>
                 </div>
+                <?php if (isAdmin()): ?>
                 <button onclick="openAddModal()"
                     class="px-6 py-3 text-white transition-colors rounded-lg shadow-md bg-amber-600 hover:bg-amber-700">
                     <i class="mr-2 fa-solid fa-plus"></i>Add Product
                 </button>
+                <?php endif; ?>
             </div>
             <div class="p-6">
 
@@ -562,6 +564,7 @@ $current_user = getCurrentUser();
                                                 class="mr-3 text-purple-600 hover:text-purple-800" title="View Ingredients">
                                                 <i class="fa-solid fa-list"></i>
                                             </button>
+                                            <?php if (isAdmin()): ?>
                                             <button
                                                 onclick="editProduct(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['category_id']; ?>, '<?php echo addslashes($product['description'] ?? ''); ?>', '<?php echo $product['status']; ?>', <?php echo $product['price_dodici'] ? $product['price_dodici'] : 'null'; ?>, <?php echo $product['price_sedici'] ? $product['price_sedici'] : 'null'; ?>)"
                                                 class="mr-3 text-blue-600 hover:text-blue-800" title="Edit Product">
@@ -572,6 +575,7 @@ $current_user = getCurrentUser();
                                                 class="text-red-600 hover:text-red-800" title="Delete Product">
                                                 <i class="fa-solid fa-trash"></i>
                                             </button>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

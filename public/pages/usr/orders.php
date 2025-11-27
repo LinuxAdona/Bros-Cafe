@@ -273,6 +273,7 @@ $current_user = getCurrentUser();
                                 <span class="ml-3 sidebar-text">Analytics</span>
                             </a>
                         </li>
+                    <?php endif; ?>
                         <li>
                             <a href="products.php" data-tooltip="Products"
                                 class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
@@ -283,6 +284,7 @@ $current_user = getCurrentUser();
                                 <span class="ml-3 sidebar-text">Products</span>
                             </a>
                         </li>
+                    <?php if (isAdmin()): ?>
                         <li>
                             <a href="users.php" data-tooltip="Employees"
                                 class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">

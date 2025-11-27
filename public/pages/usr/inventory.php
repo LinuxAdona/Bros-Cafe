@@ -260,6 +260,7 @@ $current_user = getCurrentUser();
                                 <span class="ml-3 sidebar-text">Analytics</span>
                             </a>
                         </li>
+                    <?php endif; ?>
                         <li>
                             <a href="products.php" data-tooltip="Products"
                                 class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
@@ -270,6 +271,7 @@ $current_user = getCurrentUser();
                                 <span class="ml-3 sidebar-text">Products</span>
                             </a>
                         </li>
+                    <?php if (isAdmin()): ?>
                         <li>
                             <a href="users.php" data-tooltip="Employees"
                                 class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
@@ -336,7 +338,7 @@ $current_user = getCurrentUser();
                 <?php endif; ?>
 
                 <!-- Stats Cards -->
-                <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 lg:grid-cols-4">
                     <div class="p-6 bg-white rounded-lg shadow">
                         <div class="flex items-center">
                             <div class="p-3 bg-blue-500 rounded-md shrink-0">
@@ -623,10 +625,10 @@ $current_user = getCurrentUser();
                                         <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
                                             <button
                                                 onclick="openRestockModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>, '<?php echo addslashes($product['unit']); ?>')"
-                                                class="cursor-pointer mr-3 text-amber-600 hover:text-amber-900">Restock</button>
+                                                class="cursor-pointer mr-3 bg-green-100 border border-green-600 rounded-md px-3 py-2 text-green-600 hover:text-white hover:bg-green-600">Restock</button>
                                             <button
                                                 onclick="openAdjustModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>, '<?php echo addslashes($product['unit']); ?>')"
-                                                class="cursor-pointer text-blue-600 hover:text-blue-900">Adjust</button>
+                                                class="cursor-pointer bg-blue-100 text-blue-600 border border-blue-600 rounded-md px-3 py-2 hover:text-white hover:bg-blue-600">Adjust</button>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
