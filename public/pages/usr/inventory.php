@@ -149,18 +149,28 @@ $current_user = getCurrentUser();
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     <!-- Prevent sidebar jitter on page load -->
     <script>
-    (function() {
-        if (localStorage.getItem('sidebarCollapsed') === 'true') {
-            document.documentElement.classList.add('sidebar-collapsed-init');
-        }
-    })();
+        (function() {
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                document.documentElement.classList.add('sidebar-collapsed-init');
+            }
+        })();
     </script>
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
+    <!-- Mobile Hamburger Button (Fixed outside sidebar) -->
+    <button id="mobileSidebarBtn" class="fixed top-4 left-4 z-50 p-3 text-white bg-gray-900 rounded-lg shadow-lg lg:hidden transition-all duration-300 hover:bg-gray-800" onclick="toggleMobileSidebar()">
+        <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden" onclick="toggleMobileSidebar()"></div>
+
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside id="sidebar" class="flex flex-col text-white bg-gray-900">
+        <aside id="sidebar" class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center justify-between sidebar-logo">
                     <!-- Logo and text (shown when expanded) -->
@@ -195,16 +205,16 @@ $current_user = getCurrentUser();
             <nav class="flex-1 p-4 overflow-y-auto">
                 <ul class="space-y-2">
                     <?php if (isAdmin()): ?>
-                    <li>
-                        <a href="dashboard.php" data-tooltip="Dashboard"
-                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                            </svg>
-                            <span class="ml-3 sidebar-text">Dashboard</span>
-                        </a>
-                    </li>
+                        <li>
+                            <a href="dashboard.php" data-tooltip="Dashboard"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                </svg>
+                                <span class="ml-3 sidebar-text">Dashboard</span>
+                            </a>
+                        </li>
                     <?php endif; ?>
                     <li>
                         <a href="pos.php" data-tooltip="POS"
@@ -237,33 +247,33 @@ $current_user = getCurrentUser();
                         </a>
                     </li>
                     <?php if (isAdmin()): ?>
-                    <li>
-                        <a href="analytics.php" data-tooltip="Analytics"
-                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <i class="flex-shrink-0 w-5 h-5 fa-solid fa-chart-simple"></i>
-                            <span class="ml-3 sidebar-text">Analytics</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="products.php" data-tooltip="Products"
-                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                            </svg>
-                            <span class="ml-3 sidebar-text">Products</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="users.php" data-tooltip="Employees"
-                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                            <span class="ml-3 sidebar-text">Employees</span>
-                        </a>
-                    </li>
+                        <li>
+                            <a href="analytics.php" data-tooltip="Analytics"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <i class="flex-shrink-0 w-5 h-5 fa-solid fa-chart-simple"></i>
+                                <span class="ml-3 sidebar-text">Analytics</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="products.php" data-tooltip="Products"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                                <span class="ml-3 sidebar-text">Products</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="users.php" data-tooltip="Employees"
+                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span class="ml-3 sidebar-text">Employees</span>
+                            </a>
+                        </li>
                     <?php endif; ?>
                 </ul>
             </nav>
@@ -295,28 +305,28 @@ $current_user = getCurrentUser();
             <div class="p-6">
                 <!-- Low Stock Alert -->
                 <?php if (count($low_stock) > 0): ?>
-                <div class="p-4 mb-6 border-l-4 border-red-500 bg-red-50">
-                    <div class="flex">
-                        <div class="shrink-0">
-                            <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <div class="ml-3">
-                            <h3 class="text-sm font-medium text-red-800">Low Stock Alert</h3>
-                            <div class="mt-2 text-sm text-red-700">
-                                <ul class="pl-5 space-y-1 list-disc">
-                                    <?php foreach ($low_stock as $item): ?>
-                                    <li><?php echo $item['name']; ?>: <?php echo $item['quantity']; ?> remaining
-                                        (reorder at <?php echo $item['reorder_level']; ?>)</li>
-                                    <?php endforeach; ?>
-                                </ul>
+                    <div class="p-4 mb-6 border-l-4 border-red-500 bg-red-50">
+                        <div class="flex">
+                            <div class="shrink-0">
+                                <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-red-800">Low Stock Alert</h3>
+                                <div class="mt-2 text-sm text-red-700">
+                                    <ul class="pl-5 space-y-1 list-disc">
+                                        <?php foreach ($low_stock as $item): ?>
+                                            <li><?php echo $item['name']; ?>: <?php echo $item['quantity']; ?> remaining
+                                                (reorder at <?php echo $item['reorder_level']; ?>)</li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 <?php endif; ?>
 
                 <!-- Stats Cards -->
@@ -362,7 +372,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Available Items</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] > $p['reorder_level'])); ?>
+                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] > $p['reorder_level'])); ?>
                                 </p>
                             </div>
                         </div>
@@ -379,7 +389,7 @@ $current_user = getCurrentUser();
                             <div class="ml-5">
                                 <p class="text-sm text-gray-500">Out of Stock</p>
                                 <p class="text-2xl font-semibold text-gray-900">
-                                    <?php echo count(array_filter($items, fn ($p) => $p['quantity'] == 0)); ?>
+                                    <?php echo count(array_filter($items, fn($p) => $p['quantity'] == 0)); ?>
                                 </p>
                             </div>
                         </div>
@@ -387,93 +397,93 @@ $current_user = getCurrentUser();
                 </div>
 
                 <?php if (isAdmin()): ?>
-                <!-- Analytics Section -->
-                <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
-                    <!-- Stock Status Chart -->
-                    <div class="p-6 bg-white rounded-lg shadow">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Stock Status Distribution</h3>
-                        <div class="h-64">
-                            <canvas id="stockStatusChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Category Stock Chart -->
-                    <div class="p-6 bg-white rounded-lg shadow">
-                        <h3 class="mb-4 text-lg font-semibold text-gray-800">Stock by Category</h3>
-                        <div class="h-64">
-                            <canvas id="categoryStockChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Restocks and Category Analytics -->
-                <div class="grid grid-cols-1 gap-6 mb-6">
-                    <!-- Recent Restocks -->
-                    <div class="p-6 bg-white rounded-lg shadow"
-                        style="height: 500px; display: flex; flex-direction: column;">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800">Recent Restocks</h3>
-                            <div class="relative">
-                                <input type="text" id="restockSearch" placeholder="Search items..."
-                                    class="px-4 py-2 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-                                    onkeyup="searchRestocks()">
-                                <i
-                                    class="absolute text-gray-400 transform -translate-y-1/2 fa-solid fa-search right-3 top-1/2"></i>
+                    <!-- Analytics Section -->
+                    <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+                        <!-- Stock Status Chart -->
+                        <div class="p-6 bg-white rounded-lg shadow">
+                            <h3 class="mb-4 text-lg font-semibold text-gray-800">Stock Status Distribution</h3>
+                            <div class="h-64">
+                                <canvas id="stockStatusChart"></canvas>
                             </div>
                         </div>
-                        <!-- Scrollable container with max height -->
-                        <div class="overflow-x-auto flex-1" style="overflow-y: auto;">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50 sticky top-0 z-10">
-                                    <tr>
-                                        <th
-                                            class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50">
-                                            Items</th>
-                                        <th
-                                            class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50">
-                                            Date</th>
-                                        <th
-                                            class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50">
-                                            Stock</th>
-                                        <th
-                                            class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50">
-                                            Notes</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200" id="restockTableBody">
-                                    <?php if (count($recent_restocks) > 0): ?>
-                                    <?php foreach ($recent_restocks as $restock): ?>
-                                    <tr class="restock-row">
-                                        <td
-                                            class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap restock-name">
-                                            <?php echo $restock['name']; ?></td>
-                                        <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                            <?php echo date('M d, Y', strtotime($restock['last_restocked'])); ?></td>
-                                        <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                            <?php
-                                                        list($convertedQty, $convertedUnit) = convertUnit($restock['quantity'], $restock['unit']);
-                                        echo $convertedQty . ' ' . $convertedUnit;
-                                        ?>
-                                        </td>
-                                        <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                                            <?php echo $restock['notes'] ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                    <?php else: ?>
-                                    <tr id="noRestocksRow">
-                                        <td colspan="3" class="px-4 py-3 text-sm text-center text-gray-500">No recent
-                                            restocks</td>
-                                    </tr>
-                                    <?php endif; ?>
-                                    <tr id="noMatchRow" class="hidden">
-                                        <td colspan="3" class="px-4 py-3 text-sm text-center text-gray-500">No matching
-                                            items found</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+
+                        <!-- Category Stock Chart -->
+                        <div class="p-6 bg-white rounded-lg shadow">
+                            <h3 class="mb-4 text-lg font-semibold text-gray-800">Stock by Category</h3>
+                            <div class="h-64">
+                                <canvas id="categoryStockChart"></canvas>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <!-- Recent Restocks and Category Analytics -->
+                    <div class="grid grid-cols-1 gap-6 mb-6">
+                        <!-- Recent Restocks -->
+                        <div class="p-6 bg-white rounded-lg shadow"
+                            style="height: 500px; display: flex; flex-direction: column;">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Recent Restocks</h3>
+                                <div class="relative">
+                                    <input type="text" id="restockSearch" placeholder="Search items..."
+                                        class="px-4 py-2 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                                        onkeyup="searchRestocks()">
+                                    <i
+                                        class="absolute text-gray-400 transform -translate-y-1/2 fa-solid fa-search right-3 top-1/2"></i>
+                                </div>
+                            </div>
+                            <!-- Scrollable container with max height -->
+                            <div class="overflow-x-auto flex-1" style="overflow-y: auto;">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50 sticky top-0 z-10">
+                                        <tr>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50">
+                                                Items</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50">
+                                                Date</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50">
+                                                Stock</th>
+                                            <th
+                                                class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50">
+                                                Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200" id="restockTableBody">
+                                        <?php if (count($recent_restocks) > 0): ?>
+                                            <?php foreach ($recent_restocks as $restock): ?>
+                                                <tr class="restock-row">
+                                                    <td
+                                                        class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap restock-name">
+                                                        <?php echo $restock['name']; ?></td>
+                                                    <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                        <?php echo date('M d, Y', strtotime($restock['last_restocked'])); ?></td>
+                                                    <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                        <?php
+                                                        list($convertedQty, $convertedUnit) = convertUnit($restock['quantity'], $restock['unit']);
+                                                        echo $convertedQty . ' ' . $convertedUnit;
+                                                        ?>
+                                                    </td>
+                                                    <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                                        <?php echo $restock['notes'] ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <tr id="noRestocksRow">
+                                                <td colspan="3" class="px-4 py-3 text-sm text-center text-gray-500">No recent
+                                                    restocks</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                        <tr id="noMatchRow" class="hidden">
+                                            <td colspan="3" class="px-4 py-3 text-sm text-center text-gray-500">No matching
+                                                items found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 <?php endif; ?>
 
                 <!-- Filters -->
@@ -568,51 +578,51 @@ $current_user = getCurrentUser();
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 <?php foreach ($items as $product): ?>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900"><?php echo $product['name']; ?>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">
-                                            <?php
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900"><?php echo $product['name']; ?>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">
+                                                <?php
                                                 list($convertedQty, $convertedUnit) = convertUnit($product['quantity'], $product['unit']);
-                                    echo $convertedQty . ' ' . $convertedUnit;
-                                    ?></div>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                                        <?php
+                                                echo $convertedQty . ' ' . $convertedUnit;
+                                                ?></div>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                                            <?php
                                             list($convertedReorderQty, $convertedReorderUnit) = convertUnit($product['reorder_level'], $product['unit']);
-                                    echo $convertedReorderQty . ' ' . $convertedReorderUnit;
-                                    ?>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <?php if ($product['quantity'] == 0): ?>
-                                        <span
-                                            class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">Out
-                                            of Stock</span>
-                                        <?php elseif ($product['quantity'] <= $product['reorder_level']): ?>
-                                        <span
-                                            class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">Low
-                                            Stock</span>
-                                        <?php else: ?>
-                                        <span
-                                            class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">In
-                                            Stock</span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                                        <?php echo $product['last_restocked'] ? date('M d, Y', strtotime($product['last_restocked'])) : 'Never'; ?>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
-                                        <button
-                                            onclick="openRestockModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>, '<?php echo addslashes($product['unit']); ?>')"
-                                            class="cursor-pointer mr-3 text-amber-600 hover:text-amber-900">Restock</button>
-                                        <button
-                                            onclick="openAdjustModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>, '<?php echo addslashes($product['unit']); ?>')"
-                                            class="cursor-pointer text-blue-600 hover:text-blue-900">Adjust</button>
-                                    </td>
-                                </tr>
+                                            echo $convertedReorderQty . ' ' . $convertedReorderUnit;
+                                            ?>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <?php if ($product['quantity'] == 0): ?>
+                                                <span
+                                                    class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">Out
+                                                    of Stock</span>
+                                            <?php elseif ($product['quantity'] <= $product['reorder_level']): ?>
+                                                <span
+                                                    class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">Low
+                                                    Stock</span>
+                                            <?php else: ?>
+                                                <span
+                                                    class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">In
+                                                    Stock</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                                            <?php echo $product['last_restocked'] ? date('M d, Y', strtotime($product['last_restocked'])) : 'Never'; ?>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
+                                            <button
+                                                onclick="openRestockModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>, '<?php echo addslashes($product['unit']); ?>')"
+                                                class="cursor-pointer mr-3 text-amber-600 hover:text-amber-900">Restock</button>
+                                            <button
+                                                onclick="openAdjustModal(<?php echo $product['id']; ?>, '<?php echo addslashes($product['name']); ?>', <?php echo $product['quantity']; ?>, '<?php echo addslashes($product['unit']); ?>')"
+                                                class="cursor-pointer text-blue-600 hover:text-blue-900">Adjust</button>
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
@@ -620,83 +630,83 @@ $current_user = getCurrentUser();
 
                     <!-- Pagination -->
                     <?php if ($total_pages > 1): ?>
-                    <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200">
-                        <div class="flex items-center text-sm text-gray-700">
-                            <span>Showing <span class="font-semibold"><?php echo $offset + 1; ?></span> to
-                                <span
-                                    class="font-semibold"><?php echo min($offset + $per_page, $total_ingredients); ?></span>
-                                of
-                                <span class="font-semibold"><?php echo $total_ingredients; ?></span> orders</span>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <!-- Previous Button -->
-                            <?php if ($page > 1): ?>
-                            <a href="?page=<?php echo $page - 1; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                                <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
-                            </a>
-                            <?php else: ?>
-                            <span
-                                class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
-                                <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
-                            </span>
-                            <?php endif; ?>
-
-                            <!-- Page Numbers -->
-                            <div class="flex gap-1">
-                                <?php
-                                    $start_page = max(1, $page - 2);
-$end_page = min($total_pages, $page + 2);
-
-if ($start_page > 1): ?>
-                                <a href="?page=1&&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                    class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                                    1
-                                </a>
-                                <?php if ($start_page > 2): ?>
-                                <span class="px-3 py-2 text-sm text-gray-500">...</span>
-                                <?php endif; ?>
-                                <?php endif; ?>
-
-                                <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
-                                <?php if ($i == $page): ?>
-                                <span class="px-3 py-2 text-sm font-medium text-white rounded-lg bg-amber-600">
-                                    <?php echo $i; ?>
-                                </span>
-                                <?php else: ?>
-                                <a href="?page=<?php echo $i; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                    class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                                    <?php echo $i; ?>
-                                </a>
-                                <?php endif; ?>
-                                <?php endfor; ?>
-
-                                <?php if ($end_page < $total_pages): ?>
-                                <?php if ($end_page < $total_pages - 1): ?>
-                                <span class="px-3 py-2 text-sm text-gray-500">...</span>
-                                <?php endif; ?>
-                                <a href="?page=<?php echo $total_pages; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                    class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                                    <?php echo $total_pages; ?>
-                                </a>
-                                <?php endif; ?>
+                        <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+                            <div class="flex items-center text-sm text-gray-700">
+                                <span>Showing <span class="font-semibold"><?php echo $offset + 1; ?></span> to
+                                    <span
+                                        class="font-semibold"><?php echo min($offset + $per_page, $total_ingredients); ?></span>
+                                    of
+                                    <span class="font-semibold"><?php echo $total_ingredients; ?></span> orders</span>
                             </div>
 
-                            <!-- Next Button -->
-                            <?php if ($page < $total_pages): ?>
-                            <a href="?page=<?php echo $page + 1; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
-                                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
-                                Next <i class="ml-1 fa-solid fa-chevron-right"></i>
-                            </a>
-                            <?php else: ?>
-                            <span
-                                class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
-                                Next <i class="ml-1 fa-solid fa-chevron-right"></i>
-                            </span>
-                            <?php endif; ?>
+                            <div class="flex gap-2">
+                                <!-- Previous Button -->
+                                <?php if ($page > 1): ?>
+                                    <a href="?page=<?php echo $page - 1; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
+                                    </a>
+                                <?php else: ?>
+                                    <span
+                                        class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+                                        <i class="mr-1 fa-solid fa-chevron-left"></i> Previous
+                                    </span>
+                                <?php endif; ?>
+
+                                <!-- Page Numbers -->
+                                <div class="flex gap-1">
+                                    <?php
+                                    $start_page = max(1, $page - 2);
+                                    $end_page = min($total_pages, $page + 2);
+
+                                    if ($start_page > 1): ?>
+                                        <a href="?page=1&&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                            1
+                                        </a>
+                                        <?php if ($start_page > 2): ?>
+                                            <span class="px-3 py-2 text-sm text-gray-500">...</span>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+
+                                    <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
+                                        <?php if ($i == $page): ?>
+                                            <span class="px-3 py-2 text-sm font-medium text-white rounded-lg bg-amber-600">
+                                                <?php echo $i; ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <a href="?page=<?php echo $i; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                                class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                                <?php echo $i; ?>
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php endfor; ?>
+
+                                    <?php if ($end_page < $total_pages): ?>
+                                        <?php if ($end_page < $total_pages - 1): ?>
+                                            <span class="px-3 py-2 text-sm text-gray-500">...</span>
+                                        <?php endif; ?>
+                                        <a href="?page=<?php echo $total_pages; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                            class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                            <?php echo $total_pages; ?>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+
+                                <!-- Next Button -->
+                                <?php if ($page < $total_pages): ?>
+                                    <a href="?page=<?php echo $page + 1; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
+                                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                                        Next <i class="ml-1 fa-solid fa-chevron-right"></i>
+                                    </a>
+                                <?php else: ?>
+                                    <span
+                                        class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+                                        Next <i class="ml-1 fa-solid fa-chevron-right"></i>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
                         </div>
-                    </div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -931,9 +941,9 @@ if ($start_page > 1): ?>
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
                             <option value="">All Categories</option>
                             <?php foreach ($category_analytics as $category): ?>
-                            <option value="<?php echo $category['product_category']; ?>">
-                                <?php echo $category['product_category']; ?>
-                            </option>
+                                <option value="<?php echo $category['product_category']; ?>">
+                                    <?php echo $category['product_category']; ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                         <p class="mt-1 text-xs text-gray-500">Select a category or leave empty to restock all items</p>
@@ -1128,508 +1138,533 @@ if ($start_page > 1): ?>
     </div>
 
     <script>
-    // Modal functions
-    function showSuccessModal(message) {
-        document.getElementById('successMessage').textContent = message;
-        document.getElementById('successModal').classList.remove('hidden');
-    }
-
-    function closeSuccessModal() {
-        document.getElementById('successModal').classList.add('hidden');
-        location.reload();
-    }
-
-    function showErrorModal(message) {
-        document.getElementById('errorMessage').textContent = message;
-        document.getElementById('errorModal').classList.remove('hidden');
-    }
-
-    function closeErrorModal() {
-        document.getElementById('errorModal').classList.add('hidden');
-    }
-
-    // Confirmation modal functions
-    let bulkRestockData = null;
-
-    function showConfirmModal(message) {
-        document.getElementById('confirmMessage').textContent = message;
-        document.getElementById('confirmModal').classList.remove('hidden');
-    }
-
-    function closeConfirmModal() {
-        document.getElementById('confirmModal').classList.add('hidden');
-        bulkRestockData = null;
-    }
-
-    function confirmBulkRestock() {
-        const dataToSend = bulkRestockData;
-        closeConfirmModal();
-        if (dataToSend) {
-            // Require admin verification before bulk restock
-            openVerificationModal(() => {
-                executeBulkRestock(dataToSend);
-            });
+        // Modal functions
+        function showSuccessModal(message) {
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successModal').classList.remove('hidden');
         }
-    }
 
-    // Admin Verification System
-    let verificationCallback = null;
-    let currentVerificationMethod = 'password';
-
-    function openVerificationModal(callback) {
-        verificationCallback = callback;
-        document.getElementById('verificationModal').classList.remove('hidden');
-        document.getElementById('adminPassword').value = '';
-        document.getElementById('qrCodeInput').value = '';
-        document.getElementById('verificationError').classList.add('hidden');
-    }
-
-    function closeVerificationModal() {
-        document.getElementById('verificationModal').classList.add('hidden');
-        verificationCallback = null;
-    }
-
-    function switchVerificationMethod(method) {
-        currentVerificationMethod = method;
-
-        // Update tab styles
-        const passwordTab = document.getElementById('passwordTab');
-        const qrTab = document.getElementById('qrTab');
-
-        if (method === 'password') {
-            passwordTab.className =
-                'flex-1 py-2 px-4 rounded-md font-medium transition-all bg-white text-indigo-600 shadow-sm';
-            qrTab.className =
-                'flex-1 py-2 px-4 rounded-md font-medium transition-all text-gray-600 hover:text-indigo-600';
-            document.getElementById('passwordVerification').classList.remove('hidden');
-            document.getElementById('qrVerification').classList.add('hidden');
-        } else {
-            passwordTab.className =
-                'flex-1 py-2 px-4 rounded-md font-medium transition-all text-gray-600 hover:text-indigo-600';
-            qrTab.className =
-                'flex-1 py-2 px-4 rounded-md font-medium transition-all bg-white text-indigo-600 shadow-sm';
-            document.getElementById('passwordVerification').classList.add('hidden');
-            document.getElementById('qrVerification').classList.remove('hidden');
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            location.reload();
         }
-    }
 
-    function togglePasswordVisibility() {
-        const passwordInput = document.getElementById('adminPassword');
-        const toggleIcon = document.getElementById('passwordToggleIcon');
-
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            toggleIcon.className = 'fa-solid fa-eye-slash';
-        } else {
-            passwordInput.type = 'password';
-            toggleIcon.className = 'fa-solid fa-eye';
+        function showErrorModal(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorModal').classList.remove('hidden');
         }
-    }
 
-    function submitVerification() {
-        const errorDiv = document.getElementById('verificationError');
-        const errorMsg = document.getElementById('verificationErrorMessage');
+        function closeErrorModal() {
+            document.getElementById('errorModal').classList.add('hidden');
+        }
 
-        let data = {
-            method: currentVerificationMethod
-        };
+        // Confirmation modal functions
+        let bulkRestockData = null;
 
-        if (currentVerificationMethod === 'password') {
-            const password = document.getElementById('adminPassword').value;
-            if (!password) {
-                errorMsg.textContent = 'Please enter admin password';
-                errorDiv.classList.remove('hidden');
-                return;
+        function showConfirmModal(message) {
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+            bulkRestockData = null;
+        }
+
+        function confirmBulkRestock() {
+            const dataToSend = bulkRestockData;
+            closeConfirmModal();
+            if (dataToSend) {
+                // Require admin verification before bulk restock
+                openVerificationModal(() => {
+                    executeBulkRestock(dataToSend);
+                });
             }
-            data.password = password;
-        } else {
-            const qrCode = document.getElementById('qrCodeInput').value;
-            if (!qrCode) {
-                errorMsg.textContent = 'Please enter or scan QR code';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-            data.qr_code = qrCode;
         }
 
-        // Verify with server
-        fetch('verify_admin.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(result => {
-                console.log('Verification result:', result);
-                if (result.success) {
-                    console.log('Verification successful, executing callback');
-                    // Store callback before closing modal
-                    const callbackToExecute = verificationCallback;
-                    closeVerificationModal();
-                    // Execute the callback function after closing
-                    if (callbackToExecute) {
-                        console.log('Callback exists, executing...');
-                        callbackToExecute();
-                    } else {
-                        console.error('No callback function found!');
-                    }
-                } else {
-                    console.error('Verification failed:', result.message);
-                    errorMsg.textContent = result.message || 'Verification failed';
+        // Admin Verification System
+        let verificationCallback = null;
+        let currentVerificationMethod = 'password';
+
+        function openVerificationModal(callback) {
+            verificationCallback = callback;
+            document.getElementById('verificationModal').classList.remove('hidden');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('qrCodeInput').value = '';
+            document.getElementById('verificationError').classList.add('hidden');
+        }
+
+        function closeVerificationModal() {
+            document.getElementById('verificationModal').classList.add('hidden');
+            verificationCallback = null;
+        }
+
+        function switchVerificationMethod(method) {
+            currentVerificationMethod = method;
+
+            // Update tab styles
+            const passwordTab = document.getElementById('passwordTab');
+            const qrTab = document.getElementById('qrTab');
+
+            if (method === 'password') {
+                passwordTab.className =
+                    'flex-1 py-2 px-4 rounded-md font-medium transition-all bg-white text-indigo-600 shadow-sm';
+                qrTab.className =
+                    'flex-1 py-2 px-4 rounded-md font-medium transition-all text-gray-600 hover:text-indigo-600';
+                document.getElementById('passwordVerification').classList.remove('hidden');
+                document.getElementById('qrVerification').classList.add('hidden');
+            } else {
+                passwordTab.className =
+                    'flex-1 py-2 px-4 rounded-md font-medium transition-all text-gray-600 hover:text-indigo-600';
+                qrTab.className =
+                    'flex-1 py-2 px-4 rounded-md font-medium transition-all bg-white text-indigo-600 shadow-sm';
+                document.getElementById('passwordVerification').classList.add('hidden');
+                document.getElementById('qrVerification').classList.remove('hidden');
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('adminPassword');
+            const toggleIcon = document.getElementById('passwordToggleIcon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'fa-solid fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'fa-solid fa-eye';
+            }
+        }
+
+        function submitVerification() {
+            const errorDiv = document.getElementById('verificationError');
+            const errorMsg = document.getElementById('verificationErrorMessage');
+
+            let data = {
+                method: currentVerificationMethod
+            };
+
+            if (currentVerificationMethod === 'password') {
+                const password = document.getElementById('adminPassword').value;
+                if (!password) {
+                    errorMsg.textContent = 'Please enter admin password';
                     errorDiv.classList.remove('hidden');
+                    return;
                 }
-            })
-            .catch(error => {
-                console.error('Verification error:', error);
-                errorMsg.textContent = 'Verification error: ' + error.message;
-                errorDiv.classList.remove('hidden');
-            });
-    } // Allow Enter key to submit verification
-    document.addEventListener('DOMContentLoaded', function() {
-        const passwordInput = document.getElementById('adminPassword');
-        const qrInput = document.getElementById('qrCodeInput');
-
-        if (passwordInput) {
-            passwordInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    submitVerification();
+                data.password = password;
+            } else {
+                const qrCode = document.getElementById('qrCodeInput').value;
+                if (!qrCode) {
+                    errorMsg.textContent = 'Please enter or scan QR code';
+                    errorDiv.classList.remove('hidden');
+                    return;
                 }
-            });
-        }
+                data.qr_code = qrCode;
+            }
 
-        if (qrInput) {
-            qrInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    submitVerification();
-                }
-            });
-        }
-    });
+            // Verify with server
+            fetch('verify_admin.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    console.log('Verification result:', result);
+                    if (result.success) {
+                        console.log('Verification successful, executing callback');
+                        // Store callback before closing modal
+                        const callbackToExecute = verificationCallback;
+                        closeVerificationModal();
+                        // Execute the callback function after closing
+                        if (callbackToExecute) {
+                            console.log('Callback exists, executing...');
+                            callbackToExecute();
+                        } else {
+                            console.error('No callback function found!');
+                        }
+                    } else {
+                        console.error('Verification failed:', result.message);
+                        errorMsg.textContent = result.message || 'Verification failed';
+                        errorDiv.classList.remove('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Verification error:', error);
+                    errorMsg.textContent = 'Verification error: ' + error.message;
+                    errorDiv.classList.remove('hidden');
+                });
+        } // Allow Enter key to submit verification
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('adminPassword');
+            const qrInput = document.getElementById('qrCodeInput');
 
-    // Initialize charts when the page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        // Only initialize charts if they exist (admin view)
-        const stockStatusCtx = document.getElementById('stockStatusChart');
-        if (stockStatusCtx) {
-            const stockStatusChart = new Chart(stockStatusCtx.getContext('2d'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['In Stock', 'Low Stock', 'Out of Stock'],
-                    datasets: [{
-                        data: [
-                            <?php echo $stock_distribution['in_stock']; ?>,
-                            <?php echo $stock_distribution['low_stock']; ?>,
-                            <?php echo $stock_distribution['out_of_stock']; ?>
-                        ],
-                        backgroundColor: [
-                            'rgb(16, 185, 129)', // Green
-                            'rgb(245, 158, 11)', // Amber
-                            'rgb(239, 68, 68)' // Red
-                        ],
-                        borderColor: '#fff',
-                        borderWidth: 3,
-                        hoverOffset: 10
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                font: {
-                                    family: 'Montserrat',
-                                    size: 11
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        submitVerification();
+                    }
+                });
+            }
+
+            if (qrInput) {
+                qrInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        submitVerification();
+                    }
+                });
+            }
+        });
+
+        // Initialize charts when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Only initialize charts if they exist (admin view)
+            const stockStatusCtx = document.getElementById('stockStatusChart');
+            if (stockStatusCtx) {
+                const stockStatusChart = new Chart(stockStatusCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['In Stock', 'Low Stock', 'Out of Stock'],
+                        datasets: [{
+                            data: [
+                                <?php echo $stock_distribution['in_stock']; ?>,
+                                <?php echo $stock_distribution['low_stock']; ?>,
+                                <?php echo $stock_distribution['out_of_stock']; ?>
+                            ],
+                            backgroundColor: [
+                                'rgb(16, 185, 129)', // Green
+                                'rgb(245, 158, 11)', // Amber
+                                'rgb(239, 68, 68)' // Red
+                            ],
+                            borderColor: '#fff',
+                            borderWidth: 3,
+                            hoverOffset: 10
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: {
+                                        family: 'Montserrat',
+                                        size: 11
+                                    },
+                                    color: '#374151',
+                                    padding: 15,
+                                    usePointStyle: true,
+                                    pointStyle: 'circle'
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                padding: 12,
+                                titleFont: {
+                                    size: 14,
+                                    weight: 'bold'
                                 },
-                                color: '#374151',
-                                padding: 15,
-                                usePointStyle: true,
-                                pointStyle: 'circle'
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            padding: 12,
-                            titleFont: {
-                                size: 14,
-                                weight: 'bold'
-                            },
-                            bodyFont: {
-                                size: 13
-                            },
-                            callbacks: {
-                                label: function(context) {
-                                    const label = context.label || '';
-                                    const value = context.parsed || 0;
-                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                    const percentage = ((value / total) * 100).toFixed(1);
-                                    return label + ': ' + value + ' items (' + percentage + '%)';
+                                bodyFont: {
+                                    size: 13
+                                },
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed || 0;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        return label + ': ' + value + ' items (' + percentage + '%)';
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
-        }
+                });
+            }
 
-        // Category Stock Chart
-        const categoryStockCtx = document.getElementById('categoryStockChart');
-        if (categoryStockCtx) {
-            const categoryLabels =
-                <?php echo json_encode(array_column($category_analytics, 'product_category')); ?>;
-            const categoryStockData =
-                <?php echo json_encode(array_map(fn ($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
-            const avgStockData =
-                <?php echo json_encode(array_map(fn ($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
-            const numProductsData =
-                <?php echo json_encode(array_map(fn ($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
+            // Category Stock Chart
+            const categoryStockCtx = document.getElementById('categoryStockChart');
+            if (categoryStockCtx) {
+                const categoryLabels =
+                    <?php echo json_encode(array_column($category_analytics, 'product_category')); ?>;
+                const categoryStockData =
+                    <?php echo json_encode(array_map(fn($c) => $c['total_ingredient_stock'] ?? 0, $category_analytics)); ?>;
+                const avgStockData =
+                    <?php echo json_encode(array_map(fn($c) => round($c['avg_ingredient_quantity'] ?? 0, 1), $category_analytics)); ?>;
+                const numProductsData =
+                    <?php echo json_encode(array_map(fn($c) => $c['num_products_in_category'] ?? 0, $category_analytics)); ?>;
 
-            const categoryStockChart = new Chart(categoryStockCtx.getContext('2d'), {
+                const categoryStockChart = new Chart(categoryStockCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: categoryLabels,
+                        datasets: [{
+                            label: 'Total Stock',
+                            data: categoryStockData,
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgb(59, 130, 246)',
+                            borderWidth: 2,
+                            borderRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    font: {
+                                        family: 'Montserrat',
+                                        size: 12,
+                                        weight: 'bold'
+                                    },
+                                    color: '#374151'
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                padding: 12,
+                                titleFont: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                bodyFont: {
+                                    size: 13
+                                },
+                                callbacks: {
+                                    label: function(context) {
+                                        const idx = context.dataIndex;
+                                        const stock = categoryStockData[idx];
+                                        const avg = avgStockData[idx];
+                                        const products = numProductsData[idx];
+                                        return [
+                                            'Total Stock: ' + stock,
+                                            'Avg Stock: ' + avg,
+                                            'Products: ' + products
+                                        ];
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    font: {
+                                        size: 11
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 11,
+                                        weight: 'bold'
+                                    }
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        // Low Stock Products by Category Chart
+        const lowStockCategoryCtx = document.getElementById('lowStockCategoryChart');
+        if (lowStockCategoryCtx) {
+            const lowStockLabels =
+                <?php echo json_encode(array_map(fn($c) => $c['category'] ?? '', $category_analytics)); ?>;
+            const lowStockData =
+                <?php echo json_encode(array_map(fn($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
+
+            const lowStockCategoryChart = new Chart(lowStockCategoryCtx.getContext('2d'), {
                 type: 'bar',
                 data: {
-                    labels: categoryLabels,
+                    labels: lowStockLabels,
                     datasets: [{
-                        label: 'Total Stock',
-                        data: categoryStockData,
-                        backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                        borderColor: 'rgb(59, 130, 246)',
+                        label: 'Low Stock Products',
+                        data: lowStockData,
+                        backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                        borderColor: 'rgb(239, 68, 68)',
                         borderWidth: 2,
                         borderRadius: 5
                     }]
                 },
                 options: {
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            display: true,
-                            position: 'top',
-                            labels: {
-                                font: {
-                                    family: 'Montserrat',
-                                    size: 12,
-                                    weight: 'bold'
-                                },
-                                color: '#374151'
-                            }
+                            display: false
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            padding: 12,
-                            titleFont: {
-                                size: 14,
-                                weight: 'bold'
-                            },
-                            bodyFont: {
-                                size: 13
-                            },
                             callbacks: {
                                 label: function(context) {
-                                    const idx = context.dataIndex;
-                                    const stock = categoryStockData[idx];
-                                    const avg = avgStockData[idx];
-                                    const products = numProductsData[idx];
-                                    return [
-                                        'Total Stock: ' + stock,
-                                        'Avg Stock: ' + avg,
-                                        'Products: ' + products
-                                    ];
+                                    return 'Low Stock Products: ' + context.parsed.x;
                                 }
                             }
                         }
                     },
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                font: {
-                                    size: 11
-                                }
-                            },
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            }
-                        },
                         x: {
+                            beginAtZero: true
+                        },
+                        y: {
                             ticks: {
                                 font: {
                                     size: 11,
                                     weight: 'bold'
                                 }
-                            },
-                            grid: {
-                                display: false
                             }
                         }
                     }
                 }
             });
         }
-    });
 
-    // Low Stock Products by Category Chart
-    const lowStockCategoryCtx = document.getElementById('lowStockCategoryChart');
-    if (lowStockCategoryCtx) {
-        const lowStockLabels =
-            <?php echo json_encode(array_map(fn ($c) => $c['category'] ?? '', $category_analytics)); ?>;
-        const lowStockData =
-            <?php echo json_encode(array_map(fn ($c) => $c['low_stock_count'] ?? 0, $category_analytics)); ?>;
+        // Search function for Recent Restocks table
+        function searchRestocks() {
+            const searchInput = document.getElementById('restockSearch');
+            const filter = searchInput.value.toLowerCase();
+            const rows = document.querySelectorAll('.restock-row');
+            const noMatchRow = document.getElementById('noMatchRow');
+            let visibleCount = 0;
 
-        const lowStockCategoryChart = new Chart(lowStockCategoryCtx.getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: lowStockLabels,
-                datasets: [{
-                    label: 'Low Stock Products',
-                    data: lowStockData,
-                    backgroundColor: 'rgba(239, 68, 68, 0.8)',
-                    borderColor: 'rgb(239, 68, 68)',
-                    borderWidth: 2,
-                    borderRadius: 5
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return 'Low Stock Products: ' + context.parsed.x;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true
-                    },
-                    y: {
-                        ticks: {
-                            font: {
-                                size: 11,
-                                weight: 'bold'
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    // Search function for Recent Restocks table
-    function searchRestocks() {
-        const searchInput = document.getElementById('restockSearch');
-        const filter = searchInput.value.toLowerCase();
-        const rows = document.querySelectorAll('.restock-row');
-        const noMatchRow = document.getElementById('noMatchRow');
-        let visibleCount = 0;
-
-        rows.forEach(row => {
-            const itemName = row.querySelector('.restock-name').textContent.toLowerCase();
-            if (itemName.includes(filter)) {
-                row.style.display = '';
-                visibleCount++;
-            } else {
-                row.style.display = 'none';
-            }
-        });
-
-        // Show "no match" message if no rows are visible
-        if (visibleCount === 0 && rows.length > 0) {
-            noMatchRow.classList.remove('hidden');
-        } else {
-            noMatchRow.classList.add('hidden');
-        }
-    }
-
-    // Export inventory function
-    function exportInventory(format) {
-        window.location.href = 'export_inventory.php?format=' + format;
-        toggleExportDropdown(); // Close dropdown after selection
-    }
-
-    // Toggle export dropdown
-    function toggleExportDropdown() {
-        const dropdown = document.getElementById('exportDropdown');
-        dropdown.classList.toggle('hidden');
-    }
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('exportDropdown');
-        const button = event.target.closest('button[onclick="toggleExportDropdown()"]');
-
-        if (!button && dropdown && !dropdown.contains(event.target)) {
-            dropdown.classList.add('hidden');
-        }
-    });
-
-    // Bulk restock modal functions
-    function openBulkRestockModal() {
-        document.getElementById('bulkRestockModal').classList.remove('hidden');
-    }
-
-    function closeBulkRestockModal() {
-        document.getElementById('bulkRestockModal').classList.add('hidden');
-    }
-
-    function submitBulkRestock(event) {
-        event.preventDefault();
-
-        const quantity = parseFloat(document.getElementById('bulk_quantity').value);
-        const category = document.getElementById('bulk_category').value;
-        const notes = document.getElementById('bulk_notes').value;
-
-        // Store data for confirmation
-        bulkRestockData = {
-            quantity: quantity,
-            category: category,
-            notes: notes
-        };
-
-        // Show confirmation modal
-        const categoryText = category ? `in category "${category}"` : 'in all categories';
-        showConfirmModal(`Are you sure you want to add ${quantity} units to all items ${categoryText}?`);
-    }
-
-    function executeBulkRestock(data) {
-        console.log('Executing bulk restock with data:', data);
-        fetch('bulk_restock.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            .then((response) => {
-                console.log('Response status:', response.status);
-                return response.json();
-            })
-            .then((data) => {
-                console.log('Response data:', data);
-                if (data.success) {
-                    closeBulkRestockModal();
-                    showSuccessModal(data.message);
+            rows.forEach(row => {
+                const itemName = row.querySelector('.restock-name').textContent.toLowerCase();
+                if (itemName.includes(filter)) {
+                    row.style.display = '';
+                    visibleCount++;
                 } else {
-                    showErrorModal(data.message || 'Failed to bulk restock');
+                    row.style.display = 'none';
                 }
-            })
-            .catch((error) => {
-                console.error('Fetch error:', error);
-                showErrorModal('An error occurred: ' + error.message);
             });
-    }
+
+            // Show "no match" message if no rows are visible
+            if (visibleCount === 0 && rows.length > 0) {
+                noMatchRow.classList.remove('hidden');
+            } else {
+                noMatchRow.classList.add('hidden');
+            }
+        }
+
+        // Export inventory function
+        function exportInventory(format) {
+            window.location.href = 'export_inventory.php?format=' + format;
+            toggleExportDropdown(); // Close dropdown after selection
+        }
+
+        // Toggle export dropdown
+        function toggleExportDropdown() {
+            const dropdown = document.getElementById('exportDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('exportDropdown');
+            const button = event.target.closest('button[onclick="toggleExportDropdown()"]');
+
+            if (!button && dropdown && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Bulk restock modal functions
+        function openBulkRestockModal() {
+            document.getElementById('bulkRestockModal').classList.remove('hidden');
+        }
+
+        function closeBulkRestockModal() {
+            document.getElementById('bulkRestockModal').classList.add('hidden');
+        }
+
+        function submitBulkRestock(event) {
+            event.preventDefault();
+
+            const quantity = parseFloat(document.getElementById('bulk_quantity').value);
+            const category = document.getElementById('bulk_category').value;
+            const notes = document.getElementById('bulk_notes').value;
+
+            // Store data for confirmation
+            bulkRestockData = {
+                quantity: quantity,
+                category: category,
+                notes: notes
+            };
+
+            // Show confirmation modal
+            const categoryText = category ? `in category "${category}"` : 'in all categories';
+            showConfirmModal(`Are you sure you want to add ${quantity} units to all items ${categoryText}?`);
+        }
+
+        function executeBulkRestock(data) {
+            console.log('Executing bulk restock with data:', data);
+            fetch('bulk_restock.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then((response) => {
+                    console.log('Response status:', response.status);
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log('Response data:', data);
+                    if (data.success) {
+                        closeBulkRestockModal();
+                        showSuccessModal(data.message);
+                    } else {
+                        showErrorModal(data.message || 'Failed to bulk restock');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Fetch error:', error);
+                    showErrorModal('An error occurred: ' + error.message);
+                });
+        }
     </script>
     <script src="../../assets/js/inventory.js"></script>
     <script src="../../assets/js/admin.js"></script>
+    <script>
+        function toggleMobileSidebar() {
+            const e = document.getElementById("sidebar"),
+                t = document.getElementById("sidebarOverlay"),
+                s = document.getElementById("hamburgerIcon"),
+                a = document.getElementById("mobileSidebarBtn"),
+                l = !e.classList.contains("-translate-x-full");
+            l ? (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-800"), a.classList.add("bg-gray-900")) : (e.classList.remove("-translate-x-full"), t.classList.remove("opacity-0", "pointer-events-none"), t.classList.add("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />', s.classList.add("rotate-90"), a.classList.add("bg-gray-800"), a.classList.remove("bg-gray-900"))
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll("#sidebar nav a").forEach(e => {
+                e.addEventListener("click", function() {
+                    window.innerWidth < 1024 && !document.getElementById("sidebar").classList.contains("-translate-x-full") && toggleMobileSidebar()
+                })
+            })
+        });
+        window.addEventListener("resize", function() {
+            const e = document.getElementById("sidebar"),
+                t = document.getElementById("sidebarOverlay"),
+                s = document.getElementById("hamburgerIcon"),
+                a = document.getElementById("mobileSidebarBtn");
+            window.innerWidth >= 1024 ? (e.classList.remove("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50")) : (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-800"), a.classList.add("bg-gray-900"))
+        });
+        if (window.innerWidth < 1024) document.getElementById("sidebar").classList.add("-translate-x-full");
+    </script>
 </body>
 
 </html>

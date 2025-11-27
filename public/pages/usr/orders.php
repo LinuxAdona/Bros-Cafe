@@ -171,9 +171,19 @@ $current_user = getCurrentUser();
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
+    <!-- Mobile Hamburger Button (Fixed outside sidebar) -->
+    <button id="mobileSidebarBtn" class="fixed top-4 left-4 z-50 p-3 text-white bg-gray-900 rounded-lg shadow-lg lg:hidden transition-all duration-300 hover:bg-gray-800" onclick="toggleMobileSidebar()">
+        <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden" onclick="toggleMobileSidebar()"></div>
+
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside id="sidebar" class="flex flex-col text-white bg-gray-900">
+        <aside id="sidebar" class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center justify-between sidebar-logo">
                     <!-- Logo and text (shown when expanded) -->
@@ -492,7 +502,7 @@ $current_user = getCurrentUser();
                                                         'gcash' => 'bg-purple-100 text-purple-800',
                                                         default => 'bg-gray-100 text-gray-800'
                                                     };
-                                        ?>">
+                                                    ?>">
                                                     <?php echo strtoupper($order['payment_method']); ?>
                                                 </span>
                                             </td>
@@ -502,15 +512,15 @@ $current_user = getCurrentUser();
                                             <td class="px-6 py-4 text-sm whitespace-nowrap">
                                                 <span class="px-2 py-1 text-xs font-medium rounded-full 
                                                     <?php
-                                        echo match ($order['status']) {
-                                            'pending' => 'bg-yellow-100 text-yellow-800',
-                                            'preparing' => 'bg-blue-100 text-blue-800',
-                                            'ready' => 'bg-purple-100 text-purple-800',
-                                            'completed' => 'bg-green-100 text-green-800',
-                                            'cancelled' => 'bg-red-100 text-red-800',
-                                            default => 'bg-gray-100 text-gray-800'
-                                        };
-                                        ?>">
+                                                    echo match ($order['status']) {
+                                                        'pending' => 'bg-yellow-100 text-yellow-800',
+                                                        'preparing' => 'bg-blue-100 text-blue-800',
+                                                        'ready' => 'bg-purple-100 text-purple-800',
+                                                        'completed' => 'bg-green-100 text-green-800',
+                                                        'cancelled' => 'bg-red-100 text-red-800',
+                                                        default => 'bg-gray-100 text-gray-800'
+                                                    };
+                                                    ?>">
                                                     <?php echo ucfirst($order['status']); ?>
                                                 </span>
                                             </td>
@@ -572,9 +582,9 @@ $current_user = getCurrentUser();
                                 <div class="flex gap-1">
                                     <?php
                                     $start_page = max(1, $page - 2);
-$end_page = min($total_pages, $page + 2);
+                                    $end_page = min($total_pages, $page + 2);
 
-if ($start_page > 1): ?>
+                                    if ($start_page > 1): ?>
                                         <a href="?page=1&status=<?php echo $status_filter; ?>&date=<?php echo $date_filter; ?>&search=<?php echo urlencode($search); ?>"
                                             class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                                             1
@@ -715,6 +725,59 @@ if ($start_page > 1): ?>
     </div>
 
     <script src="../../assets/js/admin.js"></script>
+    <script>
+        // Mobile sidebar toggle
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const hamburgerIcon = document.getElementById('hamburgerIcon');
+            const mobileBtn = document.getElementById('mobileSidebarBtn');
+            const isOpen = !sidebar.classList.contains('-translate-x-full');
+            if (isOpen) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                overlay.classList.remove('opacity-50');
+                hamburgerIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />';
+                hamburgerIcon.classList.remove('rotate-90');
+                mobileBtn.classList.remove('bg-gray-800');
+                mobileBtn.classList.add('bg-gray-900');
+            } else {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                overlay.classList.add('opacity-50');
+                hamburgerIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
+                hamburgerIcon.classList.add('rotate-90');
+                mobileBtn.classList.add('bg-gray-800');
+                mobileBtn.classList.remove('bg-gray-900');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('#sidebar nav a').forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 1024 && !document.getElementById('sidebar').classList.contains('-translate-x-full')) toggleMobileSidebar();
+                });
+            });
+        });
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar'),
+                overlay = document.getElementById('sidebarOverlay'),
+                hamburgerIcon = document.getElementById('hamburgerIcon'),
+                mobileBtn = document.getElementById('mobileSidebarBtn');
+            if (window.innerWidth >= 1024) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                overlay.classList.remove('opacity-50');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                hamburgerIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />';
+                hamburgerIcon.classList.remove('rotate-90');
+                mobileBtn.classList.remove('bg-gray-800');
+                mobileBtn.classList.add('bg-gray-900');
+            }
+        });
+        if (window.innerWidth < 1024) document.getElementById('sidebar').classList.add('-translate-x-full');
+    </script>
     <script src="../../assets/js/orders.js"></script>
 </body>
 

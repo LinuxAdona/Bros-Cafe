@@ -265,9 +265,19 @@ $current_user = getCurrentUser();
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
+    <!-- Mobile Hamburger Button (Fixed outside sidebar) -->
+    <button id="mobileSidebarBtn" class="fixed top-4 left-4 z-50 p-3 text-white bg-gray-900 rounded-lg shadow-lg lg:hidden transition-all duration-300 hover:bg-gray-800" onclick="toggleMobileSidebar()">
+        <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden" onclick="toggleMobileSidebar()"></div>
+
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside id="sidebar" class="flex flex-col text-white bg-gray-900">
+        <aside id="sidebar" class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center justify-between sidebar-logo">
                     <!-- Logo and text (shown when expanded) -->
@@ -953,6 +963,31 @@ $current_user = getCurrentUser();
     </div>
 
     <script src="../../assets/js/admin.js"></script>
+    <script>
+        function toggleMobileSidebar() {
+            const e = document.getElementById("sidebar"),
+                t = document.getElementById("sidebarOverlay"),
+                s = document.getElementById("hamburgerIcon"),
+                a = document.getElementById("mobileSidebarBtn"),
+                l = !e.classList.contains("-translate-x-full");
+            l ? (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-800"), a.classList.add("bg-gray-900")) : (e.classList.remove("-translate-x-full"), t.classList.remove("opacity-0", "pointer-events-none"), t.classList.add("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />', s.classList.add("rotate-90"), a.classList.add("bg-gray-800"), a.classList.remove("bg-gray-900"))
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll("#sidebar nav a").forEach(e => {
+                e.addEventListener("click", function() {
+                    window.innerWidth < 1024 && !document.getElementById("sidebar").classList.contains("-translate-x-full") && toggleMobileSidebar()
+                })
+            })
+        });
+        window.addEventListener("resize", function() {
+            const e = document.getElementById("sidebar"),
+                t = document.getElementById("sidebarOverlay"),
+                s = document.getElementById("hamburgerIcon"),
+                a = document.getElementById("mobileSidebarBtn");
+            window.innerWidth >= 1024 ? (e.classList.remove("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50")) : (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-800"), a.classList.add("bg-gray-900"))
+        });
+        if (window.innerWidth < 1024) document.getElementById("sidebar").classList.add("-translate-x-full");
+    </script>
     <script src="../../assets/js/users.js"></script>
     <script>
         // Modal helper functions
