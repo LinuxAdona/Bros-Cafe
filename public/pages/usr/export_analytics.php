@@ -128,12 +128,178 @@ $stmt = $conn->prepare("
 $stmt->execute(['start' => $start_date, 'end' => $end_date]);
 $employee_performance = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Daily sales for chart
+$stmt = $conn->prepare("
+    SELECT DATE(created_at) as date, COUNT(*) as orders, SUM(total_amount) as revenue
+    FROM orders
+    WHERE DATE(created_at) BETWEEN :start AND :end
+    AND status != 'cancelled'
+    GROUP BY DATE(created_at)
+    ORDER BY date ASC
+");
+$stmt->execute(['start' => $start_date, 'end' => $end_date]);
+$daily_sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 if ($format === 'pdf') {
     // PDF Export
     define('FPDF_FONTPATH', '../../../src/fpdf_fonts/');
     require_once '../../../src/fpdf.php';
 
-    $pdf = new FPDF('P', 'mm', 'A4'); // Portrait orientation
+    // Extended FPDF class with chart drawing capabilities
+    class PDF_Analytics extends FPDF {
+        function drawBarChart($data, $title, $xLabel, $yLabel, $chartWidth = 170, $chartHeight = 60) {
+            $this->SetFont('Arial', 'B', 11);
+            $this->Cell(0, 6, $title, 0, 1, 'L');
+            $this->Ln(2);
+            
+            if (empty($data)) {
+                $this->SetFont('Arial', 'I', 10);
+                $this->Cell(0, 6, 'No data available', 0, 1, 'C');
+                return;
+            }
+            
+            $x = $this->GetX() + 10;
+            $y = $this->GetY();
+            
+            // Find max value for scaling
+            $maxValue = max(array_column($data, 'value'));
+            if ($maxValue == 0) $maxValue = 1;
+            
+            // Draw axes
+            $this->SetDrawColor(0, 0, 0);
+            $this->Line($x, $y, $x, $y + $chartHeight); // Y-axis
+            $this->Line($x, $y + $chartHeight, $x + $chartWidth, $y + $chartHeight); // X-axis
+            
+            // Draw bars
+            $barWidth = $chartWidth / count($data);
+            $maxBarHeight = $chartHeight - 5;
+            
+            foreach ($data as $index => $item) {
+                $barHeight = ($item['value'] / $maxValue) * $maxBarHeight;
+                $barX = $x + ($index * $barWidth) + 2;
+                $barY = $y + $chartHeight - $barHeight;
+                
+                // Draw bar with gradient effect
+                $this->SetFillColor(59, 130, 246);
+                $this->Rect($barX, $barY, $barWidth - 4, $barHeight, 'F');
+                
+                // Draw value on top of bar
+                $this->SetFont('Arial', '', 7);
+                $this->SetXY($barX, $barY - 4);
+                $this->Cell($barWidth - 4, 3, number_format($item['value']), 0, 0, 'C');
+                
+                // Draw label
+                $this->SetXY($barX, $y + $chartHeight + 1);
+                $label = strlen($item['label']) > 8 ? substr($item['label'], 0, 6) . '..' : $item['label'];
+                $this->Cell($barWidth - 4, 3, $label, 0, 0, 'C');
+            }
+            
+            // Y-axis label
+            $this->SetFont('Arial', '', 8);
+            $this->SetXY($x - 8, $y - 2);
+            $this->Cell(8, 4, number_format($maxValue), 0, 0, 'R');
+            $this->SetXY($x - 8, $y + $chartHeight - 2);
+            $this->Cell(8, 4, '0', 0, 0, 'R');
+            
+            $this->Ln($chartHeight + 8);
+        }
+        
+        function drawPieChart($data, $title, $chartSize = 50) {
+            $this->SetFont('Arial', 'B', 11);
+            $this->Cell(0, 6, $title, 0, 1, 'L');
+            $this->Ln(2);
+            
+            if (empty($data)) {
+                $this->SetFont('Arial', 'I', 10);
+                $this->Cell(0, 6, 'No data available', 0, 1, 'C');
+                return;
+            }
+            
+            $total = array_sum(array_column($data, 'value'));
+            if ($total == 0) $total = 1;
+            
+            $centerX = 60;
+            $centerY = $this->GetY() + $chartSize + 5;
+            
+            // Colors for pie slices
+            $colors = [
+                [59, 130, 246],   // Blue
+                [245, 158, 11],   // Amber
+                [16, 185, 129],   // Green
+                [239, 68, 68],    // Red
+                [139, 92, 246],   // Purple
+            ];
+            
+            $startAngle = 0;
+            foreach ($data as $index => $item) {
+                $angle = ($item['value'] / $total) * 360;
+                $color = $colors[$index % count($colors)];
+                $this->SetFillColor($color[0], $color[1], $color[2]);
+                
+                // Draw pie slice
+                $this->drawPieSlice($centerX, $centerY, $chartSize, $startAngle, $startAngle + $angle);
+                
+                $startAngle += $angle;
+            }
+            
+            // Draw legend
+            $legendX = $centerX + $chartSize + 15;
+            $legendY = $centerY - $chartSize + 5;
+            
+            $this->SetFont('Arial', '', 9);
+            foreach ($data as $index => $item) {
+                $color = $colors[$index % count($colors)];
+                $this->SetFillColor($color[0], $color[1], $color[2]);
+                $this->Rect($legendX, $legendY + ($index * 7), 4, 4, 'F');
+                
+                $percentage = ($item['value'] / $total) * 100;
+                $this->SetXY($legendX + 6, $legendY + ($index * 7) - 0.5);
+                $label = strlen($item['label']) > 20 ? substr($item['label'], 0, 18) . '..' : $item['label'];
+                $this->Cell(60, 5, $label . ' (' . number_format($percentage, 1) . '%)', 0, 0, 'L');
+            }
+            
+            $this->Ln($chartSize * 2 + 5);
+        }
+        
+        function drawPieSlice($centerX, $centerY, $radius, $startAngle, $endAngle) {
+            $startAngle = deg2rad($startAngle - 90);
+            $endAngle = deg2rad($endAngle - 90);
+            
+            // Draw filled triangle fan for smooth pie slice
+            $steps = 20;
+            $angleStep = ($endAngle - $startAngle) / $steps;
+            
+            for ($i = 0; $i < $steps; $i++) {
+                $a1 = $startAngle + ($i * $angleStep);
+                $a2 = $startAngle + (($i + 1) * $angleStep);
+                
+                $x1 = $centerX + ($radius * cos($a1));
+                $y1 = $centerY + ($radius * sin($a1));
+                $x2 = $centerX + ($radius * cos($a2));
+                $y2 = $centerY + ($radius * sin($a2));
+                
+                $points = [
+                    ['x' => $centerX, 'y' => $centerY],
+                    ['x' => $x1, 'y' => $y1],
+                    ['x' => $x2, 'y' => $y2]
+                ];
+                
+                $this->Polygon($points);
+            }
+        }
+        
+        function Polygon($points) {
+            if (count($points) < 3) return;
+            
+            $this->_out(sprintf('%.2F %.2F m', $points[0]['x'] * $this->k, ($this->h - $points[0]['y']) * $this->k));
+            for ($i = 1; $i < count($points); $i++) {
+                $this->_out(sprintf('%.2F %.2F l', $points[$i]['x'] * $this->k, ($this->h - $points[$i]['y']) * $this->k));
+            }
+            $this->_out('h f');
+        }
+    }
+
+    $pdf = new PDF_Analytics('P', 'mm', 'A4');
     $pdf->AddPage();
 
     // Header
@@ -217,6 +383,78 @@ if ($format === 'pdf') {
         $pdf->Cell(60, 6, 'PHP ' . number_format($category['revenue'], 2), 1, 1, 'R');
     }
     $pdf->Ln(5);
+
+    // Add new page for charts
+    $pdf->AddPage();
+
+    // Sales Trend Chart
+    if (count($daily_sales) > 0) {
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->SetFillColor(59, 130, 246);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->Cell(0, 8, 'Visual Analytics', 0, 1, 'L', true);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->Ln(5);
+
+        // Prepare daily sales data for chart
+        $salesChartData = [];
+        foreach ($daily_sales as $sale) {
+            $salesChartData[] = [
+                'label' => date('M d', strtotime($sale['date'])),
+                'value' => floatval($sale['revenue'])
+            ];
+        }
+        
+        // Limit to last 10 days for readability
+        if (count($salesChartData) > 10) {
+            $salesChartData = array_slice($salesChartData, -10);
+        }
+        
+        $pdf->drawBarChart($salesChartData, 'Daily Revenue Trend', 'Date', 'Revenue (PHP)');
+        $pdf->Ln(5);
+    }
+
+    // Category Sales Bar Chart
+    if (count($category_sales) > 0) {
+        $categoryChartData = [];
+        foreach ($category_sales as $category) {
+            $categoryChartData[] = [
+                'label' => $category['name'],
+                'value' => floatval($category['revenue'])
+            ];
+        }
+        
+        $pdf->drawBarChart($categoryChartData, 'Revenue by Category', 'Category', 'Revenue (PHP)');
+        $pdf->Ln(5);
+    }
+
+    // Order Types Pie Chart
+    if (count($order_types) > 0) {
+        $orderTypeChartData = [];
+        foreach ($order_types as $type) {
+            $orderTypeChartData[] = [
+                'label' => ucfirst($type['order_type']),
+                'value' => intval($type['count'])
+            ];
+        }
+        
+        $pdf->drawPieChart($orderTypeChartData, 'Order Types Distribution');
+        $pdf->Ln(5);
+    }
+
+    // Top Products Bar Chart
+    if (count($top_products) > 0) {
+        $topProductsChartData = [];
+        $displayCount = min(5, count($top_products)); // Show top 5
+        for ($i = 0; $i < $displayCount; $i++) {
+            $topProductsChartData[] = [
+                'label' => $top_products[$i]['name'],
+                'value' => floatval($top_products[$i]['total_sold'])
+            ];
+        }
+        
+        $pdf->drawBarChart($topProductsChartData, 'Top 5 Products by Quantity Sold', 'Product', 'Quantity');
+    }
 
     // Add new page for more content
     $pdf->AddPage();
