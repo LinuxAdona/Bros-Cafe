@@ -2,24 +2,9 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home2/broscafe/public_html/
-    - export REPOPATH=$PWD
-
-    # Remove old files from deployment directory (except config/database.php)
-    - find $DEPLOYPATH -maxdepth 1 -type f ! -name "*.php" -delete 2>/dev/null || true
-    - find $DEPLOYPATH -maxdepth 1 -name "*.shtml" -o -name "*.json" -o -name "*.md" | xargs rm -f 2>/dev/null || true
-
-    # Copy all root level files
-    - rsync -av --exclude='.git' --exclude='node_modules' --exclude='.env' --exclude='.cpanel.yml' $REPOPATH/ $DEPLOYPATH/
-
-    # Ensure config directory is writable
-    - chmod -R 755 $DEPLOYPATH/config/ 2>/dev/null || true
-    - chmod -R 755 $DEPLOYPATH/public/ 2>/dev/null || true
-    - chmod -R 755 $DEPLOYPATH/src/ 2>/dev/null || true
-    - chmod -R 755 $DEPLOYPATH/database/ 2>/dev/null || true
-
-    # Make image upload directory writable
-    - chmod 777 $DEPLOYPATH/public/assets/images/products 2>/dev/null || true
-    - chmod 777 $DEPLOYPATH/public/assets/images 2>/dev/null || true
+    - mkdir -p $DEPLOYPATH
+    - cp -r . $DEPLOYPATH
+    - chmod -R 755 $DEPLOYPATH
 
     # Set permissions for writable directories (for image uploads, logs, etc.)
     - find $DEPLOYPATH/public/assets/images/products -type d -exec chmod 777 {} \;
