@@ -11,10 +11,24 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$data = json_decode(file_get_contents('php://input'), true);
+// Handle both FormData and JSON input
+$data = [];
+if (isset($_POST['action'])) {
+    // FormData submission
+    $data = $_POST;
+    if (isset($data['sizes'])) {
+        $data['sizes'] = json_decode($data['sizes'], true);
+    }
+    if (isset($data['ingredients'])) {
+        $data['ingredients'] = json_decode($data['ingredients'], true);
+    }
+} else {
+    // JSON submission (backward compatibility)
+    $data = json_decode(file_get_contents('php://input'), true);
+}
 
 if (!$data) {
-    echo json_encode(['success' => false, 'message' => 'Invalid JSON data']);
+    echo json_encode(['success' => false, 'message' => 'Invalid data']);
     exit;
 }
 
@@ -26,18 +40,54 @@ try {
 
     $action = $data['action'] ?? 'add';
 
+    // Process image upload if present
+    $imageData = null;
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $file = $_FILES['image'];
+
+        // Validate file type
+        $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        $fileType = mime_content_type($file['tmp_name']);
+
+        if (!in_array($fileType, $allowedTypes)) {
+            throw new Exception('Invalid file type. Only JPEG, PNG, and GIF are allowed.');
+        }
+
+        // Validate file size (5MB)
+        if ($file['size'] > 5 * 1024 * 1024) {
+            throw new Exception('File size must be less than 5MB.');
+        }
+
+        // Read file content
+        $imageData = file_get_contents($file['tmp_name']);
+    }
+
     if ($action === 'add') {
-        // Insert product
-        $stmt = $conn->prepare("
-            INSERT INTO products (category_id, name, description, status)
-            VALUES (:category_id, :name, :description, :status)
-        ");
-        $stmt->execute([
+        // Insert product with image
+        $sql = "INSERT INTO products (category_id, name, description, status";
+        if ($imageData !== null) {
+            $sql .= ", image";
+        }
+        $sql .= ") VALUES (:category_id, :name, :description, :status";
+        if ($imageData !== null) {
+            $sql .= ", :image";
+        }
+        $sql .= ")";
+
+        $stmt = $conn->prepare($sql);
+
+        $params = [
             'category_id' => $data['category_id'],
             'name' => $data['name'],
             'description' => $data['description'] ?? '',
             'status' => $data['status'] ?? 'available'
-        ]);
+        ];
+
+        if ($imageData !== null) {
+            $params['image'] = $imageData;
+        }
+
+        $stmt->execute($params);
 
         $product_id = $conn->lastInsertId();
 
@@ -83,24 +133,35 @@ try {
     } elseif ($action === 'edit') {
         $product_id = $data['product_id'];
 
-        // Update product
-        $stmt = $conn->prepare("
-            UPDATE products 
-            SET category_id = :category_id, 
-                name = :name, 
-                description = :description, 
-                price_dodici = NULL,
-                price_sedici = NULL,
-                status = :status
-            WHERE id = :id
-        ");
-        $stmt->execute([
+        // Build update query
+        $sql = "UPDATE products 
+                SET category_id = :category_id, 
+                    name = :name, 
+                    description = :description, 
+                    price_dodici = NULL,
+                    price_sedici = NULL,
+                    status = :status";
+
+        $params = [
             'id' => $product_id,
             'category_id' => $data['category_id'],
             'name' => $data['name'],
             'description' => $data['description'] ?? '',
             'status' => $data['status'] ?? 'available'
-        ]);
+        ];
+
+        // Handle image update or removal
+        if ($imageData !== null) {
+            $sql .= ", image = :image";
+            $params['image'] = $imageData;
+        } elseif (isset($data['remove_image']) && $data['remove_image'] == '1') {
+            $sql .= ", image = NULL";
+        }
+
+        $sql .= " WHERE id = :id";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
 
         // Update sizes
         if (!empty($data['sizes'])) {

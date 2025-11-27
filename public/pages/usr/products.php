@@ -701,6 +701,46 @@ $current_user = getCurrentUser();
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"></textarea>
                     </div>
 
+                    <!-- Product Image Section -->
+                    <div class="border-t pt-4">
+                        <label class="block mb-2 text-sm font-medium text-gray-700">Product Image</label>
+                        <div class="flex items-start gap-4">
+                            <!-- Image Preview -->
+                            <div class="flex-shrink-0">
+                                <div id="imagePreviewContainer" class="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center">
+                                    <img id="imagePreview" src="" alt="Preview" class="hidden w-full h-full object-cover">
+                                    <div id="imagePlaceholder" class="text-center p-2">
+                                        <i class="fa-solid fa-image text-3xl text-gray-400 mb-1"></i>
+                                        <p class="text-xs text-gray-500">No image</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Upload Controls -->
+                            <div class="flex-1">
+                                <input type="file" id="productImage" accept="image/jpeg,image/jpg,image/png,image/gif"
+                                    class="hidden" onchange="previewImage(event)">
+                                <input type="hidden" id="removeImage" value="0">
+
+                                <div class="space-y-2">
+                                    <button type="button" onclick="document.getElementById('productImage').click()"
+                                        class="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                                        <i class="fa-solid fa-upload mr-1"></i> Choose Image
+                                    </button>
+                                    <button type="button" id="removeImageBtn" onclick="removeProductImage()"
+                                        class="hidden px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors ml-2">
+                                        <i class="fa-solid fa-trash mr-1"></i> Remove
+                                    </button>
+                                </div>
+
+                                <p class="text-xs text-gray-500 mt-2">
+                                    Allowed: JPEG, PNG, GIF<br>
+                                    Max size: 5MB
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Sizes Section -->
                     <div class="border-t pt-4">
                         <div class="flex items-center justify-between mb-3">
@@ -1288,23 +1328,29 @@ $current_user = getCurrentUser();
                 }
             });
 
-            const data = {
-                action: document.getElementById('formAction').value,
-                product_id: document.getElementById('productId').value,
-                name: document.getElementById('productName').value,
-                category_id: document.getElementById('categoryId').value,
-                description: document.getElementById('productDescription').value,
-                status: document.getElementById('productStatus').value,
-                sizes: sizes,
-                ingredients: ingredients
-            };
+            // Create FormData to handle file upload
+            const formData = new FormData();
+            formData.append('action', document.getElementById('formAction').value);
+            formData.append('product_id', document.getElementById('productId').value);
+            formData.append('name', document.getElementById('productName').value);
+            formData.append('category_id', document.getElementById('categoryId').value);
+            formData.append('description', document.getElementById('productDescription').value);
+            formData.append('status', document.getElementById('productStatus').value);
+            formData.append('sizes', JSON.stringify(sizes));
+            formData.append('ingredients', JSON.stringify(ingredients));
+
+            // Add image file if selected
+            const imageFile = document.getElementById('productImage').files[0];
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
+
+            // Add remove image flag
+            formData.append('remove_image', document.getElementById('removeImage').value);
 
             fetch('save_product.php', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
+                    body: formData
                 })
                 .then(response => response.json())
                 .then(result => {
@@ -1482,8 +1528,96 @@ $current_user = getCurrentUser();
             document.getElementById('ingredientsModal').classList.add('hidden');
         }
 
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('imagePreview');
+            const placeholder = document.getElementById('imagePlaceholder');
+            const removeBtn = document.getElementById('removeImageBtn');
+
+            if (file) {
+                // Validate file type
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                if (!allowedTypes.includes(file.type)) {
+                    showErrorModal('Please select a valid image file (JPEG, PNG, or GIF)');
+                    event.target.value = '';
+                    return;
+                }
+
+                // Validate file size (5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showErrorModal('Image size must be less than 5MB');
+                    event.target.value = '';
+                    return;
+                }
+
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                    removeBtn.classList.remove('hidden');
+                    document.getElementById('removeImage').value = '0';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeProductImage() {
+            const preview = document.getElementById('imagePreview');
+            const placeholder = document.getElementById('imagePlaceholder');
+            const removeBtn = document.getElementById('removeImageBtn');
+            const fileInput = document.getElementById('productImage');
+
+            // Clear file input
+            fileInput.value = '';
+
+            // Hide preview and show placeholder
+            preview.src = '';
+            preview.classList.add('hidden');
+            placeholder.classList.remove('hidden');
+            removeBtn.classList.add('hidden');
+
+            // Mark for removal if editing existing product
+            document.getElementById('removeImage').value = '1';
+        }
+
+        function loadProductImage(productId) {
+            if (!productId) {
+                removeProductImage();
+                return;
+            }
+
+            const preview = document.getElementById('imagePreview');
+            const placeholder = document.getElementById('imagePlaceholder');
+            const removeBtn = document.getElementById('removeImageBtn');
+
+            // Load image from database
+            fetch('get_image.php?id=' + productId)
+                .then(response => {
+                    if (response.ok && response.headers.get('content-type')?.startsWith('image/')) {
+                        return response.blob();
+                    }
+                    throw new Error('No image found');
+                })
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    preview.src = url;
+                    preview.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                    removeBtn.classList.remove('hidden');
+                    document.getElementById('removeImage').value = '0';
+                })
+                .catch(error => {
+                    // No image, show placeholder
+                    removeProductImage();
+                });
+        }
+
         function closeModal() {
             document.getElementById('productModal').classList.add('hidden');
+            // Reset image preview
+            removeProductImage();
         }
 
         function editProduct(id, name, categoryId, description, status, priceDodici, priceSedici) {
@@ -1510,6 +1644,9 @@ $current_user = getCurrentUser();
             document.getElementById('categoryId').value = categoryId || '';
             document.getElementById('productDescription').value = description || '';
             document.getElementById('productStatus').value = status || 'available';
+
+            // Load product image
+            loadProductImage(id);
 
             // Clear and populate sizes
             document.getElementById('sizesContainer').innerHTML = '';
