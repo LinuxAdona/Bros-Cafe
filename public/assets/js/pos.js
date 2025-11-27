@@ -1,7 +1,7 @@
-2// Global variables
+// Global variables
 let cart = [];
 let currentProduct = null;
-let isCartVisible = true;
+let isCartVisible = false; // Start with cart closed
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -43,21 +43,17 @@ function searchProducts() {
 // Cart toggle with animation
 function toggleCart() {
     const cartSection = document.getElementById('cart-section');
-    const cartToggleBtn = document.getElementById('cart-toggle-btn');
     
     if (isCartVisible) {
-        cartSection.classList.add('cart-hidden');
+        // Close cart
+        cartSection.classList.add('translate-x-full');
         isCartVisible = false;
-        // Move button to right when cart is closed
-        cartToggleBtn.style.right = '2rem'; // 32px
-        updateCartBadge();
     } else {
-        cartSection.classList.remove('cart-hidden');
+        // Open cart
+        cartSection.classList.remove('translate-x-full');
         isCartVisible = true;
-        // Move button to left of cart when cart is open (416px = 384px cart width + 32px spacing)
-        cartToggleBtn.style.right = '416px';
-        updateCartBadge();
     }
+    updateCartBadge();
 }
 
 // Category filter
@@ -231,15 +227,23 @@ function updateCart() {
 
 // Update cart badge
 function updateCartBadge() {
-    const badge = document.getElementById('cart-badge');
+    const badgeMobile = document.getElementById('cart-badge-mobile');
+    const badgeDesktop = document.getElementById('cart-badge-desktop');
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     
-    // Only show badge when cart is hidden
+    // Show badge with item count when cart has items and is hidden
     if (totalItems > 0 && !isCartVisible) {
-        badge.textContent = totalItems;
-        badge.style.display = 'flex';
+        if (badgeMobile) {
+            badgeMobile.textContent = totalItems;
+            badgeMobile.style.display = 'flex';
+        }
+        if (badgeDesktop) {
+            badgeDesktop.textContent = totalItems;
+            badgeDesktop.style.display = 'flex';
+        }
     } else {
-        badge.style.display = 'none';
+        if (badgeMobile) badgeMobile.style.display = 'none';
+        if (badgeDesktop) badgeDesktop.style.display = 'none';
     }
 }
 

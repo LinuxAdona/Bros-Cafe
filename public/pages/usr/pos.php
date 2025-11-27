@@ -45,69 +45,92 @@ $current_user = getCurrentUser();
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Prevent sidebar jitter on page load -->
     <script>
-        (function() {
-            if (localStorage.getItem('sidebarCollapsed') === 'true') {
-                document.documentElement.classList.add('sidebar-collapsed-init');
-            }
-        })();
+    (function() {
+        if (localStorage.getItem('sidebarCollapsed') === 'true') {
+            document.documentElement.classList.add('sidebar-collapsed-init');
+        }
+    })();
     </script>
     <style>
-        /* Apply collapsed state immediately to prevent jitter */
-        .sidebar-collapsed-init #sidebar {
-            width: 5rem;
-        }
+    /* Apply collapsed state immediately to prevent jitter */
+    .sidebar-collapsed-init #sidebar {
+        width: 5rem;
+    }
 
-        .sidebar-collapsed-init #sidebar .sidebar-text,
-        .sidebar-collapsed-init #sidebar .sidebar-logo-text {
-            display: none;
-        }
+    .sidebar-collapsed-init #sidebar .sidebar-text,
+    .sidebar-collapsed-init #sidebar .sidebar-logo-text {
+        display: none;
+    }
 
-        .sidebar-collapsed-init #sidebar .sidebar-logo {
-            justify-content: center;
-        }
+    .sidebar-collapsed-init #sidebar .sidebar-logo {
+        justify-content: center;
+    }
 
-        .sidebar-collapsed-init #sidebar .logo-content {
-            display: none;
-        }
+    .sidebar-collapsed-init #sidebar .logo-content {
+        display: none;
+    }
 
-        .sidebar-collapsed-init #sidebar .toggle-btn-collapsed {
-            display: flex;
-        }
+    .sidebar-collapsed-init #sidebar .toggle-btn-collapsed {
+        display: flex;
+    }
 
-        .sidebar-collapsed-init #sidebar .toggle-btn-expanded {
-            display: none;
-        }
+    .sidebar-collapsed-init #sidebar .toggle-btn-expanded {
+        display: none;
+    }
 
-        .sidebar-collapsed-init #sidebar nav ul li a {
-            justify-content: center;
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-        }
+    .sidebar-collapsed-init #sidebar nav ul li a {
+        justify-content: center;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
 
-        .sidebar-collapsed-init #sidebar .user-info {
-            justify-content: center;
-        }
+    .sidebar-collapsed-init #sidebar .user-info {
+        justify-content: center;
+    }
 
-        .sidebar-collapsed-init #sidebar .user-info>div {
-            display: none;
-        }
+    .sidebar-collapsed-init #sidebar .user-info>div {
+        display: none;
+    }
     </style>
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
-    <!-- Mobile Hamburger Button (Fixed outside sidebar) -->
-    <button id="mobileSidebarBtn" class="fixed top-4 left-4 z-50 p-3 text-white bg-gray-900 rounded-lg shadow-lg lg:hidden transition-all duration-300 hover:bg-gray-800" onclick="toggleMobileSidebar()">
-        <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-    </button>
-
     <!-- Mobile Sidebar Overlay -->
-    <div id="sidebarOverlay" class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden" onclick="toggleMobileSidebar()"></div>
+    <div id="sidebarOverlay"
+        class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden"
+        onclick="toggleMobileSidebar()"></div>
 
-    <div class="flex h-screen overflow-hidden">
+    <div class="flex h-screen overflow-hidden flex-col lg:flex-row">
+        <!-- Mobile Header -->
+        <div class="lg:hidden bg-white border-b border-gray-200 flex items-center justify-between px-4 py-3 z-20">
+            <div class="flex items-center">
+                <button id="mobileSidebarBtn"
+                    class="p-2 text-gray-900 bg-gray-100 rounded-lg shadow transition-all duration-300 hover:bg-gray-200"
+                    onclick="toggleMobileSidebar()">
+                    <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <h1 class="ml-4 text-lg font-bold text-gray-800">Bro's Cafe</h1>
+            </div>
+            <button id="mobileCartBtn"
+                class="relative p-2 text-gray-900 bg-gray-100 rounded-lg shadow transition-all duration-300 hover:bg-gray-200"
+                onclick="toggleCart()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span id="cart-badge-mobile"
+                    class="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full"
+                    style="display: none;"></span>
+            </button>
+        </div>
+
         <!-- Sidebar -->
-        <aside id="sidebar" class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
+        <aside id="sidebar"
+            class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
             <div class="p-4 border-b border-gray-800">
                 <div class="flex items-center justify-between sidebar-logo">
                     <!-- Logo and text (shown when expanded) -->
@@ -142,77 +165,77 @@ $current_user = getCurrentUser();
             <nav class="flex-1 p-4 overflow-y-auto">
                 <ul class="space-y-2">
                     <?php if (isAdmin()): ?>
-                        <li>
-                            <a href="dashboard.php" data-tooltip="Dashboard"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                                </svg>
-                                <span class="ml-3 sidebar-text">Dashboard</span>
-                            </a>
-                        </li>
+                    <li>
+                        <a href="dashboard.php" data-tooltip="Dashboard"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>
+                            <span class="ml-3 sidebar-text">Dashboard</span>
+                        </a>
+                    </li>
                     <?php endif; ?>
                     <?php if (isEmployee()): ?>
-                        <li>
-                            <a href="pos.php" data-tooltip="POS"
-                                class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
-                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                <span class="ml-3 sidebar-text">POS</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="orders.php" data-tooltip="Orders"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                                <span class="ml-3 sidebar-text">Orders</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="inventory.php" data-tooltip="Inventory"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                </svg>
-                                <span class="ml-3 sidebar-text">Inventory</span>
-                            </a>
-                        </li>
+                    <li>
+                        <a href="pos.php" data-tooltip="POS"
+                            class="flex items-center px-4 py-3 rounded-lg bg-amber-600">
+                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <span class="ml-3 sidebar-text">POS</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="orders.php" data-tooltip="Orders"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            <span class="ml-3 sidebar-text">Orders</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="inventory.php" data-tooltip="Inventory"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                            <span class="ml-3 sidebar-text">Inventory</span>
+                        </a>
+                    </li>
                     <?php endif; ?>
                     <?php if (isAdmin()): ?>
-                        <li>
-                            <a href="analytics.php" data-tooltip="Analytics"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <i class="flex-shrink-0 w-5 h-5 fa-solid fa-chart-simple"></i>
-                                <span class="ml-3 sidebar-text">Analytics</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="products.php" data-tooltip="Products"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                </svg>
-                                <span class="ml-3 sidebar-text">Products</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="users.php" data-tooltip="Employees"
-                                class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
-                                <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                </svg>
-                                <span class="ml-3 sidebar-text">Employees</span>
-                            </a>
-                        </li>
+                    <li>
+                        <a href="analytics.php" data-tooltip="Analytics"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <i class="flex-shrink-0 w-5 h-5 fa-solid fa-chart-simple"></i>
+                            <span class="ml-3 sidebar-text">Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="products.php" data-tooltip="Products"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                            <span class="ml-3 sidebar-text">Products</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="users.php" data-tooltip="Employees"
+                            class="flex items-center px-4 py-3 transition-colors rounded-lg hover:bg-gray-800">
+                            <svg class="flex-shrink-0 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span class="ml-3 sidebar-text">Employees</span>
+                        </a>
+                    </li>
                     <?php endif; ?>
                 </ul>
             </nav>
@@ -234,14 +257,25 @@ $current_user = getCurrentUser();
         </aside>
 
         <!-- Main Content -->
-        <div class="flex flex-1 overflow-hidden">
+        <div class="flex flex-1 overflow-hidden relative">
             <!-- Products Section -->
-            <div class="flex flex-col flex-1 overflow-y-auto">
+            <div class="flex flex-col flex-1 overflow-y-auto w-full">
                 <div class="flex items-center bg-white shadow-lg justify-between p-6 mb-6">
                     <div class="flex flex-col justify-center">
                         <h2 class="text-3xl font-bold text-gray-800">Products</h2>
                         <p class="text-md text-gray-600">Select items to add to order</p>
                     </div>
+                    <button id="desktopCartBtn"
+                        class="hidden lg:flex items-center justify-center w-14 h-14 text-white bg-amber-600 rounded-full shadow-lg transition-all duration-300 hover:bg-amber-700 hover:scale-110"
+                        onclick="toggleCart()">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <span id="cart-badge-desktop"
+                            class="absolute flex items-center justify-center min-w-[1.5rem] h-6 px-1.5 text-xs font-bold text-white bg-red-500 rounded-full"
+                            style="display: none; top: -8px; right: -8px;"></span>
+                    </button>
                 </div>
 
                 <div class="px-6">
@@ -264,8 +298,8 @@ $current_user = getCurrentUser();
                         <button onclick="filterCategory('all')"
                             class="px-4 py-2 text-white rounded-lg category-btn bg-amber-600 whitespace-nowrap">All</button>
                         <?php foreach ($categories as $category): ?>
-                            <button onclick="filterCategory('<?php echo $category['id']; ?>')"
-                                class="px-4 py-2 text-gray-700 transition-all bg-white rounded-lg category-btn whitespace-nowrap"><?php echo $category['name']; ?></button>
+                        <button onclick="filterCategory('<?php echo $category['id']; ?>')"
+                            class="px-4 py-2 text-gray-700 transition-all bg-white rounded-lg category-btn whitespace-nowrap"><?php echo $category['name']; ?></button>
                         <?php endforeach; ?>
                     </div>
 
@@ -281,109 +315,94 @@ $current_user = getCurrentUser();
                                 'category_id' => $product['category_id']
                             ];
                         ?>
-                            <div class="transition-shadow bg-white rounded-lg shadow cursor-pointer product-card hover:shadow-lg"
-                                data-category="<?php echo $product['category_id']; ?>"
-                                onclick="addToCart(<?php echo htmlspecialchars(json_encode($productData), ENT_QUOTES, 'UTF-8'); ?>)">
-                                <div class="p-4">
-                                    <div class="flex items-center justify-center w-full mb-3 overflow-hidden bg-gray-100 rounded-lg"
-                                        style="aspect-ratio: 1 / 1;">
-                                        <?php if ($product['image']): ?>
-                                            <img src="../get_image.php?id=<?php echo $product['id']; ?>"
-                                                alt="<?php echo htmlspecialchars($product['name']); ?>"
-                                                class="object-cover w-full h-full">
-                                        <?php else: ?>
-                                            <span class="text-4xl">☕</span>
-                                        <?php endif; ?>
+                        <div class="transition-shadow bg-white rounded-lg shadow cursor-pointer product-card hover:shadow-lg"
+                            data-category="<?php echo $product['category_id']; ?>"
+                            onclick="addToCart(<?php echo htmlspecialchars(json_encode($productData), ENT_QUOTES, 'UTF-8'); ?>)">
+                            <div class="p-4">
+                                <div class="flex items-center justify-center w-full mb-3 overflow-hidden bg-gray-100 rounded-lg"
+                                    style="aspect-ratio: 1 / 1;">
+                                    <?php if ($product['image']): ?>
+                                    <img src="../get_image.php?id=<?php echo $product['id']; ?>"
+                                        alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                        class="object-cover w-full h-full">
+                                    <?php else: ?>
+                                    <span class="text-4xl">☕</span>
+                                    <?php endif; ?>
+                                </div>
+                                <h3 class="mb-1 font-bold text-gray-800"><?php echo $product['name']; ?></h3>
+                                <div class="text-sm">
+                                    <?php if ($product['price_dodici']): ?>
+                                    <div class="flex items-center justify-between font-semibold text-amber-600">
+                                        <p>Dodici</p>
+                                        <span><?php echo formatCurrency($product['price_dodici']); ?></span>
                                     </div>
-                                    <h3 class="mb-1 font-bold text-gray-800"><?php echo $product['name']; ?></h3>
-                                    <div class="text-sm">
-                                        <?php if ($product['price_dodici']): ?>
-                                            <div class="flex items-center justify-between font-semibold text-amber-600">
-                                                <p>Dodici</p>
-                                                <span><?php echo formatCurrency($product['price_dodici']); ?></span>
-                                            </div>
-                                        <?php endif; ?>
-                                        <?php if ($product['price_sedici']): ?>
-                                            <div class="flex items-center justify-between font-semibold text-amber-600">
-                                                <p>Sedici</p>
-                                                <span><?php echo formatCurrency($product['price_sedici']); ?></span>
-                                            </div>
-                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                    <?php if ($product['price_sedici']): ?>
+                                    <div class="flex items-center justify-between font-semibold text-amber-600">
+                                        <p>Sedici</p>
+                                        <span><?php echo formatCurrency($product['price_sedici']); ?></span>
                                     </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
+                        </div>
                         <?php endforeach; ?>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Cart Toggle Button - moves to avoid cart overlap -->
-            <div id="cart-toggle-btn" class="fixed top-6 z-50 transition-all duration-400" style="right: 416px;">
-                <button onclick="toggleCart()"
-                    class="relative p-3 text-white transition-all rounded-full shadow-lg bg-amber-600 hover:bg-amber-700 hover:shadow-xl">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 01b4 0z" />
-                    </svg>
-                    <!-- Badge for item count when cart is hidden -->
-                    <span id="cart-badge"
-                        class="absolute top-0 right-0 flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 rounded-full"
-                        style="display: none;"></span>
-                </button>
+    <!-- Cart Section -->
+    <div id="cart-section"
+        class="flex flex-col bg-white border-l border-gray-200 w-96 fixed right-0 top-0 bottom-0 z-40 transform translate-x-full transition-all duration-300 ease-in-out shadow-2xl">
+        <div class="flex items-center justify-between p-6 border-b border-gray-200">
+            <div>
+                <h2 class="text-xl font-bold text-gray-800">Order Details</h2>
+                <p class="hidden text-sm text-gray-600">Order #<span
+                        id="order-number"><?php echo generateOrderNumber(); ?></span></p>
+            </div>
+            <button onclick="toggleCart()" class="text-gray-400 transition-colors hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="flex-1 p-6 overflow-y-auto" id="cart-items">
+            <p class="py-8 text-center text-gray-400">No items in cart</p>
+        </div>
+
+        <div class="p-6 space-y-4 border-t border-gray-200">
+            <div class="space-y-2">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Subtotal</span>
+                    <span class="font-semibold" id="subtotal">₱0.00</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold">
+                    <span>Total</span>
+                    <span class="text-amber-600" id="total">₱0.00</span>
+                </div>
             </div>
 
-            <!-- Cart Section -->
-            <div id="cart-section" class="flex flex-col bg-white border-l border-gray-200 w-96">
-                <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-800">Order Details</h2>
-                        <p class="hidden text-sm text-gray-600">Order #<span
-                                id="order-number"><?php echo generateOrderNumber(); ?></span></p>
-                    </div>
-                    <button onclick="toggleCart()" class="text-gray-400 transition-colors hover:text-gray-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
+            <select id="payment-method" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                <option value="cash">Cash</option>
+                <option value="gcash">GCash</option>
+            </select>
 
-                <div class="flex-1 p-6 overflow-y-auto" id="cart-items">
-                    <p class="py-8 text-center text-gray-400">No items in cart</p>
-                </div>
+            <select id="order-type" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                <option value="dine-in">Dine-in</option>
+                <option value="takeout">Takeout</option>
+            </select>
 
-                <div class="p-6 space-y-4 border-t border-gray-200">
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Subtotal</span>
-                            <span class="font-semibold" id="subtotal">₱0.00</span>
-                        </div>
-                        <div class="flex justify-between text-lg font-bold">
-                            <span>Total</span>
-                            <span class="text-amber-600" id="total">₱0.00</span>
-                        </div>
-                    </div>
-
-                    <select id="payment-method" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                        <option value="cash">Cash</option>
-                        <option value="gcash">GCash</option>
-                    </select>
-
-                    <select id="order-type" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                        <option value="dine-in">Dine-in</option>
-                        <option value="takeout">Takeout</option>
-                    </select>
-
-                    <button onclick="processOrder()"
-                        class="w-full py-3 font-semibold text-white transition-colors rounded-lg bg-amber-600 hover:bg-amber-700">
-                        Process Order
-                    </button>
-                    <button onclick="clearCart()"
-                        class="w-full py-3 font-semibold text-gray-700 transition-colors bg-gray-200 rounded-lg hover:bg-gray-300">
-                        Clear Cart
-                    </button>
-                </div>
-            </div>
+            <button onclick="processOrder()"
+                class="w-full py-3 font-semibold text-white transition-colors rounded-lg bg-amber-600 hover:bg-amber-700">
+                Process Order
+            </button>
+            <button onclick="clearCart()"
+                class="w-full py-3 font-semibold text-gray-700 transition-colors bg-gray-200 rounded-lg hover:bg-gray-300">
+                Clear Cart
+            </button>
         </div>
     </div>
 
@@ -723,31 +742,44 @@ $current_user = getCurrentUser();
 
     <script src="../../assets/js/admin.js"></script>
     <script>
-        function toggleMobileSidebar() {
-            const e = document.getElementById("sidebar"),
-                t = document.getElementById("sidebarOverlay"),
-                s = document.getElementById("hamburgerIcon"),
-                a = document.getElementById("mobileSidebarBtn"),
-                l = !e.classList.contains("-translate-x-full");
-            l ? (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-800"), a.classList.add("bg-gray-900")) : (e.classList.remove("-translate-x-full"), t.classList.remove("opacity-0", "pointer-events-none"), t.classList.add("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />', s.classList.add("rotate-90"), a.classList.add("bg-gray-800"), a.classList.remove("bg-gray-900"))
-        }
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll("#sidebar nav a").forEach(e => {
-                e.addEventListener("click", function() {
-                    window.innerWidth < 1024 && !document.getElementById("sidebar").classList.contains("-translate-x-full") && toggleMobileSidebar()
-                })
+    function toggleMobileSidebar() {
+        const e = document.getElementById("sidebar"),
+            t = document.getElementById("sidebarOverlay"),
+            s = document.getElementById("hamburgerIcon"),
+            a = document.getElementById("mobileSidebarBtn"),
+            l = !e.classList.contains("-translate-x-full");
+        l ? (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList
+            .remove("opacity-50"), s.innerHTML =
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />',
+            s.classList.remove("rotate-90"), a.classList.remove("bg-gray-200"), a.classList.add("bg-gray-100")) : (e
+            .classList.remove("-translate-x-full"), t.classList.remove("opacity-0", "pointer-events-none"), t
+            .classList.add("opacity-50"), s.innerHTML =
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />', s
+            .classList.add("rotate-90"), a.classList.add("bg-gray-200"), a.classList.remove("bg-gray-100"))
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll("#sidebar nav a").forEach(e => {
+            e.addEventListener("click", function() {
+                window.innerWidth < 1024 && !document.getElementById("sidebar").classList
+                    .contains("-translate-x-full") && toggleMobileSidebar()
             })
-        });
-        window.addEventListener("resize", function() {
-            const e = document.getElementById("sidebar"),
-                t = document.getElementById("sidebarOverlay"),
-                s = document.getElementById("hamburgerIcon"),
-                a = document.getElementById("mobileSidebarBtn");
-            window.innerWidth >= 1024 ? (e.classList.remove("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50")) : (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-800"), a.classList.add("bg-gray-900"))
-        });
-        if (window.innerWidth < 1024) document.getElementById("sidebar").classList.add("-translate-x-full");
+        })
+    });
+    window.addEventListener("resize", function() {
+        const e = document.getElementById("sidebar"),
+            t = document.getElementById("sidebarOverlay"),
+            s = document.getElementById("hamburgerIcon"),
+            a = document.getElementById("mobileSidebarBtn");
+        window.innerWidth >= 1024 ? (e.classList.remove("-translate-x-full"), t.classList.add("opacity-0",
+            "pointer-events-none"), t.classList.remove("opacity-50")) : (e.classList.add(
+                "-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), s.innerHTML =
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />',
+            s.classList.remove("rotate-90"), a.classList.remove("bg-gray-200"), a.classList.add(
+                "bg-gray-100"))
+    });
+    if (window.innerWidth < 1024) document.getElementById("sidebar").classList.add("-translate-x-full");
     </script>
-    <script src="../../assets/js/pos.js"></script>
+    <script src="../../assets/js/pos.js?v=<?php echo time(); ?>"></script>
 </body>
 
 </html>

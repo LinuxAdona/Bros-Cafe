@@ -158,17 +158,23 @@ $current_user = getCurrentUser();
 </head>
 
 <body class="bg-gray-100 font-['Montserrat']">
-    <!-- Mobile Hamburger Button (Fixed outside sidebar) -->
-    <button id="mobileSidebarBtn" class="fixed top-4 left-4 z-50 p-3 text-white bg-gray-900 rounded-lg shadow-lg lg:hidden transition-all duration-300 hover:bg-gray-800" onclick="toggleMobileSidebar()">
-        <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-    </button>
-
     <!-- Mobile Sidebar Overlay -->
     <div id="sidebarOverlay" class="fixed inset-0 z-30 bg-black transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden" onclick="toggleMobileSidebar()"></div>
 
-    <div class="flex h-screen overflow-hidden">
+    <div class="flex h-screen overflow-hidden flex-col lg:flex-row">
+        <!-- Mobile Header -->
+        <div class="lg:hidden bg-white border-b border-gray-200 flex items-center px-4 py-3 z-20">
+            <button id="mobileSidebarBtn"
+                class="p-2 text-gray-900 bg-gray-100 rounded-lg shadow transition-all duration-300 hover:bg-gray-200"
+                onclick="toggleMobileSidebar()">
+                <svg class="w-6 h-6 transition-transform duration-300" id="hamburgerIcon" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <h1 class="ml-4 text-lg font-bold text-gray-800">Bro's Cafe</h1>
+        </div>
+
         <!-- Sidebar -->
         <aside id="sidebar" class="flex flex-col text-white bg-gray-900 fixed inset-y-0 left-0 z-40 w-64 transform -translate-x-full transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:w-64 shadow-2xl">
             <div class="p-4 border-b border-gray-800">
@@ -1647,7 +1653,7 @@ $current_user = getCurrentUser();
                 s = document.getElementById("hamburgerIcon"),
                 a = document.getElementById("mobileSidebarBtn"),
                 l = !e.classList.contains("-translate-x-full");
-            l ? (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-800"), a.classList.add("bg-gray-900")) : (e.classList.remove("-translate-x-full"), t.classList.remove("opacity-0", "pointer-events-none"), t.classList.add("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />', s.classList.add("rotate-90"), a.classList.add("bg-gray-800"), a.classList.remove("bg-gray-900"))
+            l ? (e.classList.add("-translate-x-full"), t.classList.add("opacity-0", "pointer-events-none"), t.classList.remove("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />', s.classList.remove("rotate-90"), a.classList.remove("bg-gray-200"), a.classList.add("bg-gray-100")) : (e.classList.remove("-translate-x-full"), t.classList.remove("opacity-0", "pointer-events-none"), t.classList.add("opacity-50"), s.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />', s.classList.add("rotate-90"), a.classList.add("bg-gray-200"), a.classList.remove("bg-gray-100"))
         }
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll("#sidebar nav a").forEach(e => {
