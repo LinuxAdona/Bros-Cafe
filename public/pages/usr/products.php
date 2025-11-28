@@ -1385,7 +1385,7 @@ $current_user = getCurrentUser();
                 price: parseFloat(document.getElementById('newIngredientPrice').value)
             };
 
-            fetch('add_ingredient.php', {
+            fetch('add/add_ingredient.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1435,7 +1435,7 @@ $current_user = getCurrentUser();
                 description: document.getElementById('newCategoryDescription').value
             };
 
-            fetch('add_category.php', {
+            fetch('add/add_category.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

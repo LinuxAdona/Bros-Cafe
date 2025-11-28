@@ -1929,7 +1929,7 @@ $current_user = getCurrentUser();
 
         // Export inventory function
         function exportInventory(format) {
-            window.location.href = 'export_inventory.php?format=' + format;
+            window.location.href = 'export/export_inventory.php?format=' + format;
             toggleExportDropdown(); // Close dropdown after selection
         }
 
@@ -1946,7 +1946,7 @@ $current_user = getCurrentUser();
             const trans_type = params.get('trans_type') || '';
             const trans_date = params.get('trans_date') || '';
 
-            let url = 'export_transactions.php?format=' + format;
+            let url = 'export/export_transactions.php?format=' + format;
             if (trans_search) url += '&trans_search=' + encodeURIComponent(trans_search);
             if (trans_type) url += '&trans_type=' + encodeURIComponent(trans_type);
             if (trans_date) url += '&trans_date=' + encodeURIComponent(trans_date);
@@ -1963,7 +1963,7 @@ $current_user = getCurrentUser();
 
         // Export full inventory function
         function exportFullInventory(format) {
-            window.location.href = 'export_inventory_full.php?format=' + format;
+            window.location.href = 'export/export_inventory_full.php?format=' + format;
             toggleFullExportDropdown(); // Close dropdown after selection
         }
 

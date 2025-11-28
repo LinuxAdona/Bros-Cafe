@@ -854,7 +854,7 @@ $current_user = getCurrentUser();
         function exportOrders(format) {
             const params = new URLSearchParams(window.location.search);
             params.set('format', format);
-            window.location.href = 'export_orders.php?' + params.toString();
+            window.location.href = 'export/export_orders.php?' + params.toString();
         }
 
         // Toggle export dropdown

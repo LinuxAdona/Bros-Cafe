@@ -1,6 +1,6 @@
 <?php
-require_once '../../../config/database.php';
-require_once '../../../src/services/functions.php';
+require_once '../../../../config/database.php';
+require_once '../../../../src/services/functions.php';
 
 requireRole('admin');
 
@@ -142,8 +142,8 @@ $daily_sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if ($format === 'pdf') {
     // PDF Export
-    define('FPDF_FONTPATH', '../../../src/fpdf_fonts/');
-    require_once '../../../src/fpdf.php';
+    define('FPDF_FONTPATH', '../../../../src/fpdf_fonts/');
+    require_once '../../../../src/fpdf.php';
 
     // Extended FPDF class with chart drawing capabilities
     class PDF_Analytics extends FPDF

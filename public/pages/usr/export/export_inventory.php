@@ -1,6 +1,6 @@
 <?php
-require_once '../../../config/database.php';
-require_once '../../../src/services/functions.php';
+require_once '../../../../config/database.php';
+require_once '../../../../src/services/functions.php';
 
 requireEmployee();
 
@@ -61,8 +61,8 @@ if ($format === 'csv') {
 
 if ($format === 'pdf') {
     // PDF Export
-    define('FPDF_FONTPATH', '../../../src/fpdf_fonts/');
-    require_once '../../../src/fpdf.php';
+    define('FPDF_FONTPATH', '../../../../src/fpdf_fonts/');
+    require_once '../../../../src/fpdf.php';
 
     $pdf = new FPDF('L', 'mm', 'A4'); // Landscape orientation
     $pdf->AddPage();

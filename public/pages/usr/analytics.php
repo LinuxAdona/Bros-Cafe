@@ -545,7 +545,7 @@ $current_user = getCurrentUser();
         const params = new URLSearchParams(window.location.search);
         const period = params.get('period') || '7days';
 
-        window.location.href = 'export_analytics.php?format=' + format + '&period=' + period;
+        window.location.href = 'export/export_analytics.php?format=' + format + '&period=' + period;
         toggleAnalyticsExportDropdown();
     }
 
