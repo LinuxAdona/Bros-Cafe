@@ -100,7 +100,7 @@
                         </svg>
                     </div>
                     <h3 class="mb-2 text-xl font-bold text-gray-800">Our Location</h3>
-                    <p class="text-gray-600">123 Coffee Street<br>Cafe District<br>City, State 12345</p>
+                    <p class="text-gray-600">P. Burgos St, Batangas<br>Batangas City, 4200<br>Philippines</p>
                 </div>
 
                 <!-- Phone Card -->
@@ -112,7 +112,7 @@
                         </svg>
                     </div>
                     <h3 class="mb-2 text-xl font-bold text-gray-800">Call Us</h3>
-                    <p class="text-gray-600">+63 123 456 7890<br>+63 987 654 3210<br>Mon-Sun: 7AM-10PM</p>
+                    <p class="text-gray-600">+63 917 123 4567<br>+63 43 300 1234<br>Mon-Sun: 7AM-10PM</p>
                 </div>
 
                 <!-- Email Card -->
@@ -223,28 +223,30 @@
                         <p class="font-semibold">✓ Message sent successfully!</p>
                         <p class="text-sm">We'll get back to you within 24 hours.</p>
                     </div>
+
+                    <!-- Error Message -->
+                    <div id="error-message"
+                        class="hidden p-4 mt-6 text-red-800 bg-red-100 border border-red-300 rounded-lg">
+                        <p class="font-semibold">✗ Error sending message</p>
+                        <p id="error-text" class="text-sm"></p>
+                    </div>
                 </div>
 
                 <!-- Map & Business Hours -->
                 <div class="space-y-6">
                     <!-- Map -->
                     <div class="overflow-hidden bg-white shadow-xl rounded-2xl">
-                        <div class="h-64 bg-linear-to-br from-amber-100 to-orange-200">
-                            <!-- Placeholder for map - replace with actual map API -->
-                            <div class="flex items-center justify-center h-full">
-                                <div class="text-center">
-                                    <svg class="w-16 h-16 mx-auto mb-4 text-amber-600" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                                    </svg>
-                                    <p class="text-gray-600">Interactive Map</p>
-                                    <p class="text-sm text-gray-500">123 Coffee Street, Cafe District</p>
-                                </div>
-                            </div>
+                        <div class="h-64">
+                            <!-- Google Maps Embed -->
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3872.8936347812237!2d120.7478722!3d13.9453981!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33bda3003839eec9%3A0xf75bf4ea6a115bcd!2sBros%20Cafe!5e0!3m2!1sen!2sph!4v1732765200000!5m2!1sen!2sph"
+                                width="100%" height="256" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
                         </div>
                         <div class="p-6">
-                            <a href="https://maps.google.com" target="_blank"
+                            <a href="https://www.google.com/maps/place/Bros+Cafe/@13.9453981,120.7504471,16z/data=!4m6!3m5!1s0x33bda3003839eec9:0xf75bf4ea6a115bcd!8m2!3d13.9453981!4d120.7504471!16s%2Fg%2F11x7xnksgm?entry=ttu"
+                                target="_blank"
                                 class="flex items-center justify-center w-full px-6 py-3 font-semibold transition-all border-2 rounded-lg border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -260,33 +262,26 @@
                         <h3 class="mb-6 text-2xl font-bold text-gray-800">Business Hours</h3>
                         <div class="space-y-4">
                             <div class="flex justify-between pb-3 border-b border-gray-200">
-                                <span class="font-semibold text-gray-700">Monday - Friday</span>
-                                <span class="text-amber-600">7:00 AM - 9:00 PM</span>
-                            </div>
-                            <div class="flex justify-between pb-3 border-b border-gray-200">
-                                <span class="font-semibold text-gray-700">Saturday</span>
-                                <span class="text-amber-600">8:00 AM - 10:00 PM</span>
-                            </div>
-                            <div class="flex justify-between pb-3 border-b border-gray-200">
-                                <span class="font-semibold text-gray-700">Sunday</span>
-                                <span class="text-amber-600">8:00 AM - 10:00 PM</span>
+                                <span class="font-semibold text-gray-700">Tuesday - Sunday</span>
+                                <span class="text-amber-600">3:00 PM - 11:00 PM</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="font-semibold text-gray-700">Holidays</span>
-                                <span class="text-amber-600">9:00 AM - 8:00 PM</span>
+                                <span class="text-amber-600">3:00 PM - 11:00 PM</span>
                             </div>
                         </div>
-                        <div class="p-4 mt-6 border-2 rounded-lg bg-amber-50 border-amber-200">
+                        <div id="store-status" class="p-4 mt-6 border-2 rounded-lg bg-amber-50 border-amber-200">
                             <p class="flex items-center text-sm text-gray-700">
                                 <svg class="w-5 h-5 mr-2 text-amber-600" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                We're currently <span class="ml-1 font-semibold text-green-600">OPEN</span>
+                                <span id="status-text">Checking status...</span>
                             </p>
                         </div>
                     </div>
+
 
                     <!-- FAQ Link -->
                     <div
@@ -414,11 +409,11 @@
                 </div>
                 <div>
                     <h3 class="mb-4 text-xl font-bold text-amber-500">Visit Us</h3>
-                    <p class="text-gray-400">123 Coffee Street<br>Cafe District, City</p>
+                    <p class="text-gray-400">P. Burgos St, Batangas<br>Batangas City, 4200<br>Philippines</p>
                 </div>
                 <div>
                     <h3 class="mb-4 text-xl font-bold text-amber-500">Contact</h3>
-                    <p class="text-gray-400">+63 123 456 7890<br>info@broscafe.com</p>
+                    <p class="text-gray-400">+63 917 123 4567<br>info@broscafe.com</p>
                 </div>
             </div>
             <div class="pt-8 text-center border-t border-gray-800">
@@ -439,17 +434,73 @@
         // Contact form submission
         const contactForm = document.getElementById('contact-form');
         const successMessage = document.getElementById('success-message');
+        const errorMessage = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
 
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            // Here you would normally send the form data to your server
-            successMessage.classList.remove('hidden');
-            contactForm.reset();
 
-            // Hide success message after 5 seconds
-            setTimeout(() => {
-                successMessage.classList.add('hidden');
-            }, 5000);
+            // Hide any previous messages
+            successMessage.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML =
+                '<svg class="inline w-5 h-5 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Sending...';
+
+            try {
+                // Get form data
+                const formData = new FormData(contactForm);
+
+                // Send to backend
+                const response = await fetch('send_contact.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Show success message
+                    successMessage.classList.remove('hidden');
+                    contactForm.reset();
+
+                    // Scroll to success message
+                    successMessage.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+
+                    // Hide success message after 10 seconds
+                    setTimeout(() => {
+                        successMessage.classList.add('hidden');
+                    }, 10000);
+                } else {
+                    throw new Error(result.message || 'Failed to send message');
+                }
+            } catch (error) {
+                // Show error message
+                errorText.textContent = error.message;
+                errorMessage.classList.remove('hidden');
+
+                // Scroll to error message
+                errorMessage.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
+
+                // Hide error message after 10 seconds
+                setTimeout(() => {
+                    errorMessage.classList.add('hidden');
+                }, 10000);
+            } finally {
+                // Restore button state
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
         });
 
         // FAQ Accordion
@@ -465,6 +516,59 @@
                 icon.classList.toggle('rotate-180');
             });
         });
+
+        // Check if store is open
+        function updateStoreStatus() {
+            // Get current time in Philippine timezone (Asia/Manila)
+            const now = new Date();
+            const phTime = new Date(now.toLocaleString('en-US', {
+                timeZone: 'Asia/Manila'
+            }));
+
+            const currentHour = phTime.getHours();
+            const currentMinute = phTime.getMinutes();
+            const currentDay = phTime.getDay(); // 0 = Sunday, 1 = Monday, etc.
+
+            // Store hours: 3:00 PM (15:00) - 11:00 PM (23:00), Tuesday - Sunday
+            const openingHour = 15; // 3:00 PM
+            const closingHour = 23; // 11:00 PM
+            const isClosed = currentDay === 1; // Monday is closed (day 1)
+
+            // Convert current time to minutes for easier comparison
+            const currentTimeInMinutes = currentHour * 60 + currentMinute;
+            const openingTimeInMinutes = openingHour * 60;
+            const closingTimeInMinutes = closingHour * 60;
+
+            const statusElement = document.getElementById('store-status');
+            const statusText = document.getElementById('status-text');
+
+            if (isClosed) {
+                // Closed on Monday
+                statusElement.className = 'p-4 mt-6 border-2 rounded-lg bg-red-50 border-red-200';
+                statusText.innerHTML =
+                    'We\'re currently <span class="ml-1 font-semibold text-red-600">CLOSED</span> (Closed on Mondays)';
+            } else if (currentTimeInMinutes >= openingTimeInMinutes && currentTimeInMinutes < closingTimeInMinutes) {
+                // Open
+                statusElement.className = 'p-4 mt-6 border-2 rounded-lg bg-green-50 border-green-200';
+                statusText.innerHTML = 'We\'re currently <span class="ml-1 font-semibold text-green-600">OPEN</span>';
+            } else {
+                // Closed
+                statusElement.className = 'p-4 mt-6 border-2 rounded-lg bg-red-50 border-red-200';
+                if (currentTimeInMinutes < openingTimeInMinutes) {
+                    statusText.innerHTML =
+                        'We\'re currently <span class="ml-1 font-semibold text-red-600">CLOSED</span> (Opens at 3:00 PM)';
+                } else {
+                    statusText.innerHTML =
+                        'We\'re currently <span class="ml-1 font-semibold text-red-600">CLOSED</span> (Opens tomorrow at 3:00 PM)';
+                }
+            }
+        }
+
+        // Update status on load
+        updateStoreStatus();
+
+        // Update status every minute
+        setInterval(updateStoreStatus, 60000);
     </script>
 </body>
 
