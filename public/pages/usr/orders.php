@@ -317,10 +317,33 @@ $current_user = getCurrentUser();
 
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto">
-            <div class="flex items-center bg-white shadow-lg p-4 lg:p-6">
+            <div class="flex items-center justify-between bg-white shadow-lg p-4 lg:p-6">
                 <div class="flex flex-col justify-center">
                     <h2 class="text-xl lg:text-3xl font-bold text-gray-800">Orders Management</h2>
                     <p class="text-md text-gray-600">View and manage customer orders</p>
+                </div>
+                <div class="relative">
+                    <button onclick="toggleOrdersExportDropdown()"
+                        class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-download"></i>
+                        <span class="hidden sm:inline">Export</span>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="ordersExportDropdown"
+                        class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-10">
+                        <div class="py-2">
+                            <button onclick="exportOrders('csv')"
+                                class="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 flex items-center gap-2">
+                                <i class="fa-solid fa-file-csv text-green-600"></i>
+                                Export as CSV
+                            </button>
+                            <button onclick="exportOrders('pdf')"
+                                class="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 flex items-center gap-2">
+                                <i class="fa-solid fa-file-pdf text-red-600"></i>
+                                Export as PDF
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="p-6">
@@ -827,6 +850,29 @@ $current_user = getCurrentUser();
 
     <script src="../../assets/js/admin.js"></script>
     <script>
+        // Export orders function
+        function exportOrders(format) {
+            const params = new URLSearchParams(window.location.search);
+            params.set('format', format);
+            window.location.href = 'export_orders.php?' + params.toString();
+        }
+
+        // Toggle export dropdown
+        function toggleOrdersExportDropdown() {
+            const dropdown = document.getElementById('ordersExportDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('ordersExportDropdown');
+            const button = event.target.closest('button[onclick="toggleOrdersExportDropdown()"]');
+
+            if (!button && dropdown && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
         // Mobile sidebar toggle
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('sidebar');

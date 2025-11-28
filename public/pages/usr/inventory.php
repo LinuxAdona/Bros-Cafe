@@ -374,10 +374,42 @@ $current_user = getCurrentUser();
 
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto">
-            <div class="flex items-center bg-white shadow-lg p-4 lg:p-6">
+            <div class="flex items-center justify-between bg-white shadow-lg p-4 lg:p-6">
                 <div class="flex flex-col justify-center">
                     <h2 class="text-xl lg:text-3xl font-bold text-gray-800">Inventory Management</h2>
                     <p class="text-md text-gray-600">Track and manage product stock levels</p>
+                </div>
+                <div class="relative">
+                    <button onclick="toggleFullExportDropdown()"
+                        class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-file-export"></i>
+                        <span class="hidden sm:inline">Export All</span>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="fullExportDropdown"
+                        class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-10">
+                        <div class="py-2">
+                            <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">
+                                Complete Report
+                            </div>
+                            <button onclick="exportFullInventory('csv')"
+                                class="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 flex items-center gap-2">
+                                <i class="fa-solid fa-file-csv text-green-600"></i>
+                                <div>
+                                    <div class="font-medium">Export as CSV</div>
+                                    <div class="text-xs text-gray-500">All data in spreadsheet</div>
+                                </div>
+                            </button>
+                            <button onclick="exportFullInventory('pdf')"
+                                class="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 flex items-center gap-2">
+                                <i class="fa-solid fa-file-pdf text-red-600"></i>
+                                <div>
+                                    <div class="font-medium">Export as PDF</div>
+                                    <div class="text-xs text-gray-500">Formatted report</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="p-6">
@@ -1929,6 +1961,18 @@ $current_user = getCurrentUser();
             dropdown.classList.toggle('hidden');
         }
 
+        // Export full inventory function
+        function exportFullInventory(format) {
+            window.location.href = 'export_inventory_full.php?format=' + format;
+            toggleFullExportDropdown(); // Close dropdown after selection
+        }
+
+        // Toggle full export dropdown
+        function toggleFullExportDropdown() {
+            const dropdown = document.getElementById('fullExportDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
             const dropdown = document.getElementById('exportDropdown');
@@ -1940,6 +1984,17 @@ $current_user = getCurrentUser();
 
             const transDropdown = document.getElementById('transactionExportDropdown');
             const transButton = event.target.closest('button[onclick="toggleTransactionExportDropdown()"]');
+
+            if (!transButton && transDropdown && !transDropdown.contains(event.target)) {
+                transDropdown.classList.add('hidden');
+            }
+
+            const fullDropdown = document.getElementById('fullExportDropdown');
+            const fullButton = event.target.closest('button[onclick="toggleFullExportDropdown()"]');
+
+            if (!fullButton && fullDropdown && !fullDropdown.contains(event.target)) {
+                fullDropdown.classList.add('hidden');
+            }
 
             if (!transButton && transDropdown && !transDropdown.contains(event.target)) {
                 transDropdown.classList.add('hidden');

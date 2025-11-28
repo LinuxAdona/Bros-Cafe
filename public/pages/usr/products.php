@@ -649,9 +649,6 @@ $current_user = getCurrentUser();
                 <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-amber-500 to-amber-600">
                     <div class="flex items-center justify-between text-white">
                         <div class="flex items-center space-x-3">
-                            <div class="flex items-center justify-center w-10 h-10 bg-white bg-opacity-20 rounded-lg">
-                                <i class="text-xl fa-solid fa-box"></i>
-                            </div>
                             <h3 class="text-xl font-bold" id="modal-title">Add Product</h3>
                         </div>
                         <button type="button" onclick="closeModal()"
@@ -707,8 +704,10 @@ $current_user = getCurrentUser();
                         <div class="flex items-start gap-4">
                             <!-- Image Preview -->
                             <div class="flex-shrink-0">
-                                <div id="imagePreviewContainer" class="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center">
-                                    <img id="imagePreview" src="" alt="Preview" class="hidden w-full h-full object-cover">
+                                <div id="imagePreviewContainer"
+                                    class="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center">
+                                    <img id="imagePreview" src="" alt="Preview"
+                                        class="hidden w-full h-full object-cover">
                                     <div id="imagePlaceholder" class="text-center p-2">
                                         <i class="fa-solid fa-image text-3xl text-gray-400 mb-1"></i>
                                         <p class="text-xs text-gray-500">No image</p>
