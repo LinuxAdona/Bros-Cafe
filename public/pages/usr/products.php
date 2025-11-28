@@ -93,8 +93,9 @@ $where = ["1=1"];
 $params = [];
 
 if ($search) {
-    $where[] = "(p.name LIKE :search OR p.description LIKE :search)";
-    $params['search'] = "%$search%";
+    $where[] = "(p.name LIKE :search_name OR p.description LIKE :search_desc)";
+    $params['search_name'] = "%$search%";
+    $params['search_desc'] = "%$search%";
 }
 
 if ($category_filter) {

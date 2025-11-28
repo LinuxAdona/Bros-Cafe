@@ -32,8 +32,10 @@ if ($date_filter && $date_filter !== '') {
 }
 
 if ($search) {
-    $where[] = "(o.order_number LIKE :search OR u.full_name LIKE :search)";
-    $params['search'] = "%$search%";
+    // Use unique placeholders and correct alias (users aliased as 'e')
+    $where[] = "(o.order_number LIKE :search_number OR e.full_name LIKE :search_name)";
+    $params['search_number'] = "%$search%";
+    $params['search_name'] = "%$search%";
 }
 
 $where_clause = implode(' AND ', $where);
